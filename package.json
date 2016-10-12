@@ -1,0 +1,25 @@
+{
+  "name": "game-manager",
+  "version": "0.0.1",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Scotthorn0/Game-Manager.git"
+  },
+  "author": "Scott Horn <scotthorn0@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Scotthorn0/Game-Manager/issues"
+  },
+  "homepage": "https://github.com/Scotthorn0/Game-Manager#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "knex": "^0.12.5",
+    "path": "^0.12.7",
+    "sqlite3": "^3.1.6"
+  }
+}
