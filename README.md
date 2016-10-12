@@ -15,6 +15,7 @@ Game Manager is an app for managing a local (offline) competition. Currently des
   - [ ] Landing Page
     - [ ] Create Tournament View
     - [ ] Current Tournament View
+    
 ## Stretch Goals
 
   - [ ] Player Stats Page
