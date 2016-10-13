@@ -10,12 +10,24 @@ Game Manager is an app for managing a local (offline) competition. Currently des
   - deploy with heroku
   - react
 
-# MVP
+# MVP Product backlog
   **_Always consider the scope_**
   - [ ] Landing Page
-    - [ ] Create Tournament View
+    - [ ] Create Tournament
+      - [ ] Tournament Name Field
+      - [ ] Existing players 'drop down', or other component to select people for the tournament.
+      - [ ] Add person, field if not existing
+      - [ ] "Added Players to tournament" Component
     - [ ] Current Tournament View
-    
+      - [ ] Current Table component
+        - [ ] Player components (sorted by points, with Goal Differential as a tie breaker)
+          - has all the players standing for current tournament
+      - [ ] Games component
+        - [ ] Game components
+          - has player name, and game score
+        - [ ] Current game component ?????
+          - not sure how to fully implement the filling out the form to enter the game
+
 ## Stretch Goals
 
   - [ ] Player Stats Page
