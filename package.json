@@ -1,25 +1,42 @@
 {
-  "name": "game-manager",
-  "version": "0.0.1",
-  "main": "app.js",
+  "name": "node-catapult",
+  "version": "1.0.0",
+  "description": "A rapid project starter for node and browserify.",
+  "main": "server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server/ --ignore client/",
+    "test": "./test/run.sh"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Scotthorn0/Game-Manager.git"
-  },
-  "author": "Scott Horn <scotthorn0@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Scotthorn0/Game-Manager/issues"
-  },
-  "homepage": "https://github.com/Scotthorn0/Game-Manager#readme",
+  "author": "Scott <scotthorn0@gmail.com",
+  "license": "",
   "dependencies": {
-    "body-parser": "^1.15.2",
+    "bluebird": "^3.2.2",
+    "body-parser": "^1.14.1",
+    "browserify-middleware": "^7.0.0",
+    "express": "^4.12.4",
+    "supertest-as-promised": "^3.1.0",
     "express": "^4.14.0",
     "knex": "^0.12.5",
     "path": "^0.12.7",
     "sqlite3": "^3.1.6"
+  },
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3",
+    "nodemon": "^1.3.7",
+    "supertest": "^1.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager"
+  },
+  "keywords": [
+    "boilerplate",
+    "browserify",
+    "express",
+    "mithril"
+  ],
+  "bugs": {
+    "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager/issues"
   }
 }
