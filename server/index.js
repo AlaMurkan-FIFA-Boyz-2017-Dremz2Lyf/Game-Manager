@@ -5,6 +5,13 @@ var Path = require('path');
 
 var routes = express.Router();
 
+var knex = require('knex')({
+ client: 'sqlite3',
+ connection: {
+   filename: '../database.sqlite3'
+ }
+});
+
 //
 // Provide a browserified file at a specified path
 //
@@ -19,6 +26,57 @@ routes.get('/app-bundle.js',
 // routes.get('/api/tags-example', function(req, res) {
 //   res.send(['node', 'express', 'browserify', 'mithril']);
 // });
+
+
+// Home page
+app.get('/', function(req, res) {
+  res.sendFile(path.resolve('client/public/index.html'));
+});
+
+// /api/player
+// **************************************************
+// GET request
+app.get('/api/player', function(req, res) {
+  knex('players')
+  .select()
+  .table('players')
+  .orderBy('id', 'desc')
+  .then(function(data) {
+    res.send(data);
+  })
+});
+
+app.post('/api/player', function(req, res) {
+  knex('players').insert({
+    username: req.body.username
+  }).then(function(result) {
+    console.log(result);
+  })
+})
+
+// POST request 
+app.post('/api/player', function(req, res) {
+  req.body.forEach(function(item) {
+    knex('players').insert({
+      username: item.username
+    }).then(function(result) {
+      console.log(result);
+    });
+  })
+
+  res.sendStatus(200);
+  console.log("Successful POST request");
+});
+
+// **************************************************
+
+// /api/tournaments
+// TODO: GET, POST, PUT (update with winner)
+
+// /api/games
+// TODO: GET, POST, PUT (update with score)
+
+
 
 //
 // Static assets (html, etc.)
