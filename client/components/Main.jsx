@@ -8,13 +8,15 @@ class Main extends React.Component {
   constructor() {
     super();
     this.state = {
-      data: 'HI'
+      data: 'HI',
+      AllPlayersList : [],
+      TourneyPlayersList : []
     };
   }
 
   render() {
     return (
-      <div> Hi There it was!!!!!!!!!!!</div>
+      <div> {this.state.data}</div>
     );
   }
 
