@@ -140,12 +140,12 @@ ______________________________________________________________________
 
 #### Stateful components
   - App
-  - table in current tournament
-  - games list in current tournament
+  - Form input
+
 
 #### Stateless components
-  - Form input
-  - Players in tournament in create
+  - table in current tournament
+  - games list in current tournament  - Players in tournament in create
   - Players list in create
   - Player in Player list on create page
   - Player in tournament list
