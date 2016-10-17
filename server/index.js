@@ -30,7 +30,7 @@ routes.get('/app-bundle.js',
 
 // Home page
 app.get('/', function(req, res) {
-  res.sendFile(path.resolve('client/index.html'));
+  res.sendFile(path.resolve('client/public/index.html'));
 });
 
 // /api/player
@@ -45,6 +45,14 @@ app.get('/api/player', function(req, res) {
     res.send(data);
   })
 });
+
+app.post('/api/player', function(req, res) {
+  knex('players').insert({
+    username: req.body.username
+  }).then(function(result) {
+    console.log(result);
+  })
+})
 
 // POST request 
 app.post('/api/player', function(req, res) {
