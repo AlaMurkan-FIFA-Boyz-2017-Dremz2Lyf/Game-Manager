@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-class Main extends React.component {
+class Main extends React.Component {
 
   constructor() {
     super();
@@ -12,7 +12,7 @@ class Main extends React.component {
 
   render() {
     return (
-      <div> Hi </div>
+      <div> Hi There it was!!!!!!!!!!!</div>
     );
   }
 

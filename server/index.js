@@ -10,15 +10,15 @@ var routes = express.Router();
 //
 routes.get('/app-bundle.js',
   browserify('./client/app.js', {
-    transform: [babelify, { presets: ['es2015'] }]
+    transform: [ require('reactify') ]
   }));
 
-//
-// Example endpoint (also tested in test/server/index_test.js)
-//
-routes.get('/api/tags-example', function(req, res) {
-  res.send(['node', 'express', 'browserify', 'mithril']);
-});
+// //
+// // Example endpoint (also tested in test/server/index_test.js)
+// //
+// routes.get('/api/tags-example', function(req, res) {
+//   res.send(['node', 'express', 'browserify', 'mithril']);
+// });
 
 //
 // Static assets (html, etc.)
