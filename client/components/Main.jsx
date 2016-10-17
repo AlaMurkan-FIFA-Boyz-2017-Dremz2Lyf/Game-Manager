@@ -9,14 +9,25 @@ class Main extends React.Component {
     super();
     this.state = {
       data: 'HI',
-      AllPlayersList : [],
-      TourneyPlayersList : []
+      AllPlayersList : ['Ben', 'Nick', 'Scott', 'Chris'], //Test data, remove later
+      TourneyPlayersList : [],
+      inProgress : false
     };
+  }
+
+  addPlayerToTourney(index, players) {
+    this.setState({
+      players: this.state.TourneyPlayersList.push(players[index])
+    })
   }
 
   render() {
     return (
-      <div> {this.state.data}</div>
+      <div>
+        <div>
+          <AllPlayersList players={this.state.AllPlayersList} click={this.addPlayerToTourney.bind(this)}/>
+        </div>
+      </div>
     );
   }
 
