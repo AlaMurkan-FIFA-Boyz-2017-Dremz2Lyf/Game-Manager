@@ -29,14 +29,14 @@ routes.get('/app-bundle.js',
 
 
 // Home page
-app.get('/', function(req, res) {
+routes.get('/', function(req, res) {
   res.sendFile(path.resolve('client/public/index.html'));
 });
 
 // /api/player
 // **************************************************
 // GET request
-app.get('/api/player', function(req, res) {
+routes.get('/api/player', function(req, res) {
   knex('players')
   .select()
   .table('players')
@@ -46,7 +46,7 @@ app.get('/api/player', function(req, res) {
   })
 });
 
-app.post('/api/player', function(req, res) {
+routes.post('/api/player', function(req, res) {
   knex('players').insert({
     username: req.body.username
   }).then(function(result) {
@@ -55,7 +55,7 @@ app.post('/api/player', function(req, res) {
 })
 
 // POST request 
-app.post('/api/player', function(req, res) {
+routes.post('/api/player', function(req, res) {
   req.body.forEach(function(item) {
     knex('players').insert({
       username: item.username
