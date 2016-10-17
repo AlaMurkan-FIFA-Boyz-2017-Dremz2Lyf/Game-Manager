@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx')
 var Player = require('./Player.jsx')
 
@@ -14,6 +15,19 @@ class Main extends React.Component {
       inProgress : false
     };
   }
+
+  getAllPlayers: function() {
+    axios.get('/api/player')
+      .then(function(playerData) {
+        console.log(playerData);
+      });
+      .catch(function(err) {
+        console.log(err)
+      });
+  }
+
+  
+
 
   addPlayerToTourney(index, players) {
     this.setState({
