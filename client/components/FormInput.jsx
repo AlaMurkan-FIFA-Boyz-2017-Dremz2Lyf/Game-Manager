@@ -11,10 +11,16 @@ class Form extends React.Component {
   }
 
   handleInputChange(event) {
-    this.props.handleNewUser(event.target.value);
+    // this.props.handleNewUser(event.target.value);
     this.setState({
       value: event.target.value
     });
+  }
+
+  addNewPlayer: function() {
+    axios.post('/api/player', {
+      username: this.state.value
+    })
   }
 
   render() {
