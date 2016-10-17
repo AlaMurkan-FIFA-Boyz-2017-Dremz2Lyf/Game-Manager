@@ -1,4 +1,5 @@
 var browserify = require('browserify-middleware');
+var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
 
@@ -9,7 +10,7 @@ var routes = express.Router();
 //
 routes.get('/app-bundle.js',
   browserify('./client/app.js', {
-    transform: [ require('reactify')]
+    transform: [babelify, { presets: ['es2015'] }]
   }));
 
 //
