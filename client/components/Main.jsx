@@ -1,5 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var AllPlayersList = require('./AllPlayersList.jsx')
+var Player = require('./Player.jsx')
 
 class Main extends React.Component {
 
