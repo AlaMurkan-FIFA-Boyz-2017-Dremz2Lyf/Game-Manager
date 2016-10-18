@@ -3,11 +3,8 @@ var Player = require('./Player.jsx');
 
 var AllPlayersList = (props) => {
 
-  var playerlist = props.players.map(function(player, i) {
-    return;
-    <li className="list-group-item">
-    <Player name={player} click={props.click} index={i} players={props.players}/>
-    </li>;
+  var playerList = props.players.map(function(player, i) {
+    return <Player name={player} click={props.click} index={i} players={props.players}/>;
   });
 
   return (

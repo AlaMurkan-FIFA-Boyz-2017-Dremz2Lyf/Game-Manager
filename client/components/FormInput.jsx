@@ -7,7 +7,7 @@ class Form extends React.Component {
 
     this.state = {
       value: ''
-    }
+    };
   }
 
   handleInputChange(event) {
@@ -17,24 +17,29 @@ class Form extends React.Component {
     });
   }
 
-  addNewPlayer: function() {
+  addNewPlayer() {
     axios.post('/api/player', {
       username: this.state.value
-    })
+    });
   }
 
   render() {
     return (
-      <div className="user-search">
-        <input 
-          className="user-form"
-          type="text"
+
+      <form className="form-inline">
+        <div className="form-group">
+          <label for="username">Username</label>
+          <input type="text"
+          className="form-control user-form"
+          id="username"
           value={this.state.value}
           onChange={this.handleInputChange.bind(this)} />
-          <button></button>
-      </div>    
+        </div>
+        <button type="submit" className="btn btn-default">Submit</button>
+      </form>
+      
     );
   }
-}  
+}
 
 module.exports = Form;
