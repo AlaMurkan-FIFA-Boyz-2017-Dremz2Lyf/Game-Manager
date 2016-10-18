@@ -2,6 +2,7 @@ var browserify = require('browserify-middleware');
 var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
+var helpers = require('./serverHelpers.js');
 
 var routes = express.Router();
 
@@ -57,9 +58,15 @@ routes.post('/api/player', function(req, res) {
 // /api/tournaments
 // TODO: GET, POST, PUT (update with winner)
 
+
+// **************************************************
+
 // /api/games
 // TODO: GET, POST, PUT (update with score)
-
+routes.post('/api/games', function(req, res) {
+  
+  // knex('games').insert();
+});
 
 
 //
