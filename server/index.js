@@ -2,6 +2,7 @@ var browserify = require('browserify-middleware');
 var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
+var helpers = require('./serverHelpers.js');
 
 var routes = express.Router();
 
@@ -56,10 +57,37 @@ routes.post('/api/player', function(req, res) {
 
 // /api/tournaments
 // TODO: GET, POST, PUT (update with winner)
+  // NOTE: POST request handling should have access the new row created
+
+// **************************************************
 
 // /api/games
-// TODO: GET, POST, PUT (update with score)
+// TODO: GET, PUT (update with score)
+routes.post('/api/games', function(req, res) {
 
+  // get the tourneyId from the request body
+  var id = req.body.tourneyId;
+
+  // get the players list from the request body
+  var list = req.body.players;
+
+  // run those through the createGamesForTourney function
+  var games = helpers.createGamesForTourney(id, list);
+
+  // insert the games array into the db
+  knex('games').insert(games)
+    .then(function(response) {
+      res.status(201).send(response);
+    })
+    .catch(function(err) {
+      res.status(400).send('Error inserting games into database');
+    });
+});
+
+routes.get('/api/games:id', function(req, res) {
+  // this will use the id from the query as the tournament id.
+    // then fetch all games from the Database that have that tourneyId
+});
 
 
 //

@@ -11,7 +11,6 @@ class Main extends React.Component {
   constructor() {
     super();
     this.state = {
-      data: 'HI',
       allPlayersList: [], //Test data, remove later
       tourneyPlayersList: [],
       inProgress: false,
@@ -39,14 +38,39 @@ class Main extends React.Component {
     this.getAllPlayers();
   }
 
+  //createTournament will make a post request to the server, which will insert the
+    // new tournament into the DB, and after that call the createGames function
+  createTournament(tournyName) {
+    // post request to the /api/tournaments endpoint with the tourneyName included
+    axios.post('/api/tournaments', {
+      // NOTE: This route is not finished yet
+      tournament_name: tournyName
+    }).then(function(response) {
+      // then call createGames with the new tourney ID
+      createGames(response.body.id);
+    }).catch(function(err) {
+      // handles some errors
+      console.log(err, 'failed to create tournament');
+    });
+  }
 
-  // // this function is passed through props and attached to a player component
-  //   // in the list of existing players. It moves a player to the tournament to be.
-  // addPlayerToTourney(index, players) {
-  //   this.setState({
-  //     players: this.state.tourneyPlayersList.push(players[index])
-  //   });
-  // }
+  // createGames will be called when the button linked to createTournament is clicked.
+  createGames(tourneyId) {
+    // post request to the /api/games endpoint with the the tourneyPlayerList
+    axios.post('/api/games', {
+      tourneyId: tourneyId,
+      players: this.state.tourneyPlayerList
+    }).then(function(response) {
+      // then if the games post was Successful, we set inProgress to true
+      this.setState({
+        inProgress: true
+      });
+    }).catch(function(err) {
+      console.log(err, 'failed to post to games');
+    });
+  }
+
+
 
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
