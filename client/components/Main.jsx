@@ -27,7 +27,6 @@ class Main extends React.Component {
         self.setState({
           allPlayersList: playerData.data
         });
-        console.log(playerData);
       })
       .catch(function(err) {
         console.log(err);
