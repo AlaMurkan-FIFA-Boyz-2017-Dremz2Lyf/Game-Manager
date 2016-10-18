@@ -4,7 +4,8 @@ var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-var FormInput = require('./FormInput.jsx');
+var FormInput = require('./AddPlayerForm.jsx');
+var CurrentTournament = require('./CurrentTournament.jsx')
 
 class Main extends React.Component {
 
@@ -12,11 +13,11 @@ class Main extends React.Component {
     super();
     this.state = {
       allPlayersList: [], //Test data, remove later
-      tourneyPlayersList: [],
-      inProgress: false,
+      tourneyPlayersList: [{id: 1, username: 'Batman'}, {id: 2, username: 'Wolverine'}],
+      inProgress: true, //Testing purposes, setting to true
       currentGame: null,
-      currentTournamentGames: [],
-      currentTournament: null
+      currentTournamentGames: [{player1_id: 1, player2_id: 2, player1_score: 0, player2_score: 0, tournament_id: 1}],
+      currentTournament: {id: 1, tournament_name: 'ExampleTourney'}
     };
   }
 
@@ -60,7 +61,7 @@ class Main extends React.Component {
     // post request to the /api/games endpoint with the the tourneyPlayerList
     axios.post('/api/games', {
       tourneyId: tourneyId,
-      players: this.state.tourneyPlayerList
+      players: this.state.tourneyPlayersList
     }).then(function(response) {
       // then if the games post was Successful, we set inProgress to true
       this.setState({
@@ -103,6 +104,13 @@ class Main extends React.Component {
     }
   }
 
+  setCurrentGame(index) {
+    this.setState({
+      currentGame: this.state.currentTournamentGames[index]
+    })
+    console.log(this.state.currentGame)
+  }
+
   render() {
 
     // if the tournament is in progress,
@@ -117,11 +125,11 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-                <CurrentTournament currentTournament={this.props.currentTournament} />
+                <CurrentTournament currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
-                //Standings will go in here
+                
             </div>
 
             <div className="col-xs-1">
@@ -163,20 +171,20 @@ class Main extends React.Component {
 
           {/* this row holds both lists of players */}
           <div className="row">
-            <div className="col-xs-1">
+            <div className="col-md-1">
             </div>
 
-            <div className="col-xs-5">
+            <div className="col-md-5">
               {/* this will render out through the Player component into the players that we will make the tournament with */}
               <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
             </div>
 
-            <div className="col-xs-5">
+            <div className="col-md-5">
               {/* this will render out with the existing players in the database, and ones added through the form */}
               <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
             </div>
 
-            <div className="col-xs-1">
+            <div className="col-md-1">
             </div>
           </div>
 
