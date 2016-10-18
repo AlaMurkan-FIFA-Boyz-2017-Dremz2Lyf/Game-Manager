@@ -4,6 +4,7 @@ var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var TournamentList = require('./TournamentList.jsx');
+var FormInput = require('./FormInput.jsx');
 
 class Main extends React.Component {
 
@@ -69,7 +70,8 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
             <div className="col-xs-10">
               <div className="container">
-                <h2>Add Player will go here</h2>
+                <h2>Add Player</h2>
+                <FormInput />
               </div>
             </div>
             <div className="col-xs-1"></div>
@@ -85,20 +87,12 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-
+              <AllPlayersList players={this.state.allPlayersList} click={this.addPlayerToTourney.bind(this)}/>
             </div>
 
             <div className="col-xs-1">
             </div>
 
-          </div>
-
-          <div>
-            <AllPlayersList players={this.state.allPlayersList} click={this.addPlayerToTourney.bind(this)}/>
-          </div>
-
-          <div>
-            <TournamentList players={this.state.tourneyPlayersList} />
           </div>
 
         </div>
