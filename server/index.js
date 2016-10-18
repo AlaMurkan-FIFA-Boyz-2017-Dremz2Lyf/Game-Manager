@@ -65,7 +65,23 @@ routes.post('/api/player', function(req, res) {
 // TODO: GET, POST, PUT (update with score)
 routes.post('/api/games', function(req, res) {
 
-  knex('games').insert();
+  // get the tourneyId from the request body
+  var id = req.body.tourneyId;
+
+  // get the players list from the request body
+  var list = req.body.players;
+
+  // run those through the createGamesForTourney function
+  var games = helpers.createGamesForTourney(id, list);
+
+  // insert the games array into the db
+  knex('games').insert(games)
+    .then(function(response) {
+      res.status(201).send(response);
+    })
+    .catch(function(err) {
+      res.status(400).send('Error inserting games into database');
+    });
 });
 
 
