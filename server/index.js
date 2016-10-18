@@ -5,11 +5,13 @@ var Path = require('path');
 
 var routes = express.Router();
 
+routes.use( require('body-parser').json() );
+
 var knex = require('knex')({
- client: 'sqlite3',
- connection: {
-   filename: './database.sqlite3'
- }
+  client: 'sqlite3',
+  connection: {
+    filename: './database.sqlite3'
+  }
 });
 
 //
@@ -19,13 +21,6 @@ routes.get('/app-bundle.js',
   browserify('./client/app.js', {
     transform: [ require('reactify') ]
   }));
-
-// //
-// // Example endpoint (also tested in test/server/index_test.js)
-// //
-// routes.get('/api/tags-example', function(req, res) {
-//   res.send(['node', 'express', 'browserify', 'mithril']);
-// });
 
 
 // Home page
@@ -44,27 +39,18 @@ routes.get('/api/player', function(req, res) {
   });
 });
 
+// POST request handler
 routes.post('/api/player', function(req, res) {
   knex('players').insert({
     username: req.body.username
   }).then(function(result) {
     console.log(result);
+    res.status(201).send('Posted new user to the database');
+  }).catch(function(err) {
+    res.status(400).send('User already exists');
   });
 });
 
-// POST request
-routes.post('/api/player', function(req, res) {
-  req.body.forEach(function(item) {
-    knex('players').insert({
-      username: item.username
-    }).then(function(result) {
-      console.log(result);
-    });
-  });
-
-  res.sendStatus(200);
-  console.log('Successful POST request');
-});
 
 // **************************************************
 
