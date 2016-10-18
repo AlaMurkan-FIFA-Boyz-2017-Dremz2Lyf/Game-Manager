@@ -59,15 +59,27 @@ class Main extends React.Component {
 
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(tourneyId) {
+
+    var self = this;
     // post request to the /api/games endpoint with the the tourneyPlayerList
     axios.post('/api/games', {
       tourneyId: tourneyId,
       players: this.state.tourneyPlayersList
     }).then(function(response) {
-      // then if the games post was Successful, we set inProgress to true
-      this.setState({
-        inProgress: true
+
+      axios.get('/api/games', {
+        params: {
+          tournament_id: tourneyId
+        }
+      }).then(function(response) {
+        var games = response;
+        self.setState({
+          currentTournamentGames: games
+          inProgress: true
+        });
+
       });
+      // then if the games post was Successful, we set inProgress to true
     }).catch(function(err) {
       console.log(err, 'failed to post to games');
     });
