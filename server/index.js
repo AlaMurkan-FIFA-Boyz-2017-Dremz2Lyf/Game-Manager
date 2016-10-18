@@ -99,12 +99,12 @@ routes.post('/api/games', function(req, res) {
 routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
-  var tourneyId = req.params.tournament_id;
+  var tourneyId = req.query.tournament_id;
 
   knex('games').where('tournament_id', tourneyId).then(function(response) {
     res.status(200).send(response);
   }).catch(function(err) {
-    res.status(500).send(err, 'Could not fetch games from database');
+    res.status(500).send(err);
   });
 
 
