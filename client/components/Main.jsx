@@ -57,8 +57,8 @@ class Main extends React.Component {
       return (
         <div>
 
-          <div class="container">
-            <div class="jumbotron header">
+          <div className="container">
+            <div className="jumbotron header">
               <h1>Create a Tournament</h1>
               <p>
                 Welcome!
@@ -69,30 +69,30 @@ class Main extends React.Component {
 
           </div>
 
-          <div class="row">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-10">
-              <div class="container">
+          <div className="row">
+            <div className="col-xs-1"></div>
+            <div className="col-xs-10">
+              <div className="container">
                 <h2>Add Player will go here</h2>
               </div>
             </div>
-            <div class="col-xs-1"></div>
+            <div className="col-xs-1"></div>
           </div>
 
-          <div class="row">
+          <div className="row">
 
-            <div class="col-xs-1">
+            <div className="col-xs-1">
             </div>
 
-            <div class="col-xs-5">
+            <div className="col-xs-5">
               <TournamentList players={this.state.tourneyPlayersList} />
             </div>
 
-            <div class="col-xs-5">
+            <div className="col-xs-5">
 
             </div>
 
-            <div class="col-xs-1">
+            <div className="col-xs-1">
             </div>
 
           </div>
