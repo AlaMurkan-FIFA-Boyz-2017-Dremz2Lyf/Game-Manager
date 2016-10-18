@@ -62,7 +62,7 @@ routes.post('/api/player', function(req, res) {
 // **************************************************
 
 // /api/games
-// TODO: GET, POST, PUT (update with score)
+// TODO: GET, PUT (update with score)
 routes.post('/api/games', function(req, res) {
 
   // get the tourneyId from the request body
@@ -82,6 +82,11 @@ routes.post('/api/games', function(req, res) {
     .catch(function(err) {
       res.status(400).send('Error inserting games into database');
     });
+});
+
+routes.get('/api/games:id', function(req, res) {
+  // this will use the id from the query as the tournament id.
+    // then fetch all games from the Database that have that tourneyId
 });
 
 
