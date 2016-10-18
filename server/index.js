@@ -6,10 +6,10 @@ var Path = require('path');
 var routes = express.Router();
 
 var knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: '../database.sqlite3'
-  }
+ client: 'sqlite3',
+ connection: {
+   filename: './database.sqlite3'
+ }
 });
 
 //
@@ -38,8 +38,6 @@ routes.get('/', function(req, res) {
 // GET request
 routes.get('/api/player', function(req, res) {
   knex('players')
-  .select()
-  .table('players')
   .orderBy('id', 'desc')
   .then(function(data) {
     res.send(data);
