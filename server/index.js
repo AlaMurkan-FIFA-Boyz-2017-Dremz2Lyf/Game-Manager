@@ -65,7 +65,7 @@ routes.post('/api/player', function(req, res) {
 // TODO: GET, POST, PUT (update with score)
 routes.post('/api/games', function(req, res) {
   
-  // knex('games').insert();
+  knex('games').insert();
 });
 
 

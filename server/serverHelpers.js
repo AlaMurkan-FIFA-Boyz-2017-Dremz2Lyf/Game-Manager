@@ -11,8 +11,17 @@ exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
     // then forEach player left in there, create a game with the nextPlayer
       // and push that game into the games array
     playersInTourneyList.forEach(function(playerObj) {
+
+      // this will be the object pushed into the games array
       var gameObj = {};
-      gameObj.player1_id;
+
+      // set the needed values for the game object
+      gameObj.player1_id = nextPlayer.id;
+      gameObj.player2_id = playerObj.id;
+      gameObj.tournament_id = tourneyId;
+
+      // push into the games array
+      games.push(gameObj);
     });
 
 
