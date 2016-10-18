@@ -15,7 +15,8 @@ class Main extends React.Component {
       tourneyPlayersList: [],
       inProgress: false,
       currentGame: null,
-      currentTournamentGames: []
+      currentTournamentGames: [],
+      currentTournament: null
     };
   }
 
@@ -109,8 +110,23 @@ class Main extends React.Component {
       // render the CurrentTournament app
       return (
         <div>
-          <div>
-            some stuff here that will be awesome
+          <div className="row">
+            
+            <div className="col-xs-1">
+            
+            </div>
+
+            <div className="col-xs-5">
+                <CurrentTournament currentTournament={this.props.currentTournament} />
+            </div>
+
+            <div className="col-xs-5">
+                //Standings will go in here
+            </div>
+
+            <div className="col-xs-1">
+            
+            </div>
           </div>
         </div>
       );
