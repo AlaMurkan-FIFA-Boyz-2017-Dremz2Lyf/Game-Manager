@@ -59,7 +59,17 @@ routes.post('/api/player', function(req, res) {
 // TODO: GET, POST, PUT (update with winner)
   // NOTE: POST request handling should have access the new row created
 routes.post('/api/tournaments', function(req, res) {
-  
+  var tourneyName = req.body.tournament_name;
+
+  knex('tournaments').insert({
+    tournament_name: tourneyName
+  }).then(function(response) {
+    console.log('response in server/tournaments post handling:', response);
+    res.status(201).send(response);
+  }).catch(function(err) {
+    res.status(500).send(err, 'failed to post tournament');
+  });
+
 });
 // **************************************************
 

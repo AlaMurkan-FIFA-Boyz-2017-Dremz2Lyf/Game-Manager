@@ -50,10 +50,10 @@ class Main extends React.Component {
       tournament_name: tournyName
     }).then(function(response) {
       // will set state to the current tournament object returned from the post req
-
+      console.log('response in createTournament:', response);
       // then call createGames with the new tourney ID
 
-      createGames(response.body.id);
+      createGames(response[0]);
     }).catch(function(err) {
       // handles some errors
       console.log(err, 'failed to create tournament');
@@ -75,9 +75,10 @@ class Main extends React.Component {
           tournament_id: tourneyId
         }
       }).then(function(response) {
+        console.log(response);
         var games = response;
         self.setState({
-          currentTournamentGames: games
+          currentTournamentGames: games,
           inProgress: true
         });
 
@@ -135,9 +136,9 @@ class Main extends React.Component {
       return (
         <div>
           <div className="row">
-            
+
             <div className="col-xs-1">
-            
+
             </div>
 
             <div className="col-xs-5">
@@ -149,7 +150,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-1">
-            
+
             </div>
           </div>
         </div>
