@@ -41,6 +41,7 @@ class Main extends React.Component {
   createTournament(tournyName) {
     // post request to the /api/tournaments endpoint with the tourneyName included
     axios.post('/api/tournaments', {
+      // NOTE: This route is not finished yet
       tournament_name: tournyName
     }).then(function(response) {
       // then call createGames with the new tourney ID
@@ -66,6 +67,8 @@ class Main extends React.Component {
       console.log(err, 'failed to post to games');
     });
   }
+
+
 
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
