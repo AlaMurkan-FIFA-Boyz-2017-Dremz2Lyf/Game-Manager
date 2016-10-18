@@ -49,7 +49,10 @@ class Main extends React.Component {
       // NOTE: This route is not finished yet
       tournament_name: tournyName
     }).then(function(response) {
+      // will set state to the current tournament object returned from the post req
+
       // then call createGames with the new tourney ID
+
       createGames(response.body.id);
     }).catch(function(err) {
       // handles some errors
