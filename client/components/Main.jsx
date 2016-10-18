@@ -47,13 +47,20 @@ class Main extends React.Component {
     });
   }
 
-  movePlayer(name, players, index) {
+  // this function moves a Player component to the list they are not in
+    // tourneyPlayersList into allPlayersList, and visa versa.
+  movePlayer(name, index) {
+    // check if the tourneyPlayersList has this Player
     if (this.state.tourneyPlayersList.includes(name)) {
-      // then we remove it from that and add back to the Players list
+
+      // if so, we move from that list with a splice.
       var out = this.state.tourneyPlayersList.splice(index, 1)[0];
 
+      // then push the first index of that spliced out array into the allPlayersList
       this.state.allPlayersList.push(out);
 
+      // force update should update the state now, as we are not setting state
+        // inside a this.setState function
       this.forceUpdate();
 
     } else {
@@ -62,13 +69,17 @@ class Main extends React.Component {
 
       this.state.tourneyPlayersList.push(out);
 
+      // same thing as above, just in reverse
       this.forceUpdate();
 
     }
   }
 
   render() {
+
+    // if the tournament is in progress,
     if (this.state.inProgress) {
+      // render the CurrentTournament app
       return (
         <div>
           <div>
@@ -77,9 +88,11 @@ class Main extends React.Component {
         </div>
       );
     } else {
+      // otherwise render the create tournament app.
       return (
         <div>
 
+          {/* this container holds the jumbotron */}
           <div className="container">
             <div className="jumbotron header">
               <h1>Create a Tournament</h1>
@@ -89,9 +102,10 @@ class Main extends React.Component {
                 Create your tournament below by adding new players or picking from the list on the right!
               </p>
             </div>
-
           </div>
 
+
+          {/* This row holds the add player form */}
           <div className="row">
             <div className="col-xs-1"></div>
             <div className="col-xs-10">
@@ -103,22 +117,24 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
           </div>
 
-          <div className="row">
 
+          {/* this row holds both lists of players */}
+          <div className="row">
             <div className="col-xs-1">
             </div>
 
             <div className="col-xs-5">
+              {/* this will render out through the Player component into the players that we will make the tournament with */}
               <TournamentList players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
             </div>
 
             <div className="col-xs-5">
+              {/* this will render out with the existing players in the database, and ones added through the form */}
               <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
             </div>
 
             <div className="col-xs-1">
             </div>
-
           </div>
 
         </div>
