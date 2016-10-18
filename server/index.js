@@ -6,10 +6,10 @@ var Path = require('path');
 var routes = express.Router();
 
 var knex = require('knex')({
- client: 'sqlite3',
- connection: {
-   filename: '../database.sqlite3'
- }
+  client: 'sqlite3',
+  connection: {
+    filename: '../database.sqlite3'
+  }
 });
 
 //
@@ -30,7 +30,7 @@ routes.get('/app-bundle.js',
 
 // Home page
 routes.get('/', function(req, res) {
-  res.sendFile(path.resolve('client/public/index.html'));
+  res.sendFile(Path.resolve('client/public/index.html'));
 });
 
 // /api/player
@@ -43,7 +43,7 @@ routes.get('/api/player', function(req, res) {
   .orderBy('id', 'desc')
   .then(function(data) {
     res.send(data);
-  })
+  });
 });
 
 routes.post('/api/player', function(req, res) {
@@ -51,10 +51,10 @@ routes.post('/api/player', function(req, res) {
     username: req.body.username
   }).then(function(result) {
     console.log(result);
-  })
-})
+  });
+});
 
-// POST request 
+// POST request
 routes.post('/api/player', function(req, res) {
   req.body.forEach(function(item) {
     knex('players').insert({
@@ -62,10 +62,10 @@ routes.post('/api/player', function(req, res) {
     }).then(function(result) {
       console.log(result);
     });
-  })
+  });
 
   res.sendStatus(200);
-  console.log("Successful POST request");
+  console.log('Successful POST request');
 });
 
 // **************************************************
