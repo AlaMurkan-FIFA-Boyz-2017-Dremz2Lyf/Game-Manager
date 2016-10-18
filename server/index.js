@@ -57,14 +57,14 @@ routes.post('/api/player', function(req, res) {
 
 // /api/tournaments
 // TODO: GET, POST, PUT (update with winner)
-
+  // NOTE: POST request handling should have access the new row created
 
 // **************************************************
 
 // /api/games
 // TODO: GET, POST, PUT (update with score)
 routes.post('/api/games', function(req, res) {
-  
+
   knex('games').insert();
 });
 

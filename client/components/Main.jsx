@@ -37,14 +37,30 @@ class Main extends React.Component {
     this.getAllPlayers();
   }
 
+  //createTournament will make a post request to the server, which will insert the
+    // new tournament into the DB, and after that call the createGames function
+  createTournament(tournyName) {
+    axios.post('/api/tournaments', {
+      
+    })
+      .then(function(response) {
+        createGames(response.body.id);
+      })
+      .catch(function(err) {
+        console.log(err, 'failed to create tournament');
+      });
+  }
 
-  // // this function is passed through props and attached to a player component
-  //   // in the list of existing players. It moves a player to the tournament to be.
-  // addPlayerToTourney(index, players) {
-  //   this.setState({
-  //     players: this.state.tourneyPlayersList.push(players[index])
-  //   });
-  // }
+  // createGames will be called when the button linked to createTournament is clicked.
+  createGames(tourneyId) {
+    axios.post('/api/games')
+      .then(function(response) {
+
+      })
+      .catch(function(err) {
+        console.log(err, 'failed to post to games');
+      });
+  }
 
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
