@@ -1,4 +1,5 @@
 var React = require('react');
+var axios = require('axios');
 
 class Form extends React.Component {
 
@@ -11,22 +12,30 @@ class Form extends React.Component {
   }
 
   handleInputChange(event) {
-    // this.props.handleNewUser(event.target.value);
     this.setState({
       value: event.target.value
     });
   }
 
-  addNewPlayer() {
+  //When Add User Form is filled out this function will be called onSubmit. Prevents the page from
+  //refreshing, posts the new user to the database, then displays this new user in the player list.
+  //If the username already exists in the database it will display an error on the page. 
+  addNewPlayer(event) {
+    var self = this;
+    event.preventDefault()
     axios.post('/api/player', {
       username: this.state.value
-    });
+    }).then(function(){
+      self.props.getAllPlayers();
+    }).catch(function(error){
+      console.log(error);
+    })
   }
 
   render() {
     return (
 
-      <form className="form-inline">
+      <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
         <div className="form-group">
           <label htmlFor="username">Username</label>
           <input type="text"
