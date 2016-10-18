@@ -7,7 +7,8 @@ class Form extends React.Component {
     super(props);
 
     this.state = {
-      value: ''
+      value: '',
+      noError: true
     };
   }
 
@@ -26,28 +27,52 @@ class Form extends React.Component {
     axios.post('/api/player', {
       username: this.state.value
     }).then(function(){
+      self.state.noError = true;
+      self.state.value = '';
       self.props.getAllPlayers();
     }).catch(function(error){
-      console.log(error);
+      console.log('ERROR!')
+      self.state.noError = false;
+      self.state.value = '';
+      self.props.getAllPlayers();
     })
   }
 
   render() {
-    return (
+    if(this.state.noError) {
+      return (
 
-      <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input type="text"
-          className="form-control user-form"
-          id="username"
-          value={this.state.value}
-          onChange={this.handleInputChange.bind(this)} />
-        </div>
-        <button type="submit" className="btn btn-default">Submit</button>
-      </form>
+        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input type="text"
+              className="form-control user-form"
+              id="username"
+              value={this.state.value}
+              onChange={this.handleInputChange.bind(this)} />
+          </div>
+          <button type="submit" className="btn btn-default">Submit</button>
+        </form>
 
-    );
+      );
+
+    } else {
+      return (
+      
+        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} className="error">
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input type="text"
+              className="form-control user-form"
+              id="username"
+              value={this.state.value}
+              onChange={this.handleInputChange.bind(this)} />
+          </div>
+          <button type="submit" className="btn btn-default">ERROR SUBMIT</button>
+        </form>
+
+      )
+    }
   }
 }
 
