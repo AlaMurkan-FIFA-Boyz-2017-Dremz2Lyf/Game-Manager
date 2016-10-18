@@ -114,7 +114,7 @@ class Main extends React.Component {
             <div className="col-xs-10">
               <div className="container">
                 <h2>Add Player</h2>
-                <FormInput />
+                <FormInput getAllPlayers={this.getAllPlayers.bind(this)} />
               </div>
             </div>
             <div className="col-xs-1"></div>
