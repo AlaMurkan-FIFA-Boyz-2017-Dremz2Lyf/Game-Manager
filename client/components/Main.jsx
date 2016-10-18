@@ -13,11 +13,13 @@ class Main extends React.Component {
     this.state = {
       data: 'HI',
       allPlayersList: ['Ben', 'Nick', 'Scott', 'Chris'], //Test data, remove later
-      tourneyPlayersList: ['someone', 'or'],
+      tourneyPlayersList: ['someone'],
       inProgress: false
     };
   }
 
+  // This function makes a call to the server and returns all players from the
+    // database
   getAllPlayers() {
     var self = this;
     axios.get('/api/player')
@@ -41,8 +43,28 @@ class Main extends React.Component {
     // in the list of existing players. It moves a player to the tournament to be.
   addPlayerToTourney(index, players) {
     this.setState({
-      TourneyPlayersList : this.state.TourneyPlayersList.push(players[index])
-    })
+      players: this.state.tourneyPlayersList.push(players[index])
+    });
+  }
+
+  movePlayer(name, players, index) {
+    if (this.state.tourneyPlayersList.includes(name)) {
+      // then we remove it from that and add back to the Players list
+      var out = this.state.tourneyPlayersList.splice(index, 1)[0];
+
+      this.state.allPlayersList.push(out);
+
+      this.forceUpdate();
+
+    } else {
+      // otherwise, we remove it from the players list and add to the touney list
+      var out = this.state.allPlayersList.splice(index, 1)[0];
+
+      this.state.tourneyPlayersList.push(out);
+
+      this.forceUpdate();
+
+    }
   }
 
   render() {
@@ -87,11 +109,11 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <TournamentList players={this.state.tourneyPlayersList} />
+              <TournamentList players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
             </div>
 
             <div className="col-xs-5">
-              <AllPlayersList players={this.state.allPlayersList} click={this.addPlayerToTourney.bind(this)}/>
+              <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
             </div>
 
             <div className="col-xs-1">

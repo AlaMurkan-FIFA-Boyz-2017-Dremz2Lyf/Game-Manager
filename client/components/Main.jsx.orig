@@ -1,14 +1,10 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var axios = require('axios'); //Used for AJAX calls
-<<<<<<< 95544d861385a9edb6c67dc9fa84b13b15c6f178
-var AllPlayersList = require('./AllPlayersList.jsx')
-var Player = require('./Player.jsx')
-=======
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var TournamentList = require('./TournamentList.jsx');
->>>>>>> Started tourney list, implementing layout and Bootstrap
+var FormInput = require('./FormInput.jsx');
 
 class Main extends React.Component {
 
@@ -16,15 +12,9 @@ class Main extends React.Component {
     super();
     this.state = {
       data: 'HI',
-<<<<<<< 95544d861385a9edb6c67dc9fa84b13b15c6f178
-      AllPlayersList : [], //Test data, remove later
-      TourneyPlayersList : [],
-      inProgress : false
-=======
       allPlayersList: ['Ben', 'Nick', 'Scott', 'Chris'], //Test data, remove later
-      tourneyPlayersList: ['someone', 'or'],
+      tourneyPlayersList: ['someone'],
       inProgress: false
->>>>>>> Started tourney list, implementing layout and Bootstrap
     };
   }
 
@@ -51,14 +41,33 @@ class Main extends React.Component {
     // in the list of existing players. It moves a player to the tournament to be.
   addPlayerToTourney(index, players) {
     this.setState({
-<<<<<<< 95544d861385a9edb6c67dc9fa84b13b15c6f178
+<<<<<<< 9c55079e330f96c8246af82291fd40209dfa46c9
       TourneyPlayersList : this.state.TourneyPlayersList.push(players[index])
     })
 =======
       players: this.state.tourneyPlayersList.push(players[index])
     });
+  }
 
->>>>>>> Started tourney list, implementing layout and Bootstrap
+  movePlayer(name, players, index) {
+    if (this.state.tourneyPlayersList.includes(name)) {
+      // then we remove it from that and add back to the Players list
+      var out = this.state.tourneyPlayersList.splice(index, 1)[0];
+
+      this.state.allPlayersList.push(out);
+
+      this.forceUpdate();
+
+    } else {
+      // otherwise, we remove it from the players list and add to the touney list
+      var out = this.state.allPlayersList.splice(index, 1)[0];
+
+      this.state.tourneyPlayersList.push(out);
+
+      this.forceUpdate();
+
+    }
+>>>>>>> Working movePlayer function
   }
 
   render() {
@@ -74,8 +83,8 @@ class Main extends React.Component {
       return (
         <div>
 
-          <div class="container">
-            <div class="jumbotron header">
+          <div className="container">
+            <div className="jumbotron header">
               <h1>Create a Tournament</h1>
               <p>
                 Welcome!
@@ -86,40 +95,33 @@ class Main extends React.Component {
 
           </div>
 
-          <div class="row">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-10">
-              <div class="container">
-                <h2>Add Player will go here</h2>
+          <div className="row">
+            <div className="col-xs-1"></div>
+            <div className="col-xs-10">
+              <div className="container">
+                <h2>Add Player</h2>
+                <FormInput />
               </div>
             </div>
-            <div class="col-xs-1"></div>
+            <div className="col-xs-1"></div>
           </div>
 
-          <div class="row">
+          <div className="row">
 
-            <div class="col-xs-1">
+            <div className="col-xs-1">
             </div>
 
-            <div class="col-xs-5">
-              <TournamentList players={this.state.tourneyPlayersList} />
+            <div className="col-xs-5">
+              <TournamentList players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
             </div>
 
-            <div class="col-xs-5">
-
+            <div className="col-xs-5">
+              <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
             </div>
 
-            <div class="col-xs-1">
+            <div className="col-xs-1">
             </div>
 
-          </div>
-
-          <div>
-            <AllPlayersList players={this.state.allPlayersList} click={this.addPlayerToTourney.bind(this)}/>
-          </div>
-
-          <div>
-            <TournamentList players={this.state.tourneyPlayersList} />
           </div>
 
         </div>
