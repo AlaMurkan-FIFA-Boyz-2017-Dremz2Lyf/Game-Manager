@@ -28,7 +28,7 @@ class Form extends React.Component {
 
       <form className="form-inline">
         <div className="form-group">
-          <label for="username">Username</label>
+          <label htmlFor="username">Username</label>
           <input type="text"
           className="form-control user-form"
           id="username"
@@ -37,7 +37,7 @@ class Form extends React.Component {
         </div>
         <button type="submit" className="btn btn-default">Submit</button>
       </form>
-      
+
     );
   }
 }

@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
-var TournamentList = require('./TournamentList.jsx');
+var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
 var FormInput = require('./FormInput.jsx');
 
 class Main extends React.Component {
@@ -12,8 +12,8 @@ class Main extends React.Component {
     super();
     this.state = {
       data: 'HI',
-      allPlayersList: ['Ben', 'Nick', 'Scott', 'Chris'], //Test data, remove later
-      tourneyPlayersList: ['someone'],
+      allPlayersList: [], //Test data, remove later
+      tourneyPlayersList: [],
       inProgress: false
     };
   }
@@ -24,10 +24,10 @@ class Main extends React.Component {
     var self = this;
     axios.get('/api/player')
       .then(function(playerData) {
-        // self.setState({
-        //   AllPlayersList : playerData.data
-        // })
-        console.log(playerData)
+        self.setState({
+          allPlayersList: playerData.data
+        });
+        console.log(playerData);
       })
       .catch(function(err) {
         console.log(err);
@@ -35,23 +35,24 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    this.getAllPlayers()
+    this.getAllPlayers();
   }
 
 
-  // this function is passed through props and attached to a player component
-    // in the list of existing players. It moves a player to the tournament to be.
-  addPlayerToTourney(index, players) {
-    this.setState({
-      players: this.state.tourneyPlayersList.push(players[index])
-    });
-  }
+  // // this function is passed through props and attached to a player component
+  //   // in the list of existing players. It moves a player to the tournament to be.
+  // addPlayerToTourney(index, players) {
+  //   this.setState({
+  //     players: this.state.tourneyPlayersList.push(players[index])
+  //   });
+  // }
 
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
-  movePlayer(name, index) {
+  movePlayer(playerComponent, index) {
+
     // check if the tourneyPlayersList has this Player
-    if (this.state.tourneyPlayersList.includes(name)) {
+    if (this.state.tourneyPlayersList.includes(playerComponent)) {
 
       // if so, we move from that list with a splice.
       var out = this.state.tourneyPlayersList.splice(index, 1)[0];
@@ -126,7 +127,7 @@ class Main extends React.Component {
 
             <div className="col-xs-5">
               {/* this will render out through the Player component into the players that we will make the tournament with */}
-              <TournamentList players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
+              <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
             </div>
 
             <div className="col-xs-5">
