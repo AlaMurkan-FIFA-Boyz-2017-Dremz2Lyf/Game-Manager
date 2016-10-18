@@ -14,7 +14,9 @@ class Main extends React.Component {
       data: 'HI',
       allPlayersList: [], //Test data, remove later
       tourneyPlayersList: [],
-      inProgress: false
+      inProgress: false,
+      currentGame: null,
+      currentTournamentGames: []
     };
   }
 
