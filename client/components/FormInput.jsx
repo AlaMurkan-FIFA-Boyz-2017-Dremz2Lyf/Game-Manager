@@ -59,7 +59,7 @@ class Form extends React.Component {
     } else {
       return (
       
-        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} className="error">
+        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} >
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input type="text"
@@ -68,7 +68,7 @@ class Form extends React.Component {
               value={this.state.value}
               onChange={this.handleInputChange.bind(this)} />
           </div>
-          <button type="submit" className="btn btn-default">ERROR SUBMIT</button>
+          <button type="submit" className="btn btn-danger">USER EXISTS</button>
         </form>
 
       )
