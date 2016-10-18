@@ -60,9 +60,10 @@ class Main extends React.Component {
       // otherwise, we remove it from the players list and add to the touney list
       var out = this.state.allPlayersList.splice(index, 1)[0];
 
+      // same thing as above, just removing from allPlayersList and adding to the
+        //  tourneylist
       this.state.tourneyPlayersList.push(out);
 
-      // same thing as above, just in reverse
       this.forceUpdate();
 
     }
