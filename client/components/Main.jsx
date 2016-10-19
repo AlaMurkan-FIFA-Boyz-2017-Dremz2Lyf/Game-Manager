@@ -51,9 +51,16 @@ class Main extends React.Component {
       // NOTE: This route is not finished yet
       tournament_name: tournyName
     }).then(function(response) {
-      // will set state to the current tournament object returned from the post req
+      // response.data holds an array with one number in it
+        // this number is the tournamentId
+      var tourneyId = response.data[0];
+
+        // set the currentTournament key on state to that number
+      this.setState({
+        currentTournament: tourneyId
+      });
       // then call createGames with the new tourney ID
-      context.createGames.call(context, response.data[0]);
+      context.createGames.call(context, tourneyId);
     }).catch(function(err) {
       // handles some errors
       console.log(err, 'failed to create tournament');
@@ -76,7 +83,7 @@ class Main extends React.Component {
       }).then(function(response) {
         console.log('in creategames, get', response);
         // then if the games post was Successful, we set inProgress to true
-        var games = response;
+        var games = response.data;
         self.setState({
           currentTournamentGames: games,
           inProgress: true
@@ -125,8 +132,7 @@ class Main extends React.Component {
   setCurrentGame(index) {
     this.setState({
       currentGame: this.state.currentTournamentGames[index]
-    })
-    console.log(this.state.currentGame)
+    });
   }
 
   render() {
@@ -147,7 +153,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-                
+
             </div>
 
             <div className="col-xs-1">
