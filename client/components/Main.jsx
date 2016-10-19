@@ -209,7 +209,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament currentGame={this.state.currentGame} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
