@@ -4,8 +4,9 @@ var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-var FormInput = require('./AddPlayerForm.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx')
+var AddPlayerForm = require('./AddPlayerForm.jsx');
+var GameStatsForm = require('./GameStatsForm.jsx')
 
 class Main extends React.Component {
 
@@ -13,11 +14,11 @@ class Main extends React.Component {
     super();
     this.state = {
       allPlayersList: [], //Test data, remove later
-      tourneyPlayersList: [{id: 1, username: 'Batman'}, {id: 2, username: 'Wolverine'}],
-      inProgress: true, //Testing purposes, setting to true
+      tourneyPlayersList: [],
+      inProgress: false,
       currentGame: null,
-      currentTournamentGames: [{player1_id: 1, player2_id: 2, player1_score: 0, player2_score: 0, tournament_id: 1}],
-      currentTournament: {id: 1, tournament_name: 'ExampleTourney'}
+      currentTournamentGames: [],
+      currentTournament: null
     };
   }
 
@@ -162,7 +163,7 @@ class Main extends React.Component {
             <div className="col-xs-10">
               <div className="container">
                 <h2>Add Player</h2>
-                <FormInput getAllPlayers={this.getAllPlayers.bind(this)} />
+                <AddPlayerForm getAllPlayers={this.getAllPlayers.bind(this)} />
               </div>
             </div>
             <div className="col-xs-1"></div>
@@ -171,20 +172,20 @@ class Main extends React.Component {
 
           {/* this row holds both lists of players */}
           <div className="row">
-            <div className="col-md-1">
+            <div className="col-xs-1">
             </div>
 
-            <div className="col-md-5">
+            <div className="col-xs-5">
               {/* this will render out through the Player component into the players that we will make the tournament with */}
               <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
             </div>
 
-            <div className="col-md-5">
+            <div className="col-xs-5">
               {/* this will render out with the existing players in the database, and ones added through the form */}
               <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
             </div>
 
-            <div className="col-md-1">
+            <div className="col-xs-1">
             </div>
           </div>
 
