@@ -2,12 +2,14 @@ var React = require('react');
 var Game = require('./Game.jsx');
 
 var CurrentTournament = (props) => {
-  var playersInTourney = {} //Create an object that will assign IDs to names, in order to then pass that down to game components
-  props.currentTournament.forEach(function(player) {
-    playersInTourney[player.id] = player.username
+  var playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
+
+  props.tourneyPlayersList.forEach(function(player) {
+
+    playersInTourney[player.id] = player.username;
   });
   var gamesList = props.currentTournamentGames.map(function(game, gameIndex) {
-    return <Game gameObj={game} gameIndex={gameIndex} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]}/> //Passing along player names to display in matchups
+    return <Game gameObj={game} gameIndex={gameIndex} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]}/>; //Passing along player names to display in matchups
   }); //Will want to add in a click
 
   return (

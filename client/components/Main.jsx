@@ -44,16 +44,23 @@ class Main extends React.Component {
 
   //createTournament will make a post request to the server, which will insert the
     // new tournament into the DB, and after that call the createGames function
-  createTournament(tournyName) {
+  createTournament(tourneyName) {
     var context = this;
     // post request to the /api/tournaments endpoint with the tourneyName included
     axios.post('/api/tournaments', {
       // NOTE: This route is not finished yet
-      tournament_name: tournyName
+      tournament_name: tourneyName
     }).then(function(response) {
-      // will set state to the current tournament object returned from the post req
+      // response.data holds an array with one number in it
+        // this number is the tournamentId
+      var tourneyId = response.data[0];
+
+        // set the currentTournament key on state to an object with the id and name
+      context.setState({
+        currentTournament: { id: tourneyId, tournament_name: tourneyName }
+      });
       // then call createGames with the new tourney ID
-      context.createGames.call(context, response.data[0]);
+      context.createGames.call(context, tourneyId);
     }).catch(function(err) {
       // handles some errors
       console.log(err, 'failed to create tournament');
@@ -68,15 +75,15 @@ class Main extends React.Component {
       tourneyId: tourneyId,
       players: this.state.tourneyPlayersList
     }).then(function(response) {
-
+      // when the games are posted, get back all the games for the current tournament.
       axios.get('/api/games', {
         params: {
           tournament_id: tourneyId
         }
       }).then(function(response) {
-        console.log('in creategames, get', response);
+
         // then if the games post was Successful, we set inProgress to true
-        var games = response;
+        var games = response.data;
         self.setState({
           currentTournamentGames: games,
           inProgress: true
@@ -125,8 +132,7 @@ class Main extends React.Component {
   setCurrentGame(index) {
     this.setState({
       currentGame: this.state.currentTournamentGames[index]
-    })
-    console.log(this.state.currentGame)
+    });
   }
 
   render() {
@@ -147,7 +153,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-                
+
             </div>
 
             <div className="col-xs-1">
