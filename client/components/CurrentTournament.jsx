@@ -14,19 +14,16 @@ var CurrentTournament = (props) => {
 
   return (
     <div>
-
-      <div className="col-xs-12">
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h3>{props.currentTournament.tournament_name}</h3>
-          </div>
-          <div className="panel-body">
-            <ul className="list-group game">
-              {gamesList}
-            </ul>
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3>{props.currentTournament.tournament_name}</h3>
         </div>
+        <div className="panel-body">
+          <ul className="list-group game">
+            {gamesList}
+          </ul>
         </div>
-       </div>
+      </div>
     </div>
   );
 };
