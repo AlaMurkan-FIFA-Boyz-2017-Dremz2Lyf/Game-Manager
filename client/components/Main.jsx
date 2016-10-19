@@ -175,7 +175,7 @@ class Main extends React.Component {
           <div className="row">
             <div className="col-md-1"></div>
             <div className="col-md-10">
-              <FinishTournament />
+              <FinishTournament finish={this.finishTournament.bind(this)}/>
             </div>
             <div className="col-md-1"></div>
           </div>
