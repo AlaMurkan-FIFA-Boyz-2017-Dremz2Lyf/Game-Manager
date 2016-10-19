@@ -2,10 +2,15 @@ var React = require('react');
 var axios = require('axios');
 
 
+//WHAT I NEED TO FIX
+//props.currentGame.id is null so the state is remaining null in Main??
+//Worried on my merge I screwed up scotts bug fixes
+
 class StatsForm extends React.Component {
 
   constructor(props) {
     super(props);
+
 
     this.state = {
       player_1_score: '',
