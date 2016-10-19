@@ -128,9 +128,26 @@ routes.get('/api/games', function(req, res) {
   }).catch(function(err) {
     res.status(500).send(err);
   });
-
-
 });
+
+routes.put('/api/games', function(req, res) {
+  //this will use the game id from the query as gameId.
+  //then use knex to insert the player scores in the database that has that gameId
+  // console.log(req)
+  var gameId = req.body.id;
+  var player1Score = req.body.player1_score;
+  var player2Score = req.body.player2_score;
+  knex('games').where('id', gameId).update('player1_score', player1Score).update('player2_score', player2Score)
+    .then(function(response) {
+      res.status(202).send('Successfully Updated Game Score')
+    }).catch(function(err) {
+      res.status(500).send(err)
+    })
+})
+  
+
+
+
 
 
 //

@@ -175,6 +175,26 @@ class Main extends React.Component {
     });
   }
 
+//GameStatsForm calls this function after it has PUT the entered stats in the database.
+  updateGameStats(tourneyId) {
+    //reusing the api call from createGames to make a call to the database with the updated game stats
+    var self = this;
+    axios.get('/api/games', {
+        params: {
+          tournament_id: tourneyId
+        }
+      }).then(function(response) {
+        //Here it will show the updated game scores for each game that scores have been entered in. The GameStatsForm
+        //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on 
+        //the page
+        var games = response.data;
+        self.setState({
+          currentTournamentGames: games,
+          inProgress: true
+        });
+      })  
+  }
+
   render() {
 
     // if the tournament is in progress,
@@ -209,7 +229,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament currentGame={this.state.currentGame} updateGameStats={this.updateGameStats.bind(this)} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
