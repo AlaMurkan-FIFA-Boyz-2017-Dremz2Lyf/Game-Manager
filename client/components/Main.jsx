@@ -4,9 +4,10 @@ var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-var CurrentTournament = require('./CurrentTournament.jsx')
+var GameStatsForm = require('./GameStatsForm.jsx');
 var AddPlayerForm = require('./AddPlayerForm.jsx');
-var GameStatsForm = require('./GameStatsForm.jsx')
+var StartTournament = require('./StartTournament.jsx');
+var CurrentTournament = require('./CurrentTournament.jsx');
 
 class Main extends React.Component {
 
@@ -44,13 +45,15 @@ class Main extends React.Component {
   //createTournament will make a post request to the server, which will insert the
     // new tournament into the DB, and after that call the createGames function
   createTournament(tournyName) {
+    var context = this;
     // post request to the /api/tournaments endpoint with the tourneyName included
     axios.post('/api/tournaments', {
       // NOTE: This route is not finished yet
       tournament_name: tournyName
     }).then(function(response) {
+      // will set state to the current tournament object returned from the post req
       // then call createGames with the new tourney ID
-      createGames(response.body.id);
+      context.createGames.call(context, response.data[0]);
     }).catch(function(err) {
       // handles some errors
       console.log(err, 'failed to create tournament');
@@ -59,14 +62,28 @@ class Main extends React.Component {
 
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(tourneyId) {
+    var self = this;
     // post request to the /api/games endpoint with the the tourneyPlayerList
     axios.post('/api/games', {
       tourneyId: tourneyId,
       players: this.state.tourneyPlayersList
     }).then(function(response) {
-      // then if the games post was Successful, we set inProgress to true
-      this.setState({
-        inProgress: true
+
+      axios.get('/api/games', {
+        params: {
+          tournament_id: tourneyId
+        }
+      }).then(function(response) {
+        console.log('in creategames, get', response);
+        // then if the games post was Successful, we set inProgress to true
+        var games = response;
+        self.setState({
+          currentTournamentGames: games,
+          inProgress: true
+        });
+
+      }).catch(function(err) {
+        console.log('Error in get games with tourneyID:', err);
       });
     }).catch(function(err) {
       console.log(err, 'failed to post to games');
@@ -120,13 +137,13 @@ class Main extends React.Component {
       return (
         <div>
           <div className="row">
-            
+
             <div className="col-xs-1">
-            
+
             </div>
 
             <div className="col-xs-5">
-                <CurrentTournament currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
@@ -134,7 +151,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-1">
-            
+
             </div>
           </div>
         </div>
@@ -177,7 +194,13 @@ class Main extends React.Component {
 
             <div className="col-xs-5">
               {/* this will render out through the Player component into the players that we will make the tournament with */}
-              <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
+              <div className="panel panel-default">
+                <div className="panel-heading">New Tournament Players</div>
+                <div className="panel-body">
+                  <StartTournament create={this.createTournament.bind(this)}/>
+                  <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
+                </div>
+              </div>
             </div>
 
             <div className="col-xs-5">

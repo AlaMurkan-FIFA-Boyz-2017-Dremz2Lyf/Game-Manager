@@ -11,14 +11,9 @@ var NewTournamentPlayers = (props) => {
 
   // and just like playerList again, we render that out in an unordered list
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">New Tournament Players</div>
-      <div className="panel-body">
-        <ul className="list-group">
-          {newTourneyPlayersList}
-        </ul>
-      </div>
-    </div>
+    <ul className="list-group">
+      {newTourneyPlayersList}
+    </ul>
   );
 };
 

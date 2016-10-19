@@ -20,31 +20,31 @@ class Form extends React.Component {
 
   //When Add User Form is filled out this function will be called onSubmit. Prevents the page from
   //refreshing, posts the new user to the database, then displays this new user in the player list.
-  //If the username already exists in the database it will display an error on the page. 
+  //If the username already exists in the database it will display an error on the page.
   addNewPlayer(event) {
     var self = this;
-    event.preventDefault()
+    event.preventDefault();
     axios.post('/api/player', {
       username: this.state.value
-    }).then(function(){
+    }).then(function() {
       self.state.noError = true;
       self.state.value = '';
       self.props.getAllPlayers();
-    }).catch(function(error){
-      console.log('ERROR!')
+    }).catch(function(error) {
+      console.log('ERROR!');
       self.state.noError = false;
       self.state.value = '';
       self.props.getAllPlayers();
-    })
+    });
   }
 
   render() {
-    if(this.state.noError) {
+    if (this.state.noError) {
       return (
 
         <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Username </label>
             <input type="text"
               className="form-control user-form"
               id="username"
@@ -58,7 +58,7 @@ class Form extends React.Component {
 
     } else {
       return (
-      
+
         <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} >
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -71,7 +71,7 @@ class Form extends React.Component {
           <button type="submit" className="btn btn-danger">USER EXISTS</button>
         </form>
 
-      )
+      );
     }
   }
 }

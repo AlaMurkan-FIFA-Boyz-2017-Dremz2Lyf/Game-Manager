@@ -3,25 +3,15 @@ var Game = require('./Game.jsx');
 
 var CurrentTournament = (props) => {
   var playersInTourney = {} //Create an object that will assign IDs to names, in order to then pass that down to game components
-  props.tourneyPlayersList.forEach(function(player){
+  props.currentTournament.forEach(function(player) {
     playersInTourney[player.id] = player.username
-  })
-  var gamesList = props.currentTournamentGames.map(function(game, gameIndex){
+  });
+  var gamesList = props.currentTournamentGames.map(function(game, gameIndex) {
     return <Game gameObj={game} gameIndex={gameIndex} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]}/> //Passing along player names to display in matchups
-  }) //Will want to add in a click
+  }); //Will want to add in a click
 
   return (
     <div>
-      <div className="container">
-      <div className="jumbotron header">
-        <h1>Game time!</h1>
-        <p>
-          Kick off!
-          <br />
-          Start with your first game below, or click one to start any game!
-        </p>
-      </div>
-      </div>
 
       <div className="col-xs-12">
         <div className="panel panel-default">
@@ -37,7 +27,7 @@ var CurrentTournament = (props) => {
        </div>
     </div>
   );
-}
+};
 
 
 module.exports = CurrentTournament;

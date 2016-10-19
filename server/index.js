@@ -58,7 +58,19 @@ routes.post('/api/player', function(req, res) {
 // /api/tournaments
 // TODO: GET, POST, PUT (update with winner)
   // NOTE: POST request handling should have access the new row created
+routes.post('/api/tournaments', function(req, res) {
+  var tourneyName = req.body.tournament_name;
 
+  knex('tournaments').insert({
+    tournament_name: tourneyName
+  }).then(function(response) {
+    console.log('response in server/tournaments post handling:', response);
+    res.status(201).send(response);
+  }).catch(function(err) {
+    res.status(500).send(err, 'failed to post tournament');
+  });
+
+});
 // **************************************************
 
 // /api/games
@@ -80,13 +92,22 @@ routes.post('/api/games', function(req, res) {
       res.status(201).send(response);
     })
     .catch(function(err) {
-      res.status(400).send('Error inserting games into database');
+      res.status(500).send('Error inserting games into database');
     });
 });
 
-routes.get('/api/games:id', function(req, res) {
+routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
+  var tourneyId = req.query.tournament_id;
+
+  knex('games').where('tournament_id', tourneyId).then(function(response) {
+    res.status(200).send(response);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+
+
 });
 
 
