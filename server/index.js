@@ -45,7 +45,6 @@ routes.post('/api/player', function(req, res) {
   knex('players').insert({
     username: req.body.username
   }).then(function(result) {
-    console.log(result);
     res.status(201).send('Posted new user to the database');
   }).catch(function(err) {
     res.status(400).send('User already exists');
@@ -56,19 +55,42 @@ routes.post('/api/player', function(req, res) {
 // **************************************************
 
 // /api/tournaments
-// TODO: GET, POST, PUT (update with winner)
-  // NOTE: POST request handling should have access the new row created
+// TODO: GET, PUT (update with winner)
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
 
   knex('tournaments').insert({
     tournament_name: tourneyName
   }).then(function(response) {
-    console.log('response in server/tournaments post handling:', response);
     res.status(201).send(response);
   }).catch(function(err) {
     res.status(500).send(err, 'failed to post tournament');
   });
+
+});
+
+routes.put('/api/tournaments', function(req, res) {
+  var tourneyId = req.body.id;
+
+  var winnerName = req.body.winnerName;
+
+  knex('players')
+    .where('username', winnerName)
+    .select('id')
+    .then(function(winnerId) {
+      knex('tournaments')
+      .where('id', tourneyId)
+      .update('winner', winnerId)
+      .then(function(response) {
+        res.status(202).send(response);
+      })
+      .catch(function(err) {
+        res.status(500).send('Failed to update tournament winner:', err);
+      });
+    })
+    .catch(function(err) {
+      res.status(500).send('Failed to find user id:', err);
+    });
 
 });
 // **************************************************
@@ -78,13 +100,13 @@ routes.post('/api/tournaments', function(req, res) {
 routes.post('/api/games', function(req, res) {
 
   // get the tourneyId from the request body
-  var id = req.body.tourneyId;
+  var tourneyId = req.body.tourneyId;
 
   // get the players list from the request body
   var list = req.body.players;
 
   // run those through the createGamesForTourney function
-  var games = helpers.createGamesForTourney(id, list);
+  var games = helpers.createGamesForTourney(tourneyId, list);
 
   // insert the games array into the db
   knex('games').insert(games)

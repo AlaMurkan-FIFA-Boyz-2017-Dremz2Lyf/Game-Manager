@@ -8,12 +8,14 @@ var GameStatsForm = require('./GameStatsForm.jsx');
 var AddPlayerForm = require('./AddPlayerForm.jsx');
 var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
+var FinishTournament = require('./FinishTournament.jsx');
 
 class Main extends React.Component {
 
   constructor() {
     super();
     this.state = {
+      currentTournamentTable: [],
       allPlayersList: [], //Test data, remove later
       tourneyPlayersList: [],
       inProgress: false,
@@ -135,6 +137,22 @@ class Main extends React.Component {
     });
   }
 
+  finishTournament() {
+    var self = this;
+    var winner = this.state.currentTournamentTable.shift();
+    var tournament = this.state.currentTournament;
+
+    var results = Object.assign({winnerName: winner.name}, tournament);
+    axios.put('/api/tournament', results).then(function(response) {
+      alert('Congradulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
+      self.setState({
+        inProgress: false
+      });
+    }).catch(function(err) {
+      console.log('FinishTournament Error:', err);
+    });
+  }
+
   render() {
 
     // if the tournament is in progress,
@@ -154,6 +172,13 @@ class Main extends React.Component {
 
           </div>
 
+          <div className="row">
+            <div className="col-md-1"></div>
+            <div className="col-md-10">
+              <FinishTournament />
+            </div>
+            <div className="col-md-1"></div>
+          </div>
 
           <div className="row">
 
