@@ -20,7 +20,7 @@ var CurrentTournament = (props) => {
           <h3>{props.currentTournament.tournament_name}</h3>
         </div>
         <div className="panel-body">
-          <GameStatsForm currentGame={props.currentGame} />
+          <GameStatsForm currentGame={props.currentGame} updateGameStats={props.updateGameStats} />
           <ul className="list-group game">
             {gamesList}
           </ul>

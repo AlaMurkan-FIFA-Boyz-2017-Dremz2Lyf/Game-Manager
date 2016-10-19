@@ -175,6 +175,26 @@ class Main extends React.Component {
     });
   }
 
+//THIS IS WHERE I AM MAKING CHANGES TO MAKE MY GAMESTATSFORM UPDATE THE GAME SCORES AFTER SUBMIT
+  updateGameStats(tourneyId) {
+    console.log('This should be tourney ID', tourneyId)
+    //reusing the api call from createGames to make a call to the database with the updated game stats
+    var self = this;
+    axios.get('/api/games', {
+        params: {
+          tournament_id: tourneyId
+        }
+      }).then(function(response) {
+
+        // then if the games post was Successful, we set inProgress to true
+        var games = response.data;
+        self.setState({
+          currentTournamentGames: games,
+          inProgress: true
+        });
+      })  
+  }
+
   render() {
 
     // if the tournament is in progress,
@@ -209,7 +229,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament currentGame={this.state.currentGame} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament currentGame={this.state.currentGame} updateGameStats={this.updateGameStats.bind(this)} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
