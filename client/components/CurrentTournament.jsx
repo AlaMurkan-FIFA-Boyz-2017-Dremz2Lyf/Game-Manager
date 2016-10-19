@@ -4,7 +4,7 @@ var Game = require('./Game.jsx');
 var CurrentTournament = (props) => {
   var playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
 
-  props.currentTournament.forEach(function(player) {
+  props.tourneyPlayersList.forEach(function(player) {
 
     playersInTourney[player.id] = player.username;
   });
