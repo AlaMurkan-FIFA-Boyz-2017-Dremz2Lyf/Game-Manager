@@ -142,6 +142,19 @@ class Main extends React.Component {
       // render the CurrentTournament app
       return (
         <div>
+          <div className="container">
+            <div className="jumbotron header">
+              <h1>Game time!</h1>
+              <p>
+                Kick off!
+                <br />
+                Start with your first game below, or click one to start any game!
+              </p>
+            </div>
+
+          </div>
+
+
           <div className="row">
 
             <div className="col-xs-1">
@@ -153,7 +166,24 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-
+              <div className="panel panel-default">
+                <div className="panel-heading"><h3>Table</h3></div>
+                <div className="panel-body">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Player</th>
+                        <th>Games Played</th>
+                        <th>Won</th>
+                        <th>Loss</th>
+                        <th>Draw</th>
+                        <th>GD</th>
+                      </tr>
+                    </thead>
+                    {/* NOTE: THIS WILL BE WHERE THE TABLE IS RENDERED. An outer element of <tbody> around each player's stats */}
+                  </table>
+                </div>
+              </div>
             </div>
 
             <div className="col-xs-1">
