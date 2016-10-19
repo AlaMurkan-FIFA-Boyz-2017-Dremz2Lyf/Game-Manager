@@ -8,13 +8,15 @@ var GameStatsForm = require('./GameStatsForm.jsx');
 var AddPlayerForm = require('./AddPlayerForm.jsx');
 var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
+var FinishTournament = require('./FinishTournament.jsx');
 
 class Main extends React.Component {
 
   constructor() {
     super();
     this.state = {
-      allPlayersList: [], //Test data, remove later
+      currentTournamentTable: [],
+      allPlayersList: [],
       tourneyPlayersList: [],
       inProgress: false,
       currentGame: null,
@@ -23,18 +25,20 @@ class Main extends React.Component {
     };
   }
 
-  // This function makes a call to the server and returns all players from the
-    // database
+  // getAllPlayers makes a call to the server for all players from the database.
   getAllPlayers() {
     var self = this;
     axios.get('/api/player')
       .then(function(playerData) {
+        // If the get request is successful, we set the state of allPlayersList
+          // to the returned playerData.
         self.setState({
           allPlayersList: playerData.data
         });
       })
       .catch(function(err) {
-        console.log(err);
+        // Handle any errors here.
+        console.log('Error in getting players from the DB:', err);
       });
   }
 
@@ -70,29 +74,33 @@ class Main extends React.Component {
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(tourneyId) {
     var self = this;
-    // post request to the /api/games endpoint with the the tourneyPlayerList
+    // Post request to the /api/games endpoint with the the tourneyPlayerList.
     axios.post('/api/games', {
       tourneyId: tourneyId,
       players: this.state.tourneyPlayersList
     }).then(function(response) {
-      // when the games are posted, get back all the games for the current tournament.
+      // When the games are posted, get back all the games for the current tournament.
       axios.get('/api/games', {
         params: {
           tournament_id: tourneyId
         }
       }).then(function(response) {
 
-        // then if the games post was Successful, we set inProgress to true
+        // Then if the games post and get were successful, we set inProgress to true,
+          // and add the array of game objects to the state.
         var games = response.data;
+
         self.setState({
           currentTournamentGames: games,
           inProgress: true
         });
 
       }).catch(function(err) {
+        // This error handles failures in the getting of games back.
         console.log('Error in get games with tourneyID:', err);
       });
     }).catch(function(err) {
+      // This error handles failures posting games to the server/database.
       console.log(err, 'failed to post to games');
     });
   }
@@ -135,6 +143,38 @@ class Main extends React.Component {
     });
   }
 
+  finishTournament() {
+    // set our context here.
+    var self = this;
+
+    // the sorting for the tournament table should happen on game submits,
+      // so that means the first item in the currentTournamentTable array
+      // should be the winner of our tournament when we end it!
+    var winner = this.state.currentTournamentTable.shift();
+
+    // grab the tournament we are in from state,
+    var tournament = this.state.currentTournament;
+
+    // and extend an object containing the winners name with the tournament object.
+    var results = Object.assign({winnerName: winner.name}, tournament);
+
+    // That results object will be passed into the put request to the server.
+    axios.put('/api/tournament', results).then(function(response) {
+      // This alert definitely doesnt work right now, but is a place holder for some sort of
+        // Congradulations to the winner.
+      alert('Congradulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
+
+      // Then we set our inProgress back to false to go back to the create tournament page.
+        // NOTE: this may change with multiple tournaments running at once
+      self.setState({
+        inProgress: false
+      });
+    }).catch(function(err) {
+      // A catch in the event the put request fails.
+      console.log('FinishTournament Error:', err);
+    });
+  }
+
   render() {
 
     // if the tournament is in progress,
@@ -154,6 +194,13 @@ class Main extends React.Component {
 
           </div>
 
+          <div className="row">
+            <div className="col-md-1"></div>
+            <div className="col-md-10">
+              <FinishTournament finish={this.finishTournament.bind(this)}/>
+            </div>
+            <div className="col-md-1"></div>
+          </div>
 
           <div className="row">
 
