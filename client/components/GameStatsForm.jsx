@@ -1,12 +1,10 @@
 var React = require('react');
 var axios = require('axios');
 
+//When the PUT has happened need to run a function that updates the state of current game score in 
+//the Main currentGame state
 
-//WHAT I NEED TO FIX
-//props.currentGame.id is null so the state is remaining null in Main??
-//Worried on my merge I screwed up scotts bug fixes
-
-class StatsForm extends React.Component {
+class GameStatsForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -30,12 +28,12 @@ class StatsForm extends React.Component {
     })
   }
       
-
   insertStats(event) {
     var self = this;
     event.preventDefault();
+    console.log('PROPS:', this.props.currentGame)
     axios.put('/api/games', {
-      id: this.props.currentGame.id,
+      id: self.props.currentGame.id,
       player1_score: this.state.player_1_score,
       player2_score: this.state.player_2_score
     })
@@ -78,8 +76,6 @@ class StatsForm extends React.Component {
 }
 
 
+module.exports = GameStatsForm;
 
 
-
-
-module.exports = StatsForm;
