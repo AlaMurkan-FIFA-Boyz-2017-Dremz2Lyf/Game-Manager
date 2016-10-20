@@ -49,26 +49,24 @@ describe('The Server', function() {
     describe('getTable', function() {
 
       it_('Should be a function', function * () {
-        expect(helpers.getPlayer).to.be.a('function');
+        expect(helpers.getTable).to.be.a('function');
       });
 
-      it_('When called with an array of game objects, should return an array of playerStats objects', function * () {
-        // NOTE: this test is not finished
-        var playersStats;
+      it_('Should query the database for games with the passed in tournament_id', function* () {
+        expect('I have no idea how ').to.equal('test this, but you should make it happen ;)');
+      });
 
-        yield request(app)
-        .get('/api/games')
-        .then(function(res) {
-          playersStats = helpers.getPlayer(res.body);
-        });
+      it_('When called with a tournament_id, should return an array of playerStats objects', function * () {
+
+        var tournament_id = 1;
+
+        var playersStats = helpers.getTable(tournament_id);
 
         expect(playersStats).to.be.an('array');
         expect(playersStats[0]).to.be.an('object');
+        expect(playersStats[0]).to.have.all.keys('playerId', 'gp', 'won', 'loss', 'draw', 'gd', 'points');
       });
 
-      it_('Should', function* () {
-        
-      });
     });
 
   });
@@ -97,7 +95,7 @@ describe('The Server', function() {
         .expect(200);
       });
 
-      it_('Should return an Array of objects when queried with a tournament_id', function * () {
+      it_('Should respond with an array of objects when queried with a tournament_id', function * () {
 
         yield request(app)
         .get('/api/games?tournament_id=1')
@@ -119,7 +117,7 @@ describe('The Server', function() {
         .expect(200);
       });
 
-      it_('Should accept a tournament_id query and the response body should be an array of objects', function * () {
+      it_('Should respond with an array of objects when queried with a tournament_id', function * () {
 
         yield request(app)
         .get('/api/games/table?tournament_id=1')
