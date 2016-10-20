@@ -60,46 +60,6 @@ describe('The Server', function() {
 
   describe('Routes', function() {
 
-    beforeEach(function() {
-      knex.select().table('games').then(function(res) {
-        console.log(res);
-      });
-      // knex.migrate.rollback();
-      // knex.migrate.latest();
-
-      var playerNames = Mock_Data.players.map(function(playerObj) {
-        return {username: playerObj.username};
-      });
-      knex('players').insert(playerNames)
-        .then(function(res) {
-        })
-        .catch(function(err) {
-          // console.log('Error adding players to db', err);
-        });
-
-      var tourneyNames = Mock_Data.tournaments.map(function(tourney) {
-        return {tournament_name: tourney.tournament_name};
-      });
-      knex('tournaments').insert(tourneyNames)
-        .then(function(res) {
-        })
-        .catch(function(err) {
-          // console.log('Error adding tournaments to db', err);
-        });
-
-      var games = Mock_Data.games.map(function(game) {
-        return {player1_id: game.player1_id, player2_id: game.player2_id, tournament_id: game.tournament_id};
-      });
-      knex('games').insert(games)
-        .then(function(res) {
-
-        })
-        .catch(function(err) {
-          // console.log('Error adding games to db', err);
-        });
-
-    });
-
     describe('/api/games', function() {
 
       it_('Should be a route in the server', function * () {
