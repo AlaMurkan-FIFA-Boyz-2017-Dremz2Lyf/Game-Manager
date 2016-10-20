@@ -36,7 +36,7 @@ class GameStatsForm extends React.Component {
       player2_score: this.state.player_2_score
     })
     .then(function() {
-      self.props.updateGameStats(tourneyId);
+      self.props.updateGames(tourneyId);
       self.setState({
         player_1_score: '',
         player_2_score: ''
