@@ -93,6 +93,14 @@ routes.put('/api/tournaments', function(req, res) {
     });
 
 });
+
+routes.get('/api/tournaments', function(req,res) {
+  knex('tournaments')
+  .orderBy('id', 'desc')
+  .then(function(data) {
+    res.send(data);
+  });
+})
 // **************************************************
 
 // /api/games
