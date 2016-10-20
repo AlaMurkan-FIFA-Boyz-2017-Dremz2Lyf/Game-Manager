@@ -149,7 +149,7 @@ routes.put('/api/games', function(req, res) {
     .then(function(response) {
       res.status(202).send('Successfully Updated Game Score')
     }).catch(function(err) {
-      res.status(500).send(err)
+      res.status(500).send('Failed to update scores in databse', err)
     })
 })
   
