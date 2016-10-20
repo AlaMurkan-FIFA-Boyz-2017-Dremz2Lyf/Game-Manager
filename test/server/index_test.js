@@ -48,18 +48,27 @@ describe('The Server', function() {
 
     describe('getTable', function() {
 
-      it_('serverHelpers.js should have a getTable function', function * () {
+      it_('Should be a function', function * () {
         expect(helpers.getPlayer).to.be.a('function');
       });
 
-      it_('When called with a list of player objects it should return the player object from the database', function * () {
-        expect(helpers.getPlayer());
+      it_('When called with an array of game objects, should return an array of playerStats objects', function * () {
+        // NOTE: this test is not finished
+        var playersStats;
+
+        yield request(app)
+        .get('/api/games')
+        .then(function(res) {
+          playersStats = helpers.getPlayer(res.body);
+        });
+
+        expect(playersStats).to.be.an('array');
+        expect(playersStats[0]).to.be.an('object');
       });
-    });
 
-    describe('getPlayedGames', function() {
-
-      it_('serverHelpers.js Should have a getPlayedGames function', );
+      it_('Should', function* () {
+        
+      });
     });
 
   });
@@ -110,10 +119,10 @@ describe('The Server', function() {
         .expect(200);
       });
 
-      it_('The response body should be an array of objects', function * () {
+      it_('Should accept a tournament_id query and the response body should be an array of objects', function * () {
 
         yield request(app)
-        .get('/api/games/table')
+        .get('/api/games/table?tournament_id=1')
         .expect(200)
         .expect(function(response) {
           expect(response.body).to.be.an('array');

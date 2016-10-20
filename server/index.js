@@ -95,7 +95,7 @@ routes.put('/api/tournaments', function(req, res) {
 });
 
 //Note, the below will only fetch ONGOING tournaments
-routes.get('/api/tournaments', function(req,res) {
+routes.get('/api/tournaments', function(req, res) {
   knex('tournaments').where('winner_id', null)
   .orderBy('id', 'desc')
   .then(function(data) {
@@ -135,11 +135,22 @@ routes.get('/api/games', function(req, res) {
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
 
-  knex('games').where('tournament_id', tourneyId).then(function(response) {
-    res.status(200).send(response);
-  }).catch(function(err) {
-    res.status(500).send(err);
-  });
+  // if the route was queried with a tournament_id, return the games of that tournament_id
+  if (tourneyId) {
+    // query the db here with the tourneyId
+    knex('games').where('tournament_id', tourneyId).then(function(response) {
+      res.status(200).send(response);
+    }).catch(function(err) {
+      res.status(500).send(err);
+    });
+  } else {
+    // query the db here for all games
+    knex.select().from('games').then(function(response) {
+      res.status(200).send(response);
+    }).catch(function(err) {
+      res.status(500).send(err);
+    });
+  }
 });
 
 routes.put('/api/games', function(req, res) {
