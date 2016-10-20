@@ -94,8 +94,9 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
+//Note, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req,res) {
-  knex('tournaments')
+  knex('tournaments').where('winner_id', null)
   .orderBy('id', 'desc')
   .then(function(data) {
     res.send(data);

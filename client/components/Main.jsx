@@ -19,7 +19,6 @@ class Main extends React.Component {
       currentTournamentTable: [],
       allPlayersList: [],
       tourneyPlayersList: [],
-      inProgress: false,
       currentGame: null,
       currentTournamentGames: [],
       currentTournament: null,
@@ -108,14 +107,13 @@ class Main extends React.Component {
         }
       }).then(function(response) {
 
-        // Then if the games post and get were successful, we set inProgress to true,
+        // Then if the games post and get were successful, we set currentTournament to true,
           // and add the array of game objects to the state.
         var games = response.data;
 
         self.setState({
           currentTournamentGames: games,
           currentGame: games[0],
-          inProgress: true
         });
 
       }).catch(function(err) {
@@ -167,7 +165,7 @@ class Main extends React.Component {
     console.log(this.state.currentGame)
   }
 
-  setCurrentTournament(index) {
+  setCurrentTournament(index, tourneyId) {
     this.setState({
       currentTournament : this.state.ongoingTournamentsList[index]
     });
@@ -193,13 +191,16 @@ class Main extends React.Component {
     axios.put('/api/tournament', results).then(function(response) {
       // This alert definitely doesnt work right now, but is a place holder for some sort of
         // Congradulations to the winner.
-      alert('Congradulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
+      alert('Congratulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
 
-      // Then we set our inProgress back to false to go back to the create tournament page.
+      // Then we set our currentTournament back to false to go back to the create tournament page.
         // NOTE: this may change with multiple tournaments running at once
       self.setState({
-        inProgress: false
+        currentTournament: null
       });
+
+      console.log(self.state.currentTournament)
+
     }).catch(function(err) {
       // A catch in the event the put request fails.
       console.log('FinishTournament Error:', err);
@@ -207,7 +208,7 @@ class Main extends React.Component {
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
-  updateGameStats(tourneyId) {
+  updateGames(tourneyId) {
     //reusing the api call from createGames to make a call to the database with the updated game stats
     var self = this;
     axios.get('/api/games', {
@@ -221,7 +222,6 @@ class Main extends React.Component {
         var games = response.data;
         self.setState({
           currentTournamentGames: games,
-          inProgress: true
         });
       })  
   }
@@ -229,7 +229,7 @@ class Main extends React.Component {
   render() {
 
     // if the tournament is in progress,
-    if (this.state.inProgress) {
+    if (this.state.currentTournament) {
       // render the CurrentTournament app
       return (
         <div>
@@ -260,7 +260,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament currentGame={this.state.currentGame} updateGameStats={this.updateGameStats.bind(this)} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament currentGame={this.state.currentGame} updateGames={this.updateGames.bind(this)} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
