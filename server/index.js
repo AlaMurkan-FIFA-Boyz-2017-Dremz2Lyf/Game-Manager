@@ -153,12 +153,13 @@ routes.put('/api/games', function(req, res) {
     .update('player2_score', player2Score)
     .update('status', status)
     .then(function(response) {
-      res.status(202).send('Successfully Updated Game Score')
+      res.status(202).send('Successfully Updated Game Score');
     }).catch(function(err) {
-      res.status(500).send('Failed to update scores in databse', err)
-    })
-})
+      res.status(500).send('Failed to update scores in databse', err);
+    });
+});
   
+
 
 
 
