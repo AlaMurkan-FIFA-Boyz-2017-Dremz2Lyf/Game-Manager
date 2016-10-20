@@ -21,24 +21,24 @@ global.expect = chai.expect;
 // This is the object to create the mock database.
   // It should contain keys representing tables in the db.
   // Those keys should point to arrays holding objects or 'rows' back from the DB
-global.Mock_DataBase = {};
+global.Mock_Data = {};
 
 // set a players key on the mock database
-Mock_DataBase.players = [
+Mock_Data.players = [
   {id: 1, username: 'Alice'},
   {id: 2, username: 'Bob'},
   {id: 3, username: 'Gilbert'}
 ];
 
 // set a tournaments key on the mock database
-Mock_DataBase.tournaments = [
-  {id: 1, tournament_name: 'Super Tourney!', winner_id: null}
+Mock_Data.tournaments = [
+  {tournament_name: 'Super Tourney!', winner_id: null}
 ];
 // set a games key on the mock database
-Mock_DataBase.games = [
-  {id: 1, player1_id: 1, player2_id: 2, player1_score: null, player2_score: null, player1_shots: null, player2_shots: null, player1_possession: null, player2_possession: null, player1_shotsOnGoal: null, player2_shotsOnGoal: null, tournament_id: 1},
-  {id: 2, player1_id: 1, player2_id: 3, player1_score: null, player2_score: null, player1_shots: null, player2_shots: null, player1_possession: null, player2_possession: null, player1_shotsOnGoal: null, player2_shotsOnGoal: null, tournament_id: 1},
-  {id: 3, player1_id: 2, player2_id: 3, player1_score: null, player2_score: null, player1_shots: null, player2_shots: null, player1_possession: null, player2_possession: null, player1_shotsOnGoal: null, player2_shotsOnGoal: null, tournament_id: 1}
+Mock_Data.games = [
+  {player1_id: 1, player2_id: 2, player1_score: null, player2_score: null, player1_shots: null, player2_shots: null, player1_possession: null, player2_possession: null, player1_shotsOnGoal: null, player2_shotsOnGoal: null, tournament_id: 1},
+  {player1_id: 1, player2_id: 3, player1_score: null, player2_score: null, player1_shots: null, player2_shots: null, player1_possession: null, player2_possession: null, player1_shotsOnGoal: null, player2_shotsOnGoal: null, tournament_id: 1},
+  {player1_id: 2, player2_id: 3, player1_score: null, player2_score: null, player1_shots: null, player2_shots: null, player1_possession: null, player2_possession: null, player1_shotsOnGoal: null, player2_shotsOnGoal: null, tournament_id: 1}
 ];
 
 //
