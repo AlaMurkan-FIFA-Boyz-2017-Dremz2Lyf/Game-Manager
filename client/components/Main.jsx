@@ -21,7 +21,8 @@ class Main extends React.Component {
       inProgress: false,
       currentGame: null,
       currentTournamentGames: [],
-      currentTournament: null
+      currentTournament: null,
+      allTournamentsList: []
     };
   }
 
@@ -67,6 +68,7 @@ class Main extends React.Component {
       context.setState({
         currentTournament: { id: tourneyId, tournament_name: tourneyName }
       });
+
       // then call createGames with the new tourney ID
       context.createGames.call(context, tourneyId);
     }).catch(function(err) {
