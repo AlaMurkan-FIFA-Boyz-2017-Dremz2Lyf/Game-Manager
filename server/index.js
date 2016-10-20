@@ -142,6 +142,7 @@ routes.get('/api/games', function(req, res) {
 routes.put('/api/games', function(req, res) {
   //this will use the game id from the query as gameId.
   //then use knex to insert the player scores in the database that has that gameId
+  //it will also update the status of the game in the database to disabled.
   // console.log(req)
   var gameId = req.body.id;
   var player1Score = req.body.player1_score;
