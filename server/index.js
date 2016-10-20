@@ -95,13 +95,13 @@ routes.put('/api/tournaments', function(req, res) {
 });
 
 //Note, the below will only fetch ONGOING tournaments
-routes.get('/api/tournaments', function(req,res) {
+routes.get('/api/tournaments', function(req, res) {
   knex('tournaments').where('winner_id', null)
   .orderBy('id', 'desc')
   .then(function(data) {
     res.send(data);
   });
-})
+});
 // **************************************************
 
 // /api/games
@@ -127,16 +127,30 @@ routes.post('/api/games', function(req, res) {
     });
 });
 
+// NOTE: We need to update this to OPTIONALLY take a tournament_id query.
+  // If a tournament_id is passed in as a query, just send the games in that tournament
+  // If not, we send ALL the games in the DB
 routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
 
-  knex('games').where('tournament_id', tourneyId).then(function(response) {
-    res.status(200).send(response);
-  }).catch(function(err) {
-    res.status(500).send(err);
-  });
+  // if the route was queried with a tournament_id, return the games of that tournament_id
+  if (tourneyId) {
+    // query the db here with the tourneyId
+    knex('games').where('tournament_id', tourneyId).then(function(response) {
+      res.status(200).send(response);
+    }).catch(function(err) {
+      res.status(500).send(err);
+    });
+  } else {
+    // query the db here for all games
+    knex.select().from('games').then(function(response) {
+      res.status(200).send(response);
+    }).catch(function(err) {
+      res.status(500).send(err);
+    });
+  }
 });
 
 routes.put('/api/games', function(req, res) {
@@ -147,18 +161,19 @@ routes.put('/api/games', function(req, res) {
   var gameId = req.body.id;
   var player1Score = req.body.player1_score;
   var player2Score = req.body.player2_score;
-  var status = req.body.status
+  var status = req.body.status;
   knex('games').where('id', gameId)
     .update('player1_score', player1Score)
     .update('player2_score', player2Score)
     .update('status', status)
     .then(function(response) {
-      res.status(202).send('Successfully Updated Game Score')
+      res.status(202).send('Successfully Updated Game Score');
     }).catch(function(err) {
-      res.status(500).send('Failed to update scores in databse', err)
-    })
-})
-  
+      res.status(500).send('Failed to update scores in databse', err);
+    });
+});
+
+
 
 
 
