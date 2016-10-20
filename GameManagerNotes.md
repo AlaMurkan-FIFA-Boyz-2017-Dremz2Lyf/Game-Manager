@@ -149,3 +149,12 @@ ______________________________________________________________________
   - Players list in create
   - Player in Player list on create page
   - Player in tournament list
+
+
+#### Tournament Table
+  - what happens
+    - setCurrentTournament function makes an api call for the table data
+      - The api call it takes a tourneyId as an argument
+      - and returns a tableStats array with an object for each player
+        - having keys for all the data we want
+      - then we set the currentTournamentTable to that array

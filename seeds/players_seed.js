@@ -1,6 +1,6 @@
 require(TEST_HELPER);
 
-var playerNames = Mock_Data.players.map(function(playerObj) {
+var playerNames = Mock_Data.playerObjs.map(function(playerObj) {
   return {username: playerObj.username};
 });
 

@@ -35,7 +35,7 @@ describe('The Server', function() {
 
       it_('When called with a tournament id and array of player objects it should return an array of game objects', function * () {
         var tournamentId = 1;
-        var playersList = Mock_Data.players;
+        var playersList = Mock_Data.playerObjs;
 
         var result = helpers.createGamesForTourney(tournamentId, playersList);
 
@@ -45,9 +45,10 @@ describe('The Server', function() {
       });
 
     });
+
     describe('getTable', function() {
 
-      it_('serverHelpers should have a getTable function', function * () {
+      it_('serverHelpers.js should have a getTable function', function * () {
         expect(helpers.getPlayer).to.be.a('function');
       });
 
@@ -56,6 +57,10 @@ describe('The Server', function() {
       });
     });
 
+    describe('getPlayedGames', function() {
+
+      it_('serverHelpers.js Should have a getPlayedGames function', );
+    });
 
   });
 
@@ -72,9 +77,6 @@ describe('The Server', function() {
             });
           });
         });
-      knex.select().from('players').then(function(res) {
-        console.log(res, 'working!?!?!?!?!?!?!?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!????????');
-      });
     });
 
     describe('/api/games', function() {
@@ -108,7 +110,7 @@ describe('The Server', function() {
         .expect(200);
       });
 
-      it_('the response body should be an array of objects', function * () {
+      it_('The response body should be an array of objects', function * () {
 
         yield request(app)
         .get('/api/games/table')
@@ -119,7 +121,7 @@ describe('The Server', function() {
         });
       });
 
-      it_('the objects in the return array should be properly formatted', function * () {
+      it_('The objects in the return array should be properly formatted', function * () {
 
         yield request(app)
         .get('/api/games/table')
