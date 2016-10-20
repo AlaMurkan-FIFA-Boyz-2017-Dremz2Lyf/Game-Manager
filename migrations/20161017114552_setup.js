@@ -23,7 +23,7 @@ exports.up = function(knex, Promise) {
       table.integer('player1_shotsOnGoal').unsigned();
       table.integer('player2_shotsOnGoal').unsigned();
       table.integer('tournament_id').references('id').inTable('tournaments');
-      table.string('status');
+      table.string('status').defaultTo('created');
 
     })
   ]);
