@@ -33,7 +33,8 @@ class GameStatsForm extends React.Component {
     axios.put('/api/games', {
       id: self.props.currentGame.id,
       player1_score: this.state.player_1_score,
-      player2_score: this.state.player_2_score
+      player2_score: this.state.player_2_score,
+      status: 'disabled'
     })
     .then(function() {
       self.props.updateGames(tourneyId);
