@@ -9,6 +9,7 @@ var AddPlayerForm = require('./AddPlayerForm.jsx');
 var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
 var FinishTournament = require('./FinishTournament.jsx');
+var OngoingTournamentsList = require('./OngoingTournamentsList.jsx')
 
 class Main extends React.Component {
 
@@ -22,7 +23,7 @@ class Main extends React.Component {
       currentGame: null,
       currentTournamentGames: [],
       currentTournament: null,
-      allTournamentsList: []
+      ongoingTournamentsList: []
     };
   }
 
@@ -47,8 +48,23 @@ class Main extends React.Component {
       });
   }
 
+  getOngoingTournaments() {
+    var self = this;
+    axios.get('/api/tournaments')
+    .then(function(tourneys){
+      self.setState({
+        ongoingTournamentsList : tourneys.data
+      })
+    })
+    .catch(function(err){
+      // Handle any errors here
+      console.log('Error in getting tourneys from the DB', err)
+    })
+  }
+
   componentDidMount() {
     this.getAllPlayers();
+    this.getOngoingTournaments();
   }
 
   //createTournament will make a post request to the server, which will insert the
@@ -150,6 +166,13 @@ class Main extends React.Component {
     });
     console.log(this.state.currentGame)
   }
+
+  setCurrentTournament(index) {
+    this.setState({
+      currentTournament : this.state.ongoingTournamentsList[index]
+    });
+  }
+
 
   finishTournament() {
     // set our context here.
@@ -265,6 +288,7 @@ class Main extends React.Component {
 
             </div>
           </div>
+
         </div>
       );
     } else {
@@ -322,7 +346,7 @@ class Main extends React.Component {
             <div className="col-xs-1">
             </div>
           </div>
-
+          <OngoingTournamentsList tourneys={this.state.ongoingTournamentsList} click={this.setCurrentTournament.bind(this)}/>
         </div>
       );
     }
