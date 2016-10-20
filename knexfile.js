@@ -8,7 +8,7 @@ module.exports = {
       filename: './database.sqlite3'
     },
     seeds: {
-      directory: './test'
+      directory: './seeds'
     }
   },
 

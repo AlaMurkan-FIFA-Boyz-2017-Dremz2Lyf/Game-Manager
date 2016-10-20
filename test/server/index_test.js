@@ -4,6 +4,7 @@ var helpers = require(__server + '/serverHelpers.js');
 var request = require('supertest-as-promised');
 var routes = require(__server + '/index.js');
 
+
 describe('The Server', function() {
 
   var knex = require('knex')({
@@ -59,6 +60,22 @@ describe('The Server', function() {
   });
 
   describe('Routes', function() {
+
+    beforeEach(function(done) {
+      knex.migrate.rollback()
+        .then(function() {
+          knex.migrate.latest()
+          .then(function() {
+            return knex.seed.run()
+            .then(function() {
+              done();
+            });
+          });
+        });
+      knex.select().from('players').then(function(res) {
+        console.log(res, 'working!?!?!?!?!?!?!?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!????????');
+      });
+    });
 
     describe('/api/games', function() {
 

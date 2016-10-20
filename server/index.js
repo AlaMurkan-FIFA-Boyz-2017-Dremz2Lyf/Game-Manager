@@ -101,7 +101,7 @@ routes.get('/api/tournaments', function(req,res) {
   .then(function(data) {
     res.send(data);
   });
-})
+});
 // **************************************************
 
 // /api/games
@@ -127,6 +127,9 @@ routes.post('/api/games', function(req, res) {
     });
 });
 
+// NOTE: We need to update this to OPTIONALLY take a tournament_id query.
+  // If a tournament_id is passed in as a query, just send the games in that tournament
+  // If not, we send ALL the games in the DB
 routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
@@ -158,7 +161,7 @@ routes.put('/api/games', function(req, res) {
       res.status(500).send('Failed to update scores in databse', err);
     });
 });
-  
+
 
 
 
