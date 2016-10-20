@@ -98,6 +98,7 @@ class Main extends React.Component {
 
         self.setState({
           currentTournamentGames: games,
+          currentGame: games[0],
           inProgress: true
         });
 
