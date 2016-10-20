@@ -30,11 +30,15 @@ class Main extends React.Component {
     var self = this;
     axios.get('/api/player')
       .then(function(playerData) {
-        // If the get request is successful, we set the state of allPlayersList
-          // to the returned playerData.
+        var tourneyPlayerIds = self.state.tourneyPlayersList.map(function(tourneyPlayer){
+          return tourneyPlayer.id //Returns a list of players already in the tourney
+        })
+        var notAdded = playerData.data.filter(function(player){
+            return tourneyPlayerIds.indexOf(player.id) === -1 //Returns a list of players not in the tourney from the db
+          })
         self.setState({
-          allPlayersList: playerData.data
-        });
+          allPlayersList: notAdded //Adds the players from the db not already in a tourney to allPlayersList
+        })
       })
       .catch(function(err) {
         // Handle any errors here.
@@ -141,6 +145,7 @@ class Main extends React.Component {
     this.setState({
       currentGame: this.state.currentTournamentGames[index]
     });
+    console.log(this.state.currentGame)
   }
 
   finishTournament() {
