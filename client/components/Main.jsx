@@ -234,10 +234,16 @@ class Main extends React.Component {
             uniquePlayerIds.push(game.player2_id)
           }
         })
-        axios.get('./api/players', {
+        axios.get('./api/player', {
           params : {
-            tournament_players : uniquePlayerIds.join('-') //Note: Add to this after you fill out the response
+            tournament_players : uniquePlayerIds
           }
+        })
+        .then(function(playersInCurrentTourney){
+          console.log(playersInCurrentTourney)
+          self.setState({
+            tourneyPlayersList : playersInCurrentTourney.data
+          })
         })
       })  
   }

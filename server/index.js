@@ -33,21 +33,23 @@ routes.get('/', function(req, res) {
 // **************************************************
 // GET request
 routes.get('/api/player', function(req, res) {
-  playerIds = req.params.playerIds;
+  playerIds = req.query.tournament_players;
+
   
+  if(playerIds) {
+    knex('players')
+    .whereIn('id', playerIds)
+    .then(function(data){
+      res.send(data)
+    })
+  } else
+
   knex('players')
   .orderBy('id', 'desc')
   .then(function(data) {
     res.send(data);
   });
 });
-
-// GET request for when you are looking for a specific set of players
-
-// routes.get('/api/selectplayers', function(req, res) {
-//   playerIds = req.query.playerIds;
-//   res.send()
-// })
 
 
 // POST request handler
@@ -144,7 +146,6 @@ routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
-  console.log(req.query.tournament_id)
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
     // query the db here with the tourneyId
