@@ -9,11 +9,6 @@
 
 }
 
-
-.score {
-
-}
-
 .game {
   text-align: center;
 }
@@ -40,7 +35,9 @@
 }
 
 .jumbotron {
-  color: #D6BC6F;
+  color: #1E2329;
+  background: #FAD817;
+  margin-bottom: 10px;
 }
 
 label {
@@ -48,7 +45,8 @@ label {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #D6BC6F;
+  color: #1E2329;
+  text-shadow: 1px 1px 5px #FAD817;
   font-family: 'PT Sans', sans-serif;
 }
 
@@ -58,4 +56,28 @@ h1, h2, h3, h4, h5, h6 {
   background-position: center;
   background-attachment: fixed;
   background-size: cover;
+}
+
+.panel-default {
+  background: rgba(31,35,41,0.92);
+}
+
+.panel-default>.panel-heading {
+  background: #FAD817;
+}
+
+.list-group-item:last-child {
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.list-group-item:first-child {
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+}
+
+.list-group-item {
+  color: #FAD817;
+  background: rgba(31,35,41,0.98);
+  border: 1px solid #D6BC6F;
 }
