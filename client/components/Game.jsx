@@ -5,7 +5,7 @@ var React = require('react');
 // );
 
 var Game = (props) => (
-	<li className="list-group-item" onClick={function() { props.click(props.gameIndex); }}>
+	<li className="list-group-item "/* + {props.status}*/ onClick={function() { props.click(props.gameIndex); }}>
 	  <span className="player1">{props.player1_name}</span>
 	  <span className="score">
 	    <span className="player1_score">{props.gameObj.player1_score}</span>

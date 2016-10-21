@@ -187,7 +187,7 @@ class Main extends React.Component {
     this.setState({
       currentTournament: this.state.ongoingTournamentsList[index]
     });
-    this.updateGames(tourneyId)
+    this.updateGames(tourneyId);
   }
 
   toggleStatsView() {
@@ -230,8 +230,6 @@ class Main extends React.Component {
         currentTournament: null
       });
 
-      console.log(self.state.currentTournament);
-
     }).catch(function(err) {
       // A catch in the event the put request fails.
       console.log('FinishTournament Error:', err);
@@ -250,35 +248,48 @@ class Main extends React.Component {
         //Here it will show the updated game scores for each game that scores have been entered in. The GameStatsForm
         //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
         //the page
-        var games = response.data;
-        self.setState({
-          currentTournamentGames: games,
-        });
-      })
-      
-      //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
-      //We have to do this because the players are not added to tourneyPlayersList incrementallyas they are when we create a tournament from scratch
-      .then(function(){
+      var games = response.data;
+      self.setState({
+        currentTournamentGames: games,
+      });
+    })
+      .then(function() { //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
+        // Slight change here, buy adding a dictionary we can make this process O(n) instead of O(2^n).
+        var dictionary = {};
+        // The dictionary gives us a constant/instant time to check if the id is in the unique id list.
+          // This lets us filter down to unique ids without nesting .includes or .indexOf.
         var uniquePlayerIds = [];
-        self.state.currentTournamentGames.forEach(function(game){ //Creating a unique list of players in each games
-          if (uniquePlayerIds.indexOf(game.player1_id) === -1) {
-            uniquePlayerIds.push(game.player1_id)
+
+        // Here we iterate over the array of game objects to filter them down to unique IDs
+        self.state.currentTournamentGames.forEach(function(game) { //Creating a unique list of players in each games
+          if (dictionary[game.player1_id] === undefined) {
+            uniquePlayerIds.push(game.player1_id);
           }
-          if (uniquePlayerIds.indexOf(game.player2_id) === -1) {
-            uniquePlayerIds.push(game.player2_id)
+          dictionary[game.player1_id] = 'found';
+
+          if (dictionary[game.player2_id] === undefined) {
+            uniquePlayerIds.push(game.player2_id);
           }
-        })
+          dictionary[game.player2_id] = 'found';
+
+          // if (uniquePlayerIds.indexOf(game.player1_id) === -1) {
+          //   uniquePlayerIds.push(game.player1_id);
+          // }
+          // if (uniquePlayerIds.indexOf(game.player2_id) === -1) {
+          //   uniquePlayerIds.push(game.player2_id);
+          // }
+        });
         axios.get('./api/player', {
-          params : {
-            tournament_players : uniquePlayerIds //Make a GET request, passing in the list of players in current tourney
+          params: {
+            tournament_players: uniquePlayerIds
           }
         })
-        .then(function(playersInCurrentTourney){
+        .then(function(playersInCurrentTourney) {
           self.setState({
-            tourneyPlayersList : playersInCurrentTourney.data //Set the state to reflect the players in the current tourney
-          })
-        })
-      })  
+            tourneyPlayersList: playersInCurrentTourney.data
+          });
+        });
+      });
   }
 
   render() {
