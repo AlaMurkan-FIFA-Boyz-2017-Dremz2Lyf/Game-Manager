@@ -33,6 +33,13 @@ routes.get('/', function(req, res) {
 // **************************************************
 // GET request
 routes.get('/api/player', function(req, res) {
+  
+  // if(req.query) {
+  //   res.send(req.query.tournament_players.split('-'))
+  // } else
+
+  //Maybe make an entirely different route to handle this??
+
   knex('players')
   .orderBy('id', 'desc')
   .then(function(data) {
