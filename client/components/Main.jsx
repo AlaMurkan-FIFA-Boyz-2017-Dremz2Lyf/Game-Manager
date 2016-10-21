@@ -237,7 +237,7 @@ class Main extends React.Component {
             <div className="jumbotron header">
               <h1>GAME TIME!</h1>
               <p>
-                Start with your first game below, or click one to start any game!
+                Start with your first game below, or click any game to start it!
               </p>
             </div>
 
@@ -269,7 +269,7 @@ class Main extends React.Component {
                     <thead>
                       <tr>
                         <th>Player</th>
-                        <th>Games Played</th>
+                        <th>GP</th>
                         <th>Won</th>
                         <th>Loss</th>
                         <th>Draw</th>
@@ -309,7 +309,7 @@ class Main extends React.Component {
           <div className="row">
             <div className="col-xs-1"></div>
             <div className="col-xs-4">
-                <h2>ADD PLAYER</h2>
+                <h3>ADD PLAYER</h3>
                 <AddPlayerForm getAllPlayers={this.getAllPlayers.bind(this)} />
             </div>
             <div className="col-xs-7"></div>

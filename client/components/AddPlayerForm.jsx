@@ -44,11 +44,11 @@ class Form extends React.Component {
 
         <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
           <div className="form-group">
-            <label htmlFor="username">USERNAME </label>
             <input type="text"
               className="form-control user-form"
               id="username"
               value={this.state.value}
+              placeholder="Add User"
               onChange={this.handleInputChange.bind(this)} />
           </div>
           <button type="submit" className="btn btn-default">ADD</button>
@@ -61,14 +61,15 @@ class Form extends React.Component {
 
         <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} >
           <div className="form-group">
-            <label htmlFor="username">Username</label>
             <input type="text"
               className="form-control user-form"
               id="username"
               value={this.state.value}
+              placeholder="Please try again"
               onChange={this.handleInputChange.bind(this)} />
           </div>
           <button type="submit" className="btn btn-danger">USER EXISTS</button>
+          <p className="user-oops">Oops, that name is taken! Try again!</p>
         </form>
 
       );

@@ -53,8 +53,11 @@ class GameStatsForm extends React.Component {
   render() {
     return (
 
-    <form className="form-inline" onSubmit={this.insertStats.bind(this)} autoComplete="off">
-          <div className="form-group form-group-sm">
+      <form className="form-inline" onSubmit={this.insertStats.bind(this)} autoComplete="off">
+        <div className="row">
+
+          <div className="col-xs-10">
+            <div className="form-group form-group-sm">
             <input type="text"
               className="form-control player1-score col-xs-2"
               id="player1_id"
@@ -68,9 +71,16 @@ class GameStatsForm extends React.Component {
               value={this.state.player_2_score}
               onChange={this.handleInputChangeAway.bind(this)}
               placeholder="Away Final Score" />
+            </div>
           </div>
-          <button type="submit" className="btn btn-default btn-xs">END GAME</button>
-        </form>
+
+          <div className="col-xs-2">
+            <button type="submit" className="btn btn-default btn-xs">END GAME</button>
+          </div>
+
+        </div>
+
+      </form>
     );
   }
 }
