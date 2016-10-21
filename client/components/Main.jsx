@@ -162,13 +162,13 @@ class Main extends React.Component {
     this.setState({
       currentGame: this.state.currentTournamentGames[index]
     });
-    console.log(this.state.currentGame);
   }
 
   setCurrentTournament(index, tourneyId) {
     this.setState({
       currentTournament: this.state.ongoingTournamentsList[index]
     });
+    this.updateGames(tourneyId)
   }
 
 
@@ -219,11 +219,33 @@ class Main extends React.Component {
         //Here it will show the updated game scores for each game that scores have been entered in. The GameStatsForm
         //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
         //the page
-      var games = response.data;
-      self.setState({
-        currentTournamentGames: games,
-      });
-    });
+        var games = response.data;
+        self.setState({
+          currentTournamentGames: games,
+        });
+      })
+      .then(function(){ //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
+        var uniquePlayerIds = [];
+        self.state.currentTournamentGames.forEach(function(game){ //Creating a unique list of players in each games
+          if (uniquePlayerIds.indexOf(game.player1_id) === -1) {
+            uniquePlayerIds.push(game.player1_id)
+          }
+          if (uniquePlayerIds.indexOf(game.player2_id) === -1) {
+            uniquePlayerIds.push(game.player2_id)
+          }
+        })
+        axios.get('./api/player', {
+          params : {
+            tournament_players : uniquePlayerIds
+          }
+        })
+        .then(function(playersInCurrentTourney){
+          console.log(playersInCurrentTourney)
+          self.setState({
+            tourneyPlayersList : playersInCurrentTourney.data
+          })
+        })
+      })  
   }
 
   render() {
