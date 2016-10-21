@@ -68,7 +68,7 @@
   yellow #FAD817
   Grey #1E2329
   gold #D6BC6F
-  
+
 
 ---------------------------------------------------------------------
 
@@ -143,19 +143,6 @@ ______________________________________________________________________
     - click to end
       - set winner_ID
       - Congrats to winner!
-
-
-#### Stateful components
-  - App
-  - Form input
-
-
-#### Stateless components
-  - table in current tournament
-  - games list in current tournament  - Players in tournament in create
-  - Players list in create
-  - Player in Player list on create page
-  - Player in tournament list
 
 
 #### Tournament Table

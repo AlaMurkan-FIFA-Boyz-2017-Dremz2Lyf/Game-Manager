@@ -17,13 +17,27 @@ class Main extends React.Component {
   constructor() {
     super();
     this.state = {
+      // currentTournamentTable will hold objects for each player in the current tournament.
+        // These objects will have all the stats to be rendered to the Tournament's Table/Standings
       currentTournamentTable: [],
+      // allPlayersList holds all existing players as objects.
+        // These objects have id and username keys/values.
       allPlayersList: [],
+      // tourneyPlayersList holds all players in the current/to be created tournament
+        // Same player objects as the allPlayersList
       tourneyPlayersList: [],
+      // currentGame will (surprise!) hold the current game.
+        // This allows us to add data to this game from the GameStatsForm
       currentGame: null,
+      // currentTournamentGames hold all the current tournament's games. (Seeing a patern here? ;p)
+        // Each item in the array is a game object. These game objects hold player1_id, player2_id and
+        // a bunch of data fields to track the stats.
       currentTournamentGames: [],
+      // Bet you can guess what currentTournament is :D.
       currentTournament: null,
+      // This one here isn't to hard to guess either!
       ongoingTournamentsList: [],
+
       statsView: false,
       statLines: []
     };
@@ -32,6 +46,7 @@ class Main extends React.Component {
   // getAllPlayers makes a call to the server for all players from the database.
   getAllPlayers() {
     var self = this;
+    // axios rocks and makes nice promise based calls to the server for us.
     axios.get('/api/player')
       .then(function(playerData) {
         var tourneyPlayerIds = self.state.tourneyPlayersList.map(function(tourneyPlayer) {
@@ -50,6 +65,7 @@ class Main extends React.Component {
       });
   }
 
+  // This function makes a call for all tournaments from the server and adds them to the state.
   getOngoingTournaments() {
     var self = this;
     axios.get('/api/tournaments')
