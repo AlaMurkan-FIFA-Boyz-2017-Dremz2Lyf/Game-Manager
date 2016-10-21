@@ -9,11 +9,131 @@
 
 }
 
-
-.score {
-
-}
-
 .game {
   text-align: center;
+}
+
+.form-group-sm .form-control {
+  margin: 3px;
+}
+
+.btn-xs {
+  padding: 5px 10px;
+  margin: 2px;
+}
+
+.btn-default, .btn-danger {
+  float: right;
+}
+
+.btn-danger {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+.btn {
+  font-family: 'PT Sans', sans-serif;
+}
+
+.list-group-item {
+  font-family: 'PT Sans', sans-serif;
+}
+
+.jumbotron {
+  color: #1E2329;
+  background: #FAD817;
+  margin-bottom: 10px;
+}
+
+label {
+  margin-right: 5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #1E2329;
+  text-shadow: 1px 1px 5px #FAD817;
+  font-family: 'PT Sans', sans-serif;
+}
+
+.background {
+  background-image: url('./Liverpool-Anfield-Stadium-Wallpaper.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.panel-default {
+  background: rgba(31,35,41,0.8);
+  border: 1px solid #D6BC6F;
+  border-radius: 2px;
+}
+
+.panel-default>.panel-heading {
+  background: #FAD817;
+}
+
+.panel-heading {
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
+}
+
+.list-group-item:last-child {
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.list-group-item:first-child {
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+}
+
+.list-group-item {
+  color: #FAD817;
+  background: rgba(31,35,41,0.98);
+  border: 1px solid #D6BC6F;
+  box-shadow: 0 2px 4px 0 rgba(250,216,23,0.2),0 1.5px 5px 0 rgba(250,216,23,0.19);
+}
+
+.list-group-item:hover {
+  box-shadow: 0 8px 16px 0 rgba(250,216,23,0.2),0 6px 20px 0 rgba(250,216,23,0.19);
+  transform: scale3d(1.015,1.015,-1);
+}
+
+.list-group-item:active {
+  top: -1.5px;
+  right: -1px
+}
+
+.list-group-item.active {
+  z-index: 2;
+  color: #1E2329;
+  background-color: #FAD817;
+  transform: scale(1.02);
+}
+
+.well {
+  background: rgba(31,35,41,0);
+  border: 0px;
+}
+
+.btn-primary {
+  color: #D6BC6F;
+  background-color: #1E2329;
+  border-color: #1E2329;
+}
+
+.btn-primary:hover {
+    color: #1E2329;
+    background-color: #FAD817;
+}
+
+.table>thead:first-child>tr:first-child>th {
+    border-top: 0;
+    color: #D6BC6F;
+}
+
+.user-oops {
+  color: #FAD817;
+  text-shadow: 1px 1px 4px #1E2329;
 }

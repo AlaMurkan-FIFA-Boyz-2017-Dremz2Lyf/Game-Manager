@@ -9,7 +9,7 @@ var AddPlayerForm = require('./AddPlayerForm.jsx');
 var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
 var FinishTournament = require('./FinishTournament.jsx');
-var OngoingTournamentsList = require('./OngoingTournamentsList.jsx')
+var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 
 class Main extends React.Component {
 
@@ -31,15 +31,15 @@ class Main extends React.Component {
     var self = this;
     axios.get('/api/player')
       .then(function(playerData) {
-        var tourneyPlayerIds = self.state.tourneyPlayersList.map(function(tourneyPlayer){
-          return tourneyPlayer.id //Returns a list of players already in the tourney
-        })
-        var notAdded = playerData.data.filter(function(player){
-            return tourneyPlayerIds.indexOf(player.id) === -1 //Returns a list of players not in the tourney from the db
-          })
+        var tourneyPlayerIds = self.state.tourneyPlayersList.map(function(tourneyPlayer) {
+          return tourneyPlayer.id; //Returns a list of players already in the tourney
+        });
+        var notAdded = playerData.data.filter(function(player) {
+          return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
+        });
         self.setState({
           allPlayersList: notAdded //Adds the players from the db not already in a tourney to allPlayersList
-        })
+        });
       })
       .catch(function(err) {
         // Handle any errors here.
@@ -50,15 +50,15 @@ class Main extends React.Component {
   getOngoingTournaments() {
     var self = this;
     axios.get('/api/tournaments')
-    .then(function(tourneys){
+    .then(function(tourneys) {
       self.setState({
-        ongoingTournamentsList : tourneys.data
-      })
+        ongoingTournamentsList: tourneys.data
+      });
     })
-    .catch(function(err){
+    .catch(function(err) {
       // Handle any errors here
-      console.log('Error in getting tourneys from the DB', err)
-    })
+      console.log('Error in getting tourneys from the DB', err);
+    });
   }
 
   componentDidMount() {
@@ -162,12 +162,12 @@ class Main extends React.Component {
     this.setState({
       currentGame: this.state.currentTournamentGames[index]
     });
-    console.log(this.state.currentGame)
+    console.log(this.state.currentGame);
   }
 
   setCurrentTournament(index, tourneyId) {
     this.setState({
-      currentTournament : this.state.ongoingTournamentsList[index]
+      currentTournament: this.state.ongoingTournamentsList[index]
     });
   }
 
@@ -199,7 +199,7 @@ class Main extends React.Component {
         currentTournament: null
       });
 
-      console.log(self.state.currentTournament)
+      console.log(self.state.currentTournament);
 
     }).catch(function(err) {
       // A catch in the event the put request fails.
@@ -212,18 +212,18 @@ class Main extends React.Component {
     //reusing the api call from createGames to make a call to the database with the updated game stats
     var self = this;
     axios.get('/api/games', {
-        params: {
-          tournament_id: tourneyId
-        }
-      }).then(function(response) {
+      params: {
+        tournament_id: tourneyId
+      }
+    }).then(function(response) {
         //Here it will show the updated game scores for each game that scores have been entered in. The GameStatsForm
-        //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on 
+        //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
         //the page
-        var games = response.data;
-        self.setState({
-          currentTournamentGames: games,
-        });
-      })  
+      var games = response.data;
+      self.setState({
+        currentTournamentGames: games,
+      });
+    });
   }
 
   render() {
@@ -232,14 +232,12 @@ class Main extends React.Component {
     if (this.state.currentTournament) {
       // render the CurrentTournament app
       return (
-        <div>
+        <div className="background">
           <div className="container">
             <div className="jumbotron header">
-              <h1>Game time!</h1>
+              <h1>GAME TIME!</h1>
               <p>
-                Kick off!
-                <br />
-                Start with your first game below, or click one to start any game!
+                Start with your first game below, or click any game to start it!
               </p>
             </div>
 
@@ -265,13 +263,13 @@ class Main extends React.Component {
 
             <div className="col-xs-5">
               <div className="panel panel-default">
-                <div className="panel-heading"><h3>Table</h3></div>
+                <div className="panel-heading"><h3>TABLE</h3></div>
                 <div className="panel-body">
                   <table className="table">
                     <thead>
                       <tr>
                         <th>Player</th>
-                        <th>Games Played</th>
+                        <th>GP</th>
                         <th>Won</th>
                         <th>Loss</th>
                         <th>Draw</th>
@@ -294,15 +292,13 @@ class Main extends React.Component {
     } else {
       // otherwise render the create tournament app.
       return (
-        <div>
+        <div className="background">
 
           {/* this container holds the jumbotron */}
           <div className="container">
             <div className="jumbotron header">
-              <h1>Create a Tournament</h1>
+              <h1>WELCOME</h1>
               <p>
-                Welcome!
-                <br />
                 Create your tournament below by adding new players or picking from the list on the right!
               </p>
             </div>
@@ -312,13 +308,11 @@ class Main extends React.Component {
           {/* This row holds the add player form */}
           <div className="row">
             <div className="col-xs-1"></div>
-            <div className="col-xs-10">
-              <div className="container">
-                <h2>Add Player</h2>
+            <div className="col-xs-4">
+                <h3>ADD PLAYER</h3>
                 <AddPlayerForm getAllPlayers={this.getAllPlayers.bind(this)} />
-              </div>
             </div>
-            <div className="col-xs-1"></div>
+            <div className="col-xs-7"></div>
           </div>
 
 
@@ -330,12 +324,15 @@ class Main extends React.Component {
             <div className="col-xs-5">
               {/* this will render out through the Player component into the players that we will make the tournament with */}
               <div className="panel panel-default">
-                <div className="panel-heading">New Tournament Players</div>
+                <div className="panel-heading">
+                  <h4>CREATE NEW TOURNAMENT</h4>
+                </div>
                 <div className="panel-body">
                   <StartTournament create={this.createTournament.bind(this)}/>
                   <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
                 </div>
               </div>
+              <OngoingTournamentsList tourneys={this.state.ongoingTournamentsList} click={this.setCurrentTournament.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
@@ -346,7 +343,6 @@ class Main extends React.Component {
             <div className="col-xs-1">
             </div>
           </div>
-          <OngoingTournamentsList tourneys={this.state.ongoingTournamentsList} click={this.setCurrentTournament.bind(this)}/>
         </div>
       );
     }

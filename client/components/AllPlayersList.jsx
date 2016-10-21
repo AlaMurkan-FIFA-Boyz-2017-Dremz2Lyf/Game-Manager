@@ -11,7 +11,9 @@ var AllPlayersList = (props) => {
   // render those out inside an unordered list
   return (
     <div className="panel panel-default">
-      <div className="panel-heading">Add Players to Tournament</div>
+      <div className="panel-heading">
+        <h4>ADD PLAYERS TO TOURNAMENT</h4>
+      </div>
       <div className="panel-body">
         <ul className="list-group">
           {playerList}
