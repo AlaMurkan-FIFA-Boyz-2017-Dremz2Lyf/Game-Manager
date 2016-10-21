@@ -129,11 +129,12 @@ class Main extends React.Component {
         // Then if the games post and get were successful, we set currentTournament to true,
           // and add the array of game objects to the state.
         var games = response.data;
-
+        console.log('before:', self.state.currentGame);
         self.setState({
           currentTournamentGames: games,
           currentGame: games[0],
         });
+        console.log('after:', self.state.currentGame);
 
       }).catch(function(err) {
         // This error handles failures in the getting of games back.
@@ -178,9 +179,33 @@ class Main extends React.Component {
   }
 
   setCurrentGame(index) {
+    var newGame = this.state.currentTournamentGames[index];
+    var oldGame = this.state.currentGame;
+
+    console.log('Old:', oldGame, 'new', newGame);
+
+    var checker = {
+      newGame: [newGame, true],
+      oldGame: [oldGame, false]
+    };
+
+    // axios.put('/api/games/currentGame', {game: game, current: isCurrent}).then(function(res) {
+    //   console.log(res, 'good things?');
+    // }).catch(function(err) {
+    //   console.log('error in client utils:', err);
+    // });
+
+
+
+
     this.setState({
-      currentGame: this.state.currentTournamentGames[index]
+      currentGame: newGame
     });
+
+
+
+    this.updateGames(this.state.currentTournament.id);
+
   }
 
   setCurrentTournament(index, tourneyId) {
@@ -272,12 +297,6 @@ class Main extends React.Component {
           }
           dictionary[game.player2_id] = 'found';
 
-          // if (uniquePlayerIds.indexOf(game.player1_id) === -1) {
-          //   uniquePlayerIds.push(game.player1_id);
-          // }
-          // if (uniquePlayerIds.indexOf(game.player2_id) === -1) {
-          //   uniquePlayerIds.push(game.player2_id);
-          // }
         });
         axios.get('./api/player', {
           params: {

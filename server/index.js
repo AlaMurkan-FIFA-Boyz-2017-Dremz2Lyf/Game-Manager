@@ -35,13 +35,13 @@ routes.get('/', function(req, res) {
 routes.get('/api/player', function(req, res) {
   playerIds = req.query.tournament_players;
 
-  
-  if(playerIds) {
+
+  if (playerIds) {
     knex('players')
     .whereIn('id', playerIds)
-    .then(function(data){
-      res.send(data)
-    })
+    .then(function(data) {
+      res.send(data);
+    });
   } else
 
   knex('players')
@@ -196,7 +196,6 @@ routes.get('/api/tournaments', function(req, res) {
 // **************************************************
 
 // /api/games
-// TODO: GET, PUT (update with score)
 routes.post('/api/games', function(req, res) {
 
   // get the tourneyId from the request body
@@ -218,7 +217,7 @@ routes.post('/api/games', function(req, res) {
     });
 });
 
-// NOTE: We need to update this to OPTIONALLY take a tournament_id query.
+
   // If a tournament_id is passed in as a query, just send the games in that tournament
   // If not, we send ALL the games in the DB
 routes.get('/api/games', function(req, res) {
@@ -247,7 +246,6 @@ routes.put('/api/games', function(req, res) {
   //this will use the game id from the query as gameId.
   //then use knex to insert the player scores in the database that has that gameId
   //it will also update the status of the game in the database to disabled.
-  // console.log(req)
   var gameId = req.body.id;
   var player1Score = req.body.player1_score;
   var player2Score = req.body.player2_score;
@@ -263,7 +261,9 @@ routes.put('/api/games', function(req, res) {
     });
 });
 
-
+routes.put('/api/games/currentGame', function(req, res) {
+  helpers.setGameStatus(req, res);
+});
 
 
 

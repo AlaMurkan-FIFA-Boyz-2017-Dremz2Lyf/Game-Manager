@@ -10,10 +10,10 @@ var CurrentTournament = (props) => {
     playersInTourney[player.id] = player.username;
   });
 
-
   // Use that object and props to map over the list of games and return a built out Game Component
   var gamesList = props.currentTournamentGames.map(function(game, gameIndex) {
-    return <Game gameObj={game} gameIndex={gameIndex} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]} status={game.status}/>; //Passing along player names to display in matchups
+    // Props to Ben here for his clever use of the object as a library.
+    return <Game gameObj={game} key={gameIndex} gameIndex={gameIndex} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]} status={game.status}/>; //Passing along player names to display in matchups
   });
 
   return (
