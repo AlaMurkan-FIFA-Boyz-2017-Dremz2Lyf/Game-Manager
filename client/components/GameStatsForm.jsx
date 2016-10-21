@@ -11,21 +11,21 @@ class GameStatsForm extends React.Component {
     this.state = {
       player_1_score: '',
       player_2_score: ''
-    }
+    };
   }
 
   handleInputChangeHome(event) {
     this.setState({
       player_1_score: event.target.value
-    })
+    });
   }
 
   handleInputChangeAway(event) {
     this.setState({
       player_2_score: event.target.value
-    })
+    });
   }
-      
+
   insertStats(event) {
     var self = this;
     var tourneyId = this.props.currentGame.tournament_id;
@@ -41,12 +41,12 @@ class GameStatsForm extends React.Component {
       self.setState({
         player_1_score: '',
         player_2_score: ''
-      })
+      });
     })
     .catch(function(err) {
       res.status(500).send('Error Inserting Player Scores');
-    })
-}
+    });
+  }
             // <label htmlFor="player1_id">Home</label>
             // <label htmlFor="player2_id" >Away</label>
 
@@ -59,23 +59,21 @@ class GameStatsForm extends React.Component {
               className="form-control player1-score col-xs-2"
               id="player1_id"
               value={this.state.player_1_score}
-              onChange={this.handleInputChangeHome.bind(this)} 
+              onChange={this.handleInputChangeHome.bind(this)}
               placeholder="Home Final Score" />
-            
+
             <input type="text"
-              className="form-control player2-score col-xs-2" 
+              className="form-control player2-score col-xs-2"
               id="player2_id"
               value={this.state.player_2_score}
-              onChange={this.handleInputChangeAway.bind(this)} 
-              placeholder="Away Final Score" /> 
+              onChange={this.handleInputChangeAway.bind(this)}
+              placeholder="Away Final Score" />
           </div>
-          <button type="submit" className="btn btn-default btn-xs">Submit</button>
+          <button type="submit" className="btn btn-default btn-xs">END GAME</button>
         </form>
-    );    
+    );
   }
 }
 
 
 module.exports = GameStatsForm;
-
-

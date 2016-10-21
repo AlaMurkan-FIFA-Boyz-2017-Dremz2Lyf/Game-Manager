@@ -33,7 +33,7 @@ class StartTournament extends React.Component {
             placeholder="Tournament Name"
             onChange={this.handleInputChange.bind(this)} />
         </div>
-        <button type="submit" className="btn btn-default">Submit</button>
+        <button type="submit" className="btn btn-default">CREATE!</button>
       </form>
     );
   }

@@ -1,6 +1,6 @@
 var React = require('react');
 var Game = require('./Game.jsx');
-var GameStatsForm = require('./GameStatsForm.jsx')
+var GameStatsForm = require('./GameStatsForm.jsx');
 
 var CurrentTournament = (props) => {
   var playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
@@ -17,7 +17,7 @@ var CurrentTournament = (props) => {
     <div>
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3>{props.currentTournament.tournament_name}</h3>
+          <h3>{props.currentTournament.tournament_name.toUpperCase()}</h3>
         </div>
         <div className="panel-body">
           <GameStatsForm currentGame={props.currentGame} updateGames={props.updateGames} />

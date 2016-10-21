@@ -44,14 +44,14 @@ class Form extends React.Component {
 
         <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
           <div className="form-group">
-            <label htmlFor="username">Username </label>
+            <label htmlFor="username">USERNAME </label>
             <input type="text"
               className="form-control user-form"
               id="username"
               value={this.state.value}
               onChange={this.handleInputChange.bind(this)} />
           </div>
-          <button type="submit" className="btn btn-default">Submit</button>
+          <button type="submit" className="btn btn-default">ADD</button>
         </form>
 
       );

@@ -17,3 +17,45 @@
 .game {
   text-align: center;
 }
+
+.form-group-sm .form-control {
+  margin: 3px;
+}
+
+.btn-xs {
+  padding: 5px 10px;
+  margin: 2px;
+}
+
+.btn-default {
+  float: right;
+}
+
+.btn {
+  font-family: 'PT Sans', sans-serif;
+}
+
+.list-group-item {
+  font-family: 'PT Sans', sans-serif;
+}
+
+.jumbotron {
+  color: #D6BC6F;
+}
+
+label {
+  margin-right: 5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #D6BC6F;
+  font-family: 'PT Sans', sans-serif;
+}
+
+.background {
+  background-image: url('./Liverpool-Anfield-Stadium-Wallpaper.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
