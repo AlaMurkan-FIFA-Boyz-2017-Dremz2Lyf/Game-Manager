@@ -25,7 +25,7 @@ class StartTournament extends React.Component {
 
   render() {
     return (
-      <form className="form-inline" onSubmit={this.startTourney.bind(this)}>
+      <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
         <div className="form-group">
           <input type="text"
             className="form-control"

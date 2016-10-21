@@ -63,14 +63,14 @@ class GameStatsForm extends React.Component {
               id="player1_id"
               value={this.state.player_1_score}
               onChange={this.handleInputChangeHome.bind(this)}
-              placeholder="Home Final Score" />
+              placeholder="Home Final" />
 
             <input type="text"
               className="form-control player2-score col-xs-2"
               id="player2_id"
               value={this.state.player_2_score}
               onChange={this.handleInputChangeAway.bind(this)}
-              placeholder="Away Final Score" />
+              placeholder="Away Final" />
             </div>
           </div>
 
