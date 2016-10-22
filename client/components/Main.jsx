@@ -44,46 +44,22 @@ class Main extends React.Component {
     };
   }
 
-  // getAllPlayers makes a call to the server for all players from the database.
-  getAllPlayers() {
+  componentDidMount() {
     var self = this;
-    // axios rocks and makes nice promise based calls to the server for us.
-    axios.get('/api/player')
-      .then(function(playerData) {
-        var tourneyPlayerIds = self.state.tourneyPlayersList.map(function(tourneyPlayer) {
-          return tourneyPlayer.id; //Returns a list of players already in the tourney
-        });
-        var notAdded = playerData.data.filter(function(player) {
-          return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
-        });
-        self.setState({
-          allPlayersList: notAdded //Adds the players from the db not already in a tourney to allPlayersList
-        });
-      })
-      .catch(function(err) {
-        // Handle any errors here.
-        console.log('Error in getting players from the DB:', err);
+    // utils.getAllPlayers makes a call to the server for all players from the database.
+      // State is passed in so we can check against the tournament players list.
+      // It also returns a promise.
+    utils.getAllPlayers(this.state).then(function(response) {
+      // So within a .then we can set the state to the players array
+      self.setState({
+        allPlayersList: response //Adds the players from the db not already in a tourney to allPlayersList
       });
-  }
-
-  // This function makes a call for all tournaments from the server and adds them to the state.
-  getOngoingTournaments() {
-    var self = this;
-    axios.get('/api/tournaments')
-    .then(function(tourneys) {
+    });
+    utils.getOngoingTournaments().then(function(tourneys) {
       self.setState({
         ongoingTournamentsList: tourneys.data
       });
-    })
-    .catch(function(err) {
-      // Handle any errors here
-      console.log('Error in getting tourneys from the DB', err);
     });
-  }
-
-  componentDidMount() {
-    this.getAllPlayers();
-    this.getOngoingTournaments();
   }
 
   //createTournament will make a post request to the server, which will insert the
@@ -146,8 +122,6 @@ class Main extends React.Component {
     });
   }
 
-
-
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
   movePlayer(playerComponent, index) {
@@ -178,24 +152,18 @@ class Main extends React.Component {
     }
   }
 
-  setCurrentGame(index) {
+  setCurrentGame(toBeActive, currentActive) {
 
-    var newGame = this.state.currentTournamentGames[index];
-    var oldGame = this.state.currentGame;
+    console.log('to be:', toBeActive);
+    console.log('currently active:', currentActive);
 
-    var checker = [
-      [newGame, true],
-      [oldGame, false]
-    ];
+    if (toBeActive.id === currentActive.id) {
+      return;
+    }
 
-    checker.forEach(tuple => {
-      axios.put('/api/game/currentGame', {game: tuple[0], current: tuple[1]}).then(function(res) {
-      }).catch(function(err) {
-        console.log('error in client utils:', err);
-      });
-    });
+    toBeActive.status = 'active';
 
-    this.updateGames(this.state.currentTournament.id);
+    utils.updateStatus(toBeActive, currentActive);
 
   }
 
@@ -267,33 +235,14 @@ class Main extends React.Component {
         //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
         //the page
       var games = response.data;
-      var nextGame = self.checkForUnplayed(games);
+      var nextGame = utils.getFirstUnplayed(games);
+
       self.setState({
         currentTournamentGames: games,
         currentGame: nextGame
       });
     });
     typeof callback === 'function' ? callback(tourneyId, self) : '';
-  }
-
-  checkForUnplayed(games) {
-
-    // reduce the games array down to one object, that object will have up to three keys.
-      // Created, active, or disabled.
-      // Each key points to an array of games.
-    var organizedGames = games.reduce(function(prevGame, currGame) {
-      prevGame[currGame.status] ? prevGame[currGame.status].push(currGame) : prevGame[currGame.status] = [currGame];
-      return prevGame;
-    }, {});
-
-    // Then we take the first game from the active list (if we have one), otherwise we take the first game from the Created list
-    var firstUnplayed = organizedGames.active ? organizedGames.active[0] : organizedGames.created[0];
-    // if (organizedGames.active) {
-    //   return organizedGames.active[0];
-    // } else {
-    //   return organizedGames.created[0];
-    // }
-    return firstUnplayed;
   }
 
   updatePlayers(tourneyId, context) {
@@ -305,7 +254,7 @@ class Main extends React.Component {
     var uniquePlayerIds = [];
 
     // Here we iterate over the array of game objects to filter them down to unique IDs
-    context.state.currentTournamentGames.forEach(function(game) { //Creating a unique list of players in each games
+    context.state.currentTournamentGames.forEach(function(game) {
       if (dictionary[game.player1_id] === undefined) {
         uniquePlayerIds.push(game.player1_id);
       }
@@ -325,10 +274,8 @@ class Main extends React.Component {
       }
     })
     .then(function(playersInCurrentTourney) {
-      var newCurrent = context.checkForUnplayed(context.state.currentTournamentGames);
       context.setState({
         tourneyPlayersList: playersInCurrentTourney.data,
-        currentGame: newCurrent
       });
     });
   }
@@ -424,7 +371,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament currentGame={this.state.currentGame} updateGames={this.updateGames.bind(this)} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament state={this.state} updateGames={this.updateGames.bind(this)} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
@@ -476,7 +423,7 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
             <div className="col-xs-4">
                 <h3>ADD PLAYER</h3>
-                <AddPlayerForm getAllPlayers={this.getAllPlayers.bind(this)} />
+                <AddPlayerForm getAllPlayers={utils.getAllPlayers.bind(this)} />
             </div>
             <div className="col-xs-3"></div>
             <div className="col-xs-3">

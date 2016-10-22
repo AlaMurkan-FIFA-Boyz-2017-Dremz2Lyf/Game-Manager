@@ -3,27 +3,28 @@ var Game = require('./Game.jsx');
 var GameStatsForm = require('./GameStatsForm.jsx');
 
 var CurrentTournament = (props) => {
+
   var playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
 
-  props.tourneyPlayersList.forEach(function(player) {
+  props.state.tourneyPlayersList.forEach(function(player) {
 
     playersInTourney[player.id] = player.username;
   });
 
   // Use that object and props to map over the list of games and return a built out Game Component
-  var gamesList = props.currentTournamentGames.map(function(game, gameIndex) {
+  var gamesList = props.state.currentTournamentGames.map(function(game, index) {
     // Props to Ben here for his clever use of the object as a library.
-    return <Game gameObj={game} key={gameIndex} gameIndex={gameIndex} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]} status={game.status}/>; //Passing along player names to display in matchups
+    return <Game thisGame={game} activeGame={props.state.currentGame} key={index} click={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]} />; //Passing along player names to display in matchups
   });
 
   return (
     <div>
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3>{props.currentTournament.tournament_name.toUpperCase()}</h3>
+          <h3>{props.state.currentTournament.tournament_name.toUpperCase()}</h3>
         </div>
         <div className="panel-body">
-          <GameStatsForm currentGame={props.currentGame} updateGames={props.updateGames} />
+          <GameStatsForm currentGame={props.state.currentGame} updateGames={props.updateGames} />
           <ul className="list-group game">
             {gamesList}
           </ul>

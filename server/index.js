@@ -250,6 +250,7 @@ routes.put('/api/games', function(req, res) {
   var player1Score = req.body.player1_score;
   var player2Score = req.body.player2_score;
   var status = req.body.status;
+  console.log(req);
   knex('games').where('id', gameId)
     .update('player1_score', player1Score)
     .update('player2_score', player2Score)
@@ -260,22 +261,6 @@ routes.put('/api/games', function(req, res) {
       res.status(500).send('Failed to update scores in databse', err);
     });
 });
-
-routes.put('/api/game/currentGame', function(req, res) {
-
-  // req.body.current is a boolean, true if we are updating the status to the current game,
-    // or false if we are removing active from an old current game
-  var status = req.body.current ? 'active' : 'created';
-
-  knex('games').where('id', req.body.game.id).update('status', status).then(function(response) {
-    res.status(201);
-  }).catch(function(err) {
-    res.status(500).send(err);
-  });
-});
-
-
-
 
 
 //
