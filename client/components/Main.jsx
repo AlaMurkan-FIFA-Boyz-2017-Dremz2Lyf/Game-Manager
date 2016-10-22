@@ -175,9 +175,14 @@ class Main extends React.Component {
   }
 
   toggleStatsView() {
-    console.log('clicked toggle stats')
     this.setState({
       statsView : !this.state.statsView
+    })
+  }
+
+  resetTournament() {
+    this.setState({
+      currentTournament : null
     })
   }
 
@@ -268,11 +273,26 @@ class Main extends React.Component {
         <div className="background">
           <div className="container">
             <div className="jumbotron header">
-              <h1>GAME TIME!</h1>
+              <h1>VIEW YOUR STATS!</h1>
               <p>
                 Check out the lifetime stats of all your added players!
               </p>
             </div>
+
+          </div>
+
+          <div className="row">
+            <div className="col-xs-1"></div>
+            <div className="col-xs-4">
+                <h3>.</h3>
+                <h3>.</h3>
+            </div>
+            <div className="col-xs-3"></div>
+            <div className="col-xs-3">
+              <h3>.</h3>
+              <button type="submit" className="btn btn-default" onClick={this.toggleStatsView.bind(this)}>VIEW TOURNAMENTS</button>
+            </div>
+            <div className="col-xs-1"></div>
 
           </div>
 
@@ -314,6 +334,18 @@ class Main extends React.Component {
               <FinishTournament finish={this.finishTournament.bind(this)}/>
             </div>
             <div className="col-md-1"></div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-1"></div>
+            <div className="col-xs-4">
+            </div>
+            <div className="col-xs-3"></div>
+            <div className="col-xs-3">
+              <button type="submit" className="btn btn-default" onClick={this.resetTournament.bind(this)}>HOME</button>
+            </div>
+            <div className="col-xs-1"></div>
+
           </div>
 
           <div className="row">
