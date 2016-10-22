@@ -9,6 +9,10 @@ exports.getFirstUnplayed = function(games) {
     return prevGame;
   }, {});
 
+  if (!organizedGames.created) {
+    return null;
+  }
+
   // Then we take the first game from the active list (if we have one), otherwise we take the first game from the Created list
   var firstUnplayed = organizedGames.active ? organizedGames.active[0] : organizedGames.created[0] || null;
 
@@ -44,5 +48,29 @@ exports.getOngoingTournaments = function() {
 };
 
 exports.updateGameStatus = function(toBeActive, currentActive) {
-  axios.put('/api/games').update();
+  return Promise.all([
+    axios.put('/api/games', toBeActive),
+    axios.put('/api/games', currentActive)
+  ]);
+};
+
+
+exports.getGamesByTourneyId = function(tourneyId) {
+  return axios.get('/api/games', {
+    params: {
+      tournament_id: tourneyId
+    }
+  }).then(function(response) {
+    console.log(response, 'response in getGamesByTourneyId');
+    // Then if the games post and get were successful, we set currentTournament to true,
+      // and add the array of game objects to the state.
+    var games = response.data;
+    var nextGame = exports.getFirstUnplayed(games);
+    if (nextGame) {
+      nextGame.status = 'active';
+    }
+    return {games: games, nextGame: nextGame};
+  }).catch(err => {
+    return err;
+  });
 };

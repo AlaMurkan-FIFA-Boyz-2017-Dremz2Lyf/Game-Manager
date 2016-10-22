@@ -5,7 +5,7 @@ var Game = (props) => {
 
 
   return (
-    <li className={'list-group-item ' + props.thisGame.status} onClick={function() { props.click(props.thisGame, props.activeGame); }}>
+    <li className={'list-group-item ' + props.thisGame.status} onClick={function() { props.setCurrentGame(props.thisGame, props.activeGame); }}>
       <span className="player1">{props.player1_name}</span>
       <span className="score">
         <span className="player1_score">{props.thisGame.player1_score}</span>

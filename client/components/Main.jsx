@@ -62,6 +62,15 @@ class Main extends React.Component {
     });
   }
 
+  addPlayer() {
+    var self = this;
+    utils.getAllPlayers(this.state).then(res => {
+      self.setState({
+        allPlayersList: res
+      });
+    });
+  }
+
   //createTournament will make a post request to the server, which will insert the
     // new tournament into the DB, and after that call the createGames function
   createTournament(tourneyName) {
@@ -90,31 +99,24 @@ class Main extends React.Component {
 
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(tourneyId) {
+
     var self = this;
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     axios.post('/api/games', {
       tourneyId: tourneyId,
       players: this.state.tourneyPlayersList
-    }).then(function(response) {
+    })
+    .then(function(response) {
       // When the games are posted, get back all the games for the current tournament.
-      axios.get('/api/games', {
-        params: {
-          tournament_id: tourneyId
-        }
-      }).then(function(response) {
-
-        // Then if the games post and get were successful, we set currentTournament to true,
-          // and add the array of game objects to the state.
-        var games = response.data;
-
+      utils.getGamesByTourneyId(tourneyId).then(function(res) {
         self.setState({
-          currentTournamentGames: games,
-          currentGame: games[0],
+          currentTournamentGames: res.games,
+          currentGame: res.nextGame
         });
-
-      }).catch(function(err) {
+      })
+      .catch(function(err) {
         // This error handles failures in the getting of games back.
-        console.log('Error in get games with tourneyID:', err);
+        console.log('Error in get games by tourneyID:', err);
       });
     }).catch(function(err) {
       // This error handles failures posting games to the server/database.
@@ -153,22 +155,21 @@ class Main extends React.Component {
   }
 
   setCurrentGame(toBeActive, currentActive) {
-
-    console.log('to be:', toBeActive);
-    console.log('currently active:', currentActive);
+    var self = this;
 
     if (toBeActive.id === currentActive.id) {
       return;
     }
 
     toBeActive.status = 'active';
+    currentActive.status = 'created';
 
-    utils.updateStatus(toBeActive, currentActive);
-
+    utils.updateGameStatus(toBeActive, currentActive).then(res => {
+      self.updateGames(self.state.currentTournament.id);
+    });
   }
 
   setCurrentTournament(index, tourneyId) {
-
     this.setState({
       currentTournament: this.state.ongoingTournamentsList[index]
     });
@@ -223,23 +224,12 @@ class Main extends React.Component {
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
   updateGames(tourneyId, callback) {
-    console.log('called now');
-    //reusing the api call from createGames to make a call to the database with the updated game stats
-    var self = this;
-    axios.get('/api/games', {
-      params: {
-        tournament_id: tourneyId
-      }
-    }).then(function(response) {
-        //Here it will show the updated game scores for each game that scores have been entered in. The GameStatsForm
-        //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
-        //the page
-      var games = response.data;
-      var nextGame = utils.getFirstUnplayed(games);
 
+    var self = this;
+    utils.getGamesByTourneyId(tourneyId).then(res => {
       self.setState({
-        currentTournamentGames: games,
-        currentGame: nextGame
+        currentTournamentGames: res.games,
+        currentGame: res.nextGame
       });
     });
     typeof callback === 'function' ? callback(tourneyId, self) : '';
@@ -423,7 +413,7 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
             <div className="col-xs-4">
                 <h3>ADD PLAYER</h3>
-                <AddPlayerForm getAllPlayers={utils.getAllPlayers.bind(this)} />
+                <AddPlayerForm addPlayer={this.addPlayer.bind(this)} />
             </div>
             <div className="col-xs-3"></div>
             <div className="col-xs-3">

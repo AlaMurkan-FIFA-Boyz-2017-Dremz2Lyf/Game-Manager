@@ -76,7 +76,7 @@ routes.post('/api/tournaments', function(req, res) {
   }).then(function(response) {
     res.status(201).send(response);
   }).catch(function(err) {
-    res.status(500).send(err, 'failed to post tournament');
+    res.status(500).send(err);
   });
 
 });
@@ -97,11 +97,11 @@ routes.put('/api/tournaments', function(req, res) {
         res.status(202).send(response);
       })
       .catch(function(err) {
-        res.status(500).send('Failed to update tournament winner:', err);
+        res.status(500).send(err);
       });
     })
     .catch(function(err) {
-      res.status(500).send('Failed to find user id:', err);
+      res.status(500).send(err);
     });
 
 });
@@ -250,7 +250,7 @@ routes.put('/api/games', function(req, res) {
   var player1Score = req.body.player1_score;
   var player2Score = req.body.player2_score;
   var status = req.body.status;
-  console.log(req);
+
   knex('games').where('id', gameId)
     .update('player1_score', player1Score)
     .update('player2_score', player2Score)
