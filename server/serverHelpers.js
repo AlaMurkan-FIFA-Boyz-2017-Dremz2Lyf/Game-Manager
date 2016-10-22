@@ -1,3 +1,10 @@
+var knex = require('knex')({
+  client: 'sqlite3',
+  connection: {
+    filename: './database.sqlite3'
+  }
+});
+
 exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
   // games array will be returned by this function
   var games = [];
@@ -30,4 +37,47 @@ exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
   //
 
   return games;
+};
+
+exports.getTable = function(tourneyId) {
+// Output:
+// {
+//   playerId:
+//   gp:
+//   won:
+//   loss:
+//   draw:
+//   gd
+// }
+
+// Input:
+// Games and players
+
+// Created Players Array
+knex('players')
+.orderBy('id', 'asc')
+.then(function(data, callback) {
+  var playersArray = data.map(function(item) {
+    return {
+      id: item.id,
+      wins: 0,
+      losses: 0,
+      draws: 0,
+      gp: 0,
+      gd: 0
+    }
+  })
+});
+
+
+
+
+  // if (tourneyId) {
+  //   knex('games')
+  //   .where('tournament_id', tourneyId)
+  //   .then(function(data) {
+  //     console.log(data);
+  //   })
+  // }
+
 };
