@@ -11,6 +11,7 @@ var CurrentTournament = require('./CurrentTournament.jsx');
 var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 var StatsTable = require('./StatsTable.jsx')
+var utils = require('../utils.js');
 
 class Main extends React.Component {
 
@@ -189,21 +190,13 @@ class Main extends React.Component {
       [oldGame, false]
     ];
 
-    // axios.put('/api/games/currentGame', {game: game, current: isCurrent}).then(function(res) {
-    //   console.log(res, 'good things?');
-    // }).catch(function(err) {
-    //   console.log('error in client utils:', err);
-    // });
-
-
-
-
-    this.setState({
-      currentGame: newGame
+    checker.forEach(tuple => {
+      console.log(tuple);
+      utils.setGameStatus(tuple[0], tuple[1]).then(function(res) {
+        console.log('in here', res);
+        this.updateGames(this.state.currentTournament.id);
+      });
     });
-
-
-    this.updateGames(this.state.currentTournament.id);
 
   }
 
@@ -262,6 +255,7 @@ class Main extends React.Component {
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
   updateGames(tourneyId, callback) {
+    console.log('called now');
     //reusing the api call from createGames to make a call to the database with the updated game stats
     var self = this;
     axios.get('/api/games', {
@@ -273,9 +267,11 @@ class Main extends React.Component {
         //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
         //the page
       var games = response.data;
+      var nextGame = self.checkForUnplayed(games);
 
       self.setState({
-        currentTournamentGames: games
+        currentTournamentGames: games,
+        currentGame: nextGame
       });
     });
     typeof callback === 'function' ? callback(tourneyId, self) : '';
@@ -293,8 +289,11 @@ class Main extends React.Component {
 
     // Then we take the first game from the active list (if we have one), otherwise we take the first game from the Created list
     var firstUnplayed = organizedGames.active ? organizedGames.active[0] : organizedGames.created[0];
-
-    // and return that!
+    // if (organizedGames.active) {
+    //   return organizedGames.active[0];
+    // } else {
+    //   return organizedGames.created[0];
+    // }
     return firstUnplayed;
   }
 
@@ -327,11 +326,12 @@ class Main extends React.Component {
       }
     })
     .then(function(playersInCurrentTourney) {
+      var newCurrent = context.checkForUnplayed(context.state.currentTournamentGames);
       context.setState({
-        tourneyPlayersList: playersInCurrentTourney.data
+        tourneyPlayersList: playersInCurrentTourney.data,
+        currentGame: newCurrent
       });
     });
-
   }
 
 

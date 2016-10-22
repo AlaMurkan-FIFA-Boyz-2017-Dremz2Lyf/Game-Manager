@@ -2,10 +2,9 @@ var axios = require('axios');
 
 
 exports.setGameStatus = function(game, isCurrent) {
-  axios.put('/api/games/currentGame', {game: game, current: isCurrent}).then(function(res) {
-    console.log(res, 'good things?');
+  return axios.put('/api/game/currentGame', {game: game, current: isCurrent}).then(function(res) {
+    return res;
   }).catch(function(err) {
     console.log('error in client utils:', err);
   });
-  return game;
 };

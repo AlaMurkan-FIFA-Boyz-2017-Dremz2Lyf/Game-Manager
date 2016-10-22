@@ -128,10 +128,10 @@ exports.setGameStatus = function(req, res) {
   // if we are setting
   req.body.current ? updateStatus.status = 'active' : updateStatus.status = 'created';
 
-  knex('games').where('id', req.body.game.id).update({status: 'active'}).then(function(response) {
+  knex('games').where('id', req.body.game.id).update(updateStatus).then(function(response) {
     res.status(201);
   }).catch(function(err) {
     res.status(500).send('err', err);
-    console.log('Error getting game with id of:' + gameId, err);
+    console.log('Error getting game with id of:' + req.body.game.id, err);
   });
 };

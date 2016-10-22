@@ -261,8 +261,19 @@ routes.put('/api/games', function(req, res) {
     });
 });
 
-routes.put('/api/games/currentGame', function(req, res) {
-  helpers.setGameStatus(req, res);
+routes.put('/api/game/currentGame', function(req, res) {
+
+  // create the object to pass into the knex update
+  var updateStatus = {};
+
+  // if we are setting
+  req.body.current ? updateStatus.status = 'active' : updateStatus.status = 'created';
+
+  knex('games').where('id', req.body.game.id).update(updateStatus).then(function(response) {
+    res.status(201);
+  }).catch(function(err) {
+    res.status(500).send('err', err);
+  });
 });
 
 
