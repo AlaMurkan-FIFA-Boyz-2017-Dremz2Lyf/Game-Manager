@@ -56,7 +56,7 @@ exports.getTable = function(tourneyId) {
 // Created Players Array
 knex('players')
 .orderBy('id', 'asc')
-.then(function(data, callback) {
+.then(function(data) {
   var playersArray = data.map(function(item) {
     return {
       id: item.id,
