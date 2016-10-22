@@ -191,7 +191,7 @@ class Main extends React.Component {
     ];
 
     checker.forEach(tuple => {
-      console.log(tuple);
+      debugger;
       utils.setGameStatus(tuple[0], tuple[1]).then(function(res) {
         console.log('in here', res);
         this.updateGames(this.state.currentTournament.id);
@@ -268,7 +268,7 @@ class Main extends React.Component {
         //the page
       var games = response.data;
       var nextGame = self.checkForUnplayed(games);
-
+      console.log(nextGame);
       self.setState({
         currentTournamentGames: games,
         currentGame: nextGame
@@ -299,7 +299,7 @@ class Main extends React.Component {
 
   updatePlayers(tourneyId, context) {
     // After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
-    // Slight change here, buy adding a dictionary we can make this process O(n) instead of O(2^n).
+    // Slight change here, by adding a dictionary we can make this process O(n) instead of O(2^n).
     var dictionary = {};
     // The dictionary gives us a constant/instant time to check if the id is in the unique id list.
     // This lets us filter down to unique ids without nesting .includes or .indexOf.
