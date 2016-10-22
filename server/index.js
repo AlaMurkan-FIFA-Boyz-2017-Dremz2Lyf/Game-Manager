@@ -106,6 +106,11 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
+routes.get('/api/games/table', function(req, res) {
+  helpers.getTable(1);
+  res.send("Made it to the page");
+});
+
 //Note, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
   knex('tournaments').where('winner_id', null)
