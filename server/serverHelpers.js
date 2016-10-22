@@ -41,15 +41,6 @@ exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
 
 exports.getTable = function(tourneyId) {
 
-// if (tourneyId) {
-  //   knex('games')
-  //   .where('tournament_id', tourneyId)
-  //   .then(function(data) {
-  //     console.log(data);
-  //   })
-  // }
-
-
 knex('players')
 .orderBy('id', 'asc')
 .then(function(data) {
