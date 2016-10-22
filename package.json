@@ -4,6 +4,7 @@
   "description": "FIFA tournament manager",
   "main": "server/index.js",
   "scripts": {
+    "prestart": "knex migrate:rollback | knex migrate:latest",
     "start": "nodemon server/ --ignore client/",
     "test": "./test/run.sh",
     "up": "knex migrate:latest",

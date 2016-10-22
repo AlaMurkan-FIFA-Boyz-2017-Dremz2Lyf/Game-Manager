@@ -26,15 +26,15 @@ class Form extends React.Component {
     event.preventDefault();
     axios.post('/api/player', {
       username: this.state.value
-    }).then(function() {
+    }).then(function(res) {
       self.state.noError = true;
       self.state.value = '';
-      self.props.getAllPlayers();
+      self.props.addPlayer();
     }).catch(function(error) {
-      console.log('ERROR!');
+      console.log(error);
       self.state.noError = false;
       self.state.value = '';
-      self.props.getAllPlayers();
+      self.props.addPlayer();
     });
   }
 

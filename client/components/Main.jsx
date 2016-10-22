@@ -10,63 +10,65 @@ var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
 var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
-var StatsTable = require('./StatsTable.jsx')
+var StatsTable = require('./StatsTable.jsx');
+var utils = require('../utils.js');
 
 class Main extends React.Component {
 
   constructor() {
     super();
     this.state = {
+      // currentTournamentTable will hold objects for each player in the current tournament.
+        // These objects will have all the stats to be rendered to the Tournament's Table/Standings
       currentTournamentTable: [],
+      // allPlayersList holds all existing players as objects.
+        // These objects have id and username keys/values.
       allPlayersList: [],
+      // tourneyPlayersList holds all players in the current/to be created tournament
+        // Same player objects as the allPlayersList
       tourneyPlayersList: [],
+      // currentGame will (surprise!) hold the current game.
+        // This allows us to add data to this game from the GameStatsForm
       currentGame: null,
+      // currentTournamentGames hold all the current tournament's games. (Seeing a patern here? ;p)
+        // Each item in the array is a game object. These game objects hold player1_id, player2_id and
+        // a bunch of data fields to track the stats.
       currentTournamentGames: [],
+      // Bet you can guess what currentTournament is :D.
       currentTournament: null,
+      // This one here isn't to hard to guess either!
       ongoingTournamentsList: [],
+
       statsView: false,
       statLines: []
     };
   }
 
-  // getAllPlayers makes a call to the server for all players from the database.
-  getAllPlayers() {
+  componentDidMount() {
     var self = this;
-    axios.get('/api/player')
-      .then(function(playerData) {
-        var tourneyPlayerIds = self.state.tourneyPlayersList.map(function(tourneyPlayer) {
-          return tourneyPlayer.id; //Returns a list of players already in the tourney
-        });
-        var notAdded = playerData.data.filter(function(player) {
-          return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
-        });
-        self.setState({
-          allPlayersList: notAdded //Adds the players from the db not already in a tourney to allPlayersList
-        });
-      })
-      .catch(function(err) {
-        // Handle any errors here.
-        console.log('Error in getting players from the DB:', err);
+    // utils.getAllPlayers makes a call to the server for all players from the database.
+      // State is passed in so we can check against the tournament players list.
+      // It also returns a promise.
+    utils.getAllPlayers(this.state).then(function(response) {
+      // So within a .then we can set the state to the players array
+      self.setState({
+        allPlayersList: response //Adds the players from the db not already in a tourney to allPlayersList
       });
-  }
-
-  getOngoingTournaments() {
-    var self = this;
-    axios.get('/api/tournaments')
-    .then(function(tourneys) {
+    });
+    utils.getOngoingTournaments().then(function(tourneys) {
       self.setState({
         ongoingTournamentsList: tourneys.data
       });
-    })
-    .catch(function(err) {
-      // Handle any errors here
-      console.log('Error in getting tourneys from the DB', err);
     });
   }
 
-  componentDidMount() {
-    this.getAllPlayers();
-    this.getOngoingTournaments();
+  addPlayer() {
+    var self = this;
+    utils.getAllPlayers(this.state).then(res => {
+      self.setState({
+        allPlayersList: res
+      });
+    });
   }
 
   //createTournament will make a post request to the server, which will insert the
@@ -97,39 +99,30 @@ class Main extends React.Component {
 
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(tourneyId) {
+
     var self = this;
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     axios.post('/api/games', {
       tourneyId: tourneyId,
       players: this.state.tourneyPlayersList
-    }).then(function(response) {
+    })
+    .then(function(response) {
       // When the games are posted, get back all the games for the current tournament.
-      axios.get('/api/games', {
-        params: {
-          tournament_id: tourneyId
-        }
-      }).then(function(response) {
-
-        // Then if the games post and get were successful, we set currentTournament to true,
-          // and add the array of game objects to the state.
-        var games = response.data;
-
+      utils.getGamesByTourneyId(tourneyId).then(function(res) {
         self.setState({
-          currentTournamentGames: games,
-          currentGame: games[0],
+          currentTournamentGames: res.games,
+          currentGame: res.nextGame
         });
-
-      }).catch(function(err) {
+      })
+      .catch(function(err) {
         // This error handles failures in the getting of games back.
-        console.log('Error in get games with tourneyID:', err);
+        console.log('Error in get games by tourneyID:', err);
       });
     }).catch(function(err) {
       // This error handles failures posting games to the server/database.
       console.log(err, 'failed to post to games');
     });
   }
-
-
 
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
@@ -161,9 +154,18 @@ class Main extends React.Component {
     }
   }
 
-  setCurrentGame(index) {
-    this.setState({
-      currentGame: this.state.currentTournamentGames[index]
+  setCurrentGame(toBeActive, currentActive) {
+    var self = this;
+
+    if (toBeActive.id === currentActive.id) {
+      return;
+    }
+
+    toBeActive.status = 'active';
+    currentActive.status = 'created';
+
+    utils.updateGameStatus(toBeActive, currentActive).then(res => {
+      self.updateGames(self.state.currentTournament.id);
     });
   }
 
@@ -171,19 +173,19 @@ class Main extends React.Component {
     this.setState({
       currentTournament: this.state.ongoingTournamentsList[index]
     });
-    this.updateGames(tourneyId)
+    this.updateGames(tourneyId, this.updatePlayers);
   }
 
   toggleStatsView() {
     this.setState({
-      statsView : !this.state.statsView
-    })
+      statsView: !this.state.statsView
+    });
   }
 
   resetTournament() {
     this.setState({
-      currentTournament : null
-    })
+      currentTournament: null
+    });
   }
 
 
@@ -214,8 +216,6 @@ class Main extends React.Component {
         currentTournament: null
       });
 
-      console.log(self.state.currentTournament);
-
     }).catch(function(err) {
       // A catch in the event the put request fails.
       console.log('FinishTournament Error:', err);
@@ -223,53 +223,59 @@ class Main extends React.Component {
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
-  updateGames(tourneyId) {
-    //reusing the api call from createGames to make a call to the database with the updated game stats
+  updateGames(tourneyId, callback) {
+
     var self = this;
-    axios.get('/api/games', {
-      params: {
-        tournament_id: tourneyId
-      }
-    }).then(function(response) {
-        //Here it will show the updated game scores for each game that scores have been entered in. The GameStatsForm
-        //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
-        //the page
-        var games = response.data;
-        self.setState({
-          currentTournamentGames: games,
-        });
-      })
-      
-      //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
-      //We have to do this because the players are not added to tourneyPlayersList incrementallyas they are when we create a tournament from scratch
-      .then(function(){
-        var uniquePlayerIds = [];
-        self.state.currentTournamentGames.forEach(function(game){ //Creating a unique list of players in each games
-          if (uniquePlayerIds.indexOf(game.player1_id) === -1) {
-            uniquePlayerIds.push(game.player1_id)
-          }
-          if (uniquePlayerIds.indexOf(game.player2_id) === -1) {
-            uniquePlayerIds.push(game.player2_id)
-          }
-        })
-        axios.get('./api/player', {
-          params : {
-            tournament_players : uniquePlayerIds //Make a GET request, passing in the list of players in current tourney
-          }
-        })
-        .then(function(playersInCurrentTourney){
-          self.setState({
-            tourneyPlayersList : playersInCurrentTourney.data //Set the state to reflect the players in the current tourney
-          })
-        })
-      })  
+    utils.getGamesByTourneyId(tourneyId).then(res => {
+      self.setState({
+        currentTournamentGames: res.games,
+        currentGame: res.nextGame
+      });
+    });
+    typeof callback === 'function' ? callback(tourneyId, self) : '';
   }
+
+  updatePlayers(tourneyId, context) {
+    // After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
+    // Slight change here, by adding a dictionary we can make this process O(n) instead of O(2^n).
+    var dictionary = {};
+    // The dictionary gives us a constant/instant time to check if the id is in the unique id list.
+    // This lets us filter down to unique ids without nesting .includes or .indexOf.
+    var uniquePlayerIds = [];
+
+    // Here we iterate over the array of game objects to filter them down to unique IDs
+    context.state.currentTournamentGames.forEach(function(game) {
+      if (dictionary[game.player1_id] === undefined) {
+        uniquePlayerIds.push(game.player1_id);
+      }
+      dictionary[game.player1_id] = 'found';
+
+      if (dictionary[game.player2_id] === undefined) {
+        uniquePlayerIds.push(game.player2_id);
+      }
+      dictionary[game.player2_id] = 'found';
+
+    });
+
+
+    axios.get('./api/player', {
+      params: {
+        tournament_players: uniquePlayerIds
+      }
+    })
+    .then(function(playersInCurrentTourney) {
+      context.setState({
+        tourneyPlayersList: playersInCurrentTourney.data,
+      });
+    });
+  }
+
 
   render() {
 
     // if the stats view is enabled
     if (this.state.statsView) {
-    return (
+      return (
         <div className="background">
           <div className="container">
             <div className="jumbotron header">
@@ -355,7 +361,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament currentGame={this.state.currentGame} updateGames={this.updateGames.bind(this)} currentTournament={this.state.currentTournament} currentTournamentGames={this.state.currentTournamentGames} tourneyPlayersList={this.state.tourneyPlayersList} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament state={this.state} updateGames={this.updateGames.bind(this)} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
@@ -407,7 +413,7 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
             <div className="col-xs-4">
                 <h3>ADD PLAYER</h3>
-                <AddPlayerForm getAllPlayers={this.getAllPlayers.bind(this)} />
+                <AddPlayerForm addPlayer={this.addPlayer.bind(this)} />
             </div>
             <div className="col-xs-3"></div>
             <div className="col-xs-3">
