@@ -10,7 +10,7 @@ var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
 var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
-var StatsTable = require('./StatsTable.jsx')
+var StatsTable = require('./StatsTable.jsx');
 var utils = require('../utils.js');
 
 class Main extends React.Component {
@@ -178,14 +178,14 @@ class Main extends React.Component {
 
   toggleStatsView() {
     this.setState({
-      statsView : !this.state.statsView
-    })
+      statsView: !this.state.statsView
+    });
   }
 
   resetTournament() {
     this.setState({
-      currentTournament : null
-    })
+      currentTournament: null
+    });
   }
 
 
@@ -275,7 +275,7 @@ class Main extends React.Component {
 
     // if the stats view is enabled
     if (this.state.statsView) {
-    return (
+      return (
         <div className="background">
           <div className="container">
             <div className="jumbotron header">
