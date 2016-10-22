@@ -24,7 +24,7 @@ class Main extends React.Component {
       currentTournamentGames: [],
       currentTournament: null,
       ongoingTournamentsList: [],
-      statsView: true,
+      statsView: false,
       statLines: []
     };
   }
@@ -174,6 +174,13 @@ class Main extends React.Component {
     this.updateGames(tourneyId)
   }
 
+  toggleStatsView() {
+    console.log('clicked toggle stats')
+    this.setState({
+      statsView : !this.state.statsView
+    })
+  }
+
 
   finishTournament() {
     // set our context here.
@@ -255,7 +262,7 @@ class Main extends React.Component {
 
   render() {
 
-    // if the tournament is in progress,
+    // if the stats view is enabled
     if (this.state.statsView) {
     return (
         <div className="background">
@@ -277,7 +284,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable />
+              <StatsTable stats={this.state.statLines} changeView={this.toggleStatsView.bind(this)}/>
             </div>
 
             <div className="col-xs-1">
@@ -370,7 +377,13 @@ class Main extends React.Component {
                 <h3>ADD PLAYER</h3>
                 <AddPlayerForm getAllPlayers={this.getAllPlayers.bind(this)} />
             </div>
-            <div className="col-xs-7"></div>
+            <div className="col-xs-3"></div>
+            <div className="col-xs-3">
+              <h3>.</h3>
+              <button type="submit" className="btn btn-default" onClick={this.toggleStatsView.bind(this)}>VIEW STATS</button>
+            </div>
+            <div className="col-xs-1"></div>
+
           </div>
 
 

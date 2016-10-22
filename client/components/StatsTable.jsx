@@ -1,4 +1,4 @@
-var StatLine = require('./StatLine')
+var StatLine = require('./StatLine.jsx')
 var React = require('react');
 
 var StatsTable = (props) => {
