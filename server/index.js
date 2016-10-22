@@ -106,10 +106,84 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
-routes.get('/api/games/table', function(req, res) {
-  helpers.getTable(1);
-  res.send("Made it to the page");
+routes.get('/api/games/table/:id', function(req, res) {
+  var id = Number(req.params.id);
+
+  knex('players')
+.orderBy('id', 'asc')
+.then(function(data) {
+  var playersArray = data.map(function(item) {
+    return {
+      id: item.id,
+      wins: 0,
+      losses: 0,
+      draws: 0,
+      gp: 0,
+      gd: 0
+    }
+  })
+
+  knex('games').where('tournament_id', id)
+  .then(function(data) {
+    data.forEach(function(item) {
+    var diff = Math.abs(item.player1_score - item.player2_score);
+    var winner;
+    var loser;
+    var draw1;
+    var draw2;
+    
+    if(item.player1_score === item.player2_score) {
+        draw1 = item.player1_id;
+        draw2 = item.player2_id;
+        
+        playersArray.forEach(function(item) {
+            if(item.id === draw1 || item.id === draw2) {
+                item.draws += 1;
+                item.gp += 1;
+            }
+        }) 
+    }
+    else if(item.player1_score > item.player2_score) {
+        winner = item.player1_id;
+        loser = item.player2_id;
+        
+        playersArray.forEach(function(item) {
+            if(item.id === winner) {
+                item.wins++;
+                item.gp++;
+                item.gd += diff;
+            } 
+            if(item.id === loser) {
+                item.losses++;
+                item.gp++;
+                item.gd -= diff;
+            }
+            
+        })
+        
+    } else {
+        winner = item.player2_id;
+        loser = item.player1_id;
+        
+        playersArray.forEach(function(item) {
+            if(item.id === winner) {
+                item.wins++;
+                item.gp++;
+                item.gd += diff;
+            } 
+            if(item.id === loser) {
+                item.losses++;
+                item.gp++;
+                item.gd -= diff;
+            }
+        })
+    }
+  });
+    res.send(playersArray);
+    });
+  });
 });
+
 
 //Note, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
