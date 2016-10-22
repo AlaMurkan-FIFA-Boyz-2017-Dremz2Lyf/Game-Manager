@@ -129,12 +129,11 @@ class Main extends React.Component {
         // Then if the games post and get were successful, we set currentTournament to true,
           // and add the array of game objects to the state.
         var games = response.data;
-        console.log('before:', self.state.currentGame);
+
         self.setState({
           currentTournamentGames: games,
           currentGame: games[0],
         });
-        console.log('after:', self.state.currentGame);
 
       }).catch(function(err) {
         // This error handles failures in the getting of games back.
@@ -182,12 +181,13 @@ class Main extends React.Component {
     var newGame = this.state.currentTournamentGames[index];
     var oldGame = this.state.currentGame;
 
-    console.log('Old:', oldGame, 'new', newGame);
+    console.log('Old:', oldGame);
+    console.log('new', newGame);
 
-    var checker = {
-      newGame: [newGame, true],
-      oldGame: [oldGame, false]
-    };
+    var checker = [
+      [newGame, true],
+      [oldGame, false]
+    ];
 
     // axios.put('/api/games/currentGame', {game: game, current: isCurrent}).then(function(res) {
     //   console.log(res, 'good things?');
@@ -203,7 +203,6 @@ class Main extends React.Component {
     });
 
 
-
     this.updateGames(this.state.currentTournament.id);
 
   }
@@ -212,7 +211,7 @@ class Main extends React.Component {
     this.setState({
       currentTournament: this.state.ongoingTournamentsList[index]
     });
-    this.updateGames(tourneyId);
+    this.updateGames(tourneyId, this.updatePlayers);
   }
 
   toggleStatsView() {
@@ -262,7 +261,7 @@ class Main extends React.Component {
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
-  updateGames(tourneyId) {
+  updateGames(tourneyId, callback) {
     //reusing the api call from createGames to make a call to the database with the updated game stats
     var self = this;
     axios.get('/api/games', {
@@ -274,42 +273,67 @@ class Main extends React.Component {
         //PUTs the scores to the database then here we GET from the database to gather the new scores and show them on
         //the page
       var games = response.data;
+
       self.setState({
-        currentTournamentGames: games,
+        currentTournamentGames: games
       });
-    })
-      .then(function() { //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
-        // Slight change here, buy adding a dictionary we can make this process O(n) instead of O(2^n).
-        var dictionary = {};
-        // The dictionary gives us a constant/instant time to check if the id is in the unique id list.
-          // This lets us filter down to unique ids without nesting .includes or .indexOf.
-        var uniquePlayerIds = [];
-
-        // Here we iterate over the array of game objects to filter them down to unique IDs
-        self.state.currentTournamentGames.forEach(function(game) { //Creating a unique list of players in each games
-          if (dictionary[game.player1_id] === undefined) {
-            uniquePlayerIds.push(game.player1_id);
-          }
-          dictionary[game.player1_id] = 'found';
-
-          if (dictionary[game.player2_id] === undefined) {
-            uniquePlayerIds.push(game.player2_id);
-          }
-          dictionary[game.player2_id] = 'found';
-
-        });
-        axios.get('./api/player', {
-          params: {
-            tournament_players: uniquePlayerIds
-          }
-        })
-        .then(function(playersInCurrentTourney) {
-          self.setState({
-            tourneyPlayersList: playersInCurrentTourney.data
-          });
-        });
-      });
+    });
+    typeof callback === 'function' ? callback(tourneyId, self) : '';
   }
+
+  checkForUnplayed(games) {
+
+    // reduce the games array down to one object, that object will have up to three keys.
+      // Created, active, or disabled.
+      // Each key points to an array of games.
+    var organizedGames = games.reduce(function(prevGame, currGame) {
+      prevGame[currGame.status] ? prevGame[currGame.status].push(currGame) : prevGame[currGame.status] = [currGame];
+      return prevGame;
+    }, {});
+
+    // Then we take the first game from the active list (if we have one), otherwise we take the first game from the Created list
+    var firstUnplayed = organizedGames.active ? organizedGames.active[0] : organizedGames.created[0];
+
+    // and return that!
+    return firstUnplayed;
+  }
+
+  updatePlayers(tourneyId, context) {
+    // After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
+    // Slight change here, buy adding a dictionary we can make this process O(n) instead of O(2^n).
+    var dictionary = {};
+    // The dictionary gives us a constant/instant time to check if the id is in the unique id list.
+    // This lets us filter down to unique ids without nesting .includes or .indexOf.
+    var uniquePlayerIds = [];
+
+    // Here we iterate over the array of game objects to filter them down to unique IDs
+    context.state.currentTournamentGames.forEach(function(game) { //Creating a unique list of players in each games
+      if (dictionary[game.player1_id] === undefined) {
+        uniquePlayerIds.push(game.player1_id);
+      }
+      dictionary[game.player1_id] = 'found';
+
+      if (dictionary[game.player2_id] === undefined) {
+        uniquePlayerIds.push(game.player2_id);
+      }
+      dictionary[game.player2_id] = 'found';
+
+    });
+
+
+    axios.get('./api/player', {
+      params: {
+        tournament_players: uniquePlayerIds
+      }
+    })
+    .then(function(playersInCurrentTourney) {
+      context.setState({
+        tourneyPlayersList: playersInCurrentTourney.data
+      });
+    });
+
+  }
+
 
   render() {
 
