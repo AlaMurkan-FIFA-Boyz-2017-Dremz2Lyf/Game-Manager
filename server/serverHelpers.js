@@ -40,20 +40,16 @@ exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
 };
 
 exports.getTable = function(tourneyId) {
-// Output:
-// {
-//   playerId:
-//   gp:
-//   won:
-//   loss:
-//   draw:
-//   gd
-// }
 
-// Input:
-// Games and players
+// if (tourneyId) {
+  //   knex('games')
+  //   .where('tournament_id', tourneyId)
+  //   .then(function(data) {
+  //     console.log(data);
+  //   })
+  // }
 
-// Created Players Array
+
 knex('players')
 .orderBy('id', 'asc')
 .then(function(data) {
@@ -67,17 +63,68 @@ knex('players')
       gd: 0
     }
   })
-});
 
+  knex('games')
+  .then(function(data) {
+    data.forEach(function(item) {
+    var diff = Math.abs(item.player1_score - item.player2_score);
+    var winner;
+    var loser;
+    var draw1;
+    var draw2;
+    
+    if(item.player1_score === item.player2_score) {
+        draw1 = item.player1_id;
+        draw2 = item.player2_id;
+        
+        playersArray.forEach(function(item) {
+            if(item.id === draw1 || item.id === draw2) {
+                item.draws += 1;
+                item.gp += 1;
+            }
+        }) 
+    }
+    else if(item.player1_score > item.player2_score) {
+        winner = item.player1_id;
+        loser = item.player2_id;
+        
+        playersArray.forEach(function(item) {
+            if(item.id === winner) {
+                item.wins++;
+                item.gp++;
+                item.gd += diff;
+            } 
+            if(item.id === loser) {
+                item.losses++;
+                item.gp++;
+                item.gd -= diff;
+            }
+            
+        })
+        
+    } else {
+        winner = item.player2_id;
+        loser = item.player1_id;
+        
+        playersArray.forEach(function(item) {
+            if(item.id === winner) {
+                item.wins++;
+                item.gp++;
+                item.gd += diff;
+            } 
+            if(item.id === loser) {
+                item.losses++;
+                item.gp++;
+                item.gd -= diff;
+            }
+        })
+    }
+    
+    
+    
+      });
+    console.log(playersArray);
+    });
 
-
-
-  // if (tourneyId) {
-  //   knex('games')
-  //   .where('tournament_id', tourneyId)
-  //   .then(function(data) {
-  //     console.log(data);
-  //   })
-  // }
-
+  });
 };
