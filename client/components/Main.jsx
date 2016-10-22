@@ -179,11 +179,9 @@ class Main extends React.Component {
   }
 
   setCurrentGame(index) {
+
     var newGame = this.state.currentTournamentGames[index];
     var oldGame = this.state.currentGame;
-
-    console.log('Old:', oldGame);
-    console.log('new', newGame);
 
     var checker = [
       [newGame, true],
@@ -191,16 +189,18 @@ class Main extends React.Component {
     ];
 
     checker.forEach(tuple => {
-      debugger;
-      utils.setGameStatus(tuple[0], tuple[1]).then(function(res) {
-        console.log('in here', res);
-        this.updateGames(this.state.currentTournament.id);
+      axios.put('/api/game/currentGame', {game: tuple[0], current: tuple[1]}).then(function(res) {
+      }).catch(function(err) {
+        console.log('error in client utils:', err);
       });
     });
+
+    this.updateGames(this.state.currentTournament.id);
 
   }
 
   setCurrentTournament(index, tourneyId) {
+
     this.setState({
       currentTournament: this.state.ongoingTournamentsList[index]
     });
@@ -268,7 +268,6 @@ class Main extends React.Component {
         //the page
       var games = response.data;
       var nextGame = self.checkForUnplayed(games);
-      console.log(nextGame);
       self.setState({
         currentTournamentGames: games,
         currentGame: nextGame

@@ -263,16 +263,14 @@ routes.put('/api/games', function(req, res) {
 
 routes.put('/api/game/currentGame', function(req, res) {
 
-  // create the object to pass into the knex update
-  var updateStatus = {};
+  // req.body.current is a boolean, true if we are updating the status to the current game,
+    // or false if we are removing active from an old current game
+  var status = req.body.current ? 'active' : 'created';
 
-  // if we are setting
-  req.body.current ? updateStatus.status = 'active' : updateStatus.status = 'created';
-
-  knex('games').where('id', req.body.game.id).update(updateStatus).then(function(response) {
+  knex('games').where('id', req.body.game.id).update('status', status).then(function(response) {
     res.status(201);
   }).catch(function(err) {
-    res.status(500).send('err', err);
+    res.status(500).send(err);
   });
 });
 
