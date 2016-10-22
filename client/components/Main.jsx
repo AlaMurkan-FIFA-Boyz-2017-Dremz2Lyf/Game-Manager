@@ -10,6 +10,7 @@ var StartTournament = require('./StartTournament.jsx');
 var CurrentTournament = require('./CurrentTournament.jsx');
 var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
+var StatsTable = require('./StatsTable.jsx')
 
 class Main extends React.Component {
 
@@ -22,7 +23,9 @@ class Main extends React.Component {
       currentGame: null,
       currentTournamentGames: [],
       currentTournament: null,
-      ongoingTournamentsList: []
+      ongoingTournamentsList: [],
+      statsView: true,
+      statLines: []
     };
   }
 
@@ -224,7 +227,10 @@ class Main extends React.Component {
           currentTournamentGames: games,
         });
       })
-      .then(function(){ //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
+      
+      //After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
+      //We have to do this because the players are not added to tourneyPlayersList incrementallyas they are when we create a tournament from scratch
+      .then(function(){
         var uniquePlayerIds = [];
         self.state.currentTournamentGames.forEach(function(game){ //Creating a unique list of players in each games
           if (uniquePlayerIds.indexOf(game.player1_id) === -1) {
@@ -236,13 +242,12 @@ class Main extends React.Component {
         })
         axios.get('./api/player', {
           params : {
-            tournament_players : uniquePlayerIds
+            tournament_players : uniquePlayerIds //Make a GET request, passing in the list of players in current tourney
           }
         })
         .then(function(playersInCurrentTourney){
-          console.log(playersInCurrentTourney)
           self.setState({
-            tourneyPlayersList : playersInCurrentTourney.data
+            tourneyPlayersList : playersInCurrentTourney.data //Set the state to reflect the players in the current tourney
           })
         })
       })  
@@ -251,7 +256,38 @@ class Main extends React.Component {
   render() {
 
     // if the tournament is in progress,
-    if (this.state.currentTournament) {
+    if (this.state.statsView) {
+    return (
+        <div className="background">
+          <div className="container">
+            <div className="jumbotron header">
+              <h1>GAME TIME!</h1>
+              <p>
+                Check out the lifetime stats of all your added players!
+              </p>
+            </div>
+
+          </div>
+
+
+          <div className="row">
+
+            <div className="col-xs-1">
+
+            </div>
+
+            <div className="col-xs-10">
+              <StatsTable />
+            </div>
+
+            <div className="col-xs-1">
+
+            </div>
+          </div>
+
+        </div>
+      );
+    } else if (this.state.currentTournament) {
       // render the CurrentTournament app
       return (
         <div className="background">
