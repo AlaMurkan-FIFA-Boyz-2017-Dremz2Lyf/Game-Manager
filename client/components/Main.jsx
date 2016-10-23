@@ -177,8 +177,15 @@ class Main extends React.Component {
   }
 
   toggleStatsView() {
+    var self = this;
     this.setState({
-      statsView: !this.state.statsView
+      statsView: !this.state.statsView,
+      tourneyPlayersList: []
+    });
+    utils.getAllPlayers(this.state).then(res => {
+      self.setState({
+        allPlayersList: res
+      });
     });
   }
 
