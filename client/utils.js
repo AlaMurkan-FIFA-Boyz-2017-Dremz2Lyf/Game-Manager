@@ -48,7 +48,10 @@ exports.getOngoingTournaments = function() {
 };
 
 exports.updateGameStatus = function(toBeActive, currentActive) {
+  // toBeActive and currentActive point to games.
+  // This function returns the promise.all of each axios PUT request to the server.
   return Promise.all([
+    // we update the new active game and the old active game.
     axios.put('/api/games', toBeActive),
     axios.put('/api/games', currentActive)
   ]);
@@ -61,16 +64,22 @@ exports.getGamesByTourneyId = function(tourneyId) {
       tournament_id: tourneyId
     }
   }).then(function(response) {
-    console.log(response, 'response in getGamesByTourneyId');
-    // Then if the games post and get were successful, we set currentTournament to true,
-      // and add the array of game objects to the state.
+    // Collect the games array into a variable, and pass that into the helper function.
     var games = response.data;
+
+    // getFirstUnplayed goes through the list of games and finds the first one that is active,
+      // if there is no active game, then it finds the next unplayed game.
     var nextGame = exports.getFirstUnplayed(games);
+
+    // getFirstUnplayed returns null if there are no active or unplayed games.
     if (nextGame) {
+      // So we make sure the status of that game is set to active if there is one.
       nextGame.status = 'active';
     }
+    // then return in a promise an object holding the games, and the nextGame
     return {games: games, nextGame: nextGame};
   }).catch(err => {
+
     return err;
   });
 };

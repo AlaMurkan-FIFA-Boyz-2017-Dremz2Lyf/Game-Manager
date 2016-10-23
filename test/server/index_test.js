@@ -118,7 +118,7 @@ describe('The Server', function() {
       });
 
       it_('Should respond with an array of objects when queried with a tournament_id', function * () {
-        
+
         yield request(app)
         .get('/api/games/table?tournament_id=1')
         .expect(200)
