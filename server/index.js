@@ -55,13 +55,18 @@ routes.get('/api/player', function(req, res) {
 
 // POST request handler
 routes.post('/api/player', function(req, res) {
-  knex('players').insert({
-    username: req.body.username
-  }).then(function(result) {
-    res.status(201).send('Posted new user to the database');
-  }).catch(function(err) {
-    res.status(400).send('User already exists');
-  });
+  //Prevent server from posting blank usernames with this if statement
+  if(req.body.username === '') {
+    res.status(404).send('Cannot Insert Empty String Into Databse')
+  } else {
+    knex('players').insert({
+      username: req.body.username
+    }).then(function(result) {
+      res.status(201).send('Posted new user to the database');
+    }).catch(function(err) {
+      res.status(400).send('User already exists');
+    });
+  }
 });
 
 
@@ -71,15 +76,18 @@ routes.post('/api/player', function(req, res) {
 // TODO: GET, PUT (update with winner)
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
-
-  knex('tournaments').insert({
-    tournament_name: tourneyName
-  }).then(function(response) {
-    res.status(201).send(response);
-  }).catch(function(err) {
-    res.status(500).send(err);
-  });
-
+  //Prevent server from posting blank tournament names with this if statement
+  if(tourneyName === '') {
+    res.status(404).send('Cannot use blank tournament name')
+  } else {
+    knex('tournaments').insert({
+      tournament_name: tourneyName
+    }).then(function(response) {
+      res.status(201).send(response);
+    }).catch(function(err) {
+      res.status(500).send(err);
+    });
+  }
 });
 
 routes.put('/api/tournaments', function(req, res) {

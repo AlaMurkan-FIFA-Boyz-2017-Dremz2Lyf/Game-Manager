@@ -3,7 +3,6 @@ var Tournament = require('./Tournament.jsx');
 
 var OngoingTournamentsList = (props) => {
   // Create Tournament components out of each ongoing tournaments object
-
   var tourneyList = props.tourneys.map(function(tourney, index) {
     return <Tournament tourneyObj={tourney} click={props.click} index={index} key={index} />;
   });
