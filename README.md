@@ -34,7 +34,12 @@ Game Manager is an app for managing a local (offline) competition. Currently des
 | OngoingTournamentsList | Creates a list of all the ongoing tournaments | Main/Landing page | No |
 | Player | Player components have the click handler and player data tied to them.  | NewTournamentPlayers, or AllPlayerList | No |
 | StartTournament | This form takes the tournament name and creates a new tournament with that name. It also runs the match up algorithm to generate the games | Main/Landing Page | Yes |
+| StatLine | StatLine is the player's tournament stats rendered out for the table or standings | StatsTable | No |
+| StatsTable | StatsTable renders out a list of StatLine components, one for each player | Main/Tournament 'View' | No |
 | Tournament | Existing tournament, rendered into the OngoingTournamentsList Component | OngoingTournamentsList | No |
+
+
+
 # MVP Product backlog
   **_Always consider the scope_**
   - [x] Landing Page
@@ -45,12 +50,11 @@ Game Manager is an app for managing a local (offline) competition. Currently des
       - [x] "Added Players to tournament" Component
     - [ ] Current Tournament View
       - [ ] Current Table component
-        - [ ] Player components (sorted by points, with Goal Differential as a tie breaker)
-          - has all the players standing for current tournament
+        - [ ] PlayerTable components (sorted by points, with Goal Differential as a tie breaker)
       - [x] Games component
         - [x] Game components
           - [x] has player name, and game score
-        - [ ] Current game component
+        - [x] Current game component
         - [x] Enter Game stats
           - [x] Score
           - [ ] Shots
@@ -68,11 +72,16 @@ Game Manager is an app for managing a local (offline) competition. Currently des
   - [ ] For the list of existing players on the landing page, add a customized (soccer ball?) badge with the count of how many tournament that player has Won
     Something like this if you could replace the badge with an image?
       `<li class="list-group-item">New <span class="badge">12</span></li>`
+  - [ ] Some sort of Congratulations to the winner when you end a tournament.
   - [x] Possible to create multiple tournaments without logins?
     - [x] home page shows every tournament and expand on selection?
+  - [ ] Doubles tournaments
+    - [ ] Create teams of two players.
+    - [ ] Update each player's stats. Win for the team is a win for the player.
+      - Table/Standings in tournament renders Team standings for the tournament
   - [ ] Login
     - [ ] Facebook?
-      - [ ] Use person's facebook picture to create an avatar
+      - [ ] Use person's Facebook picture to create an avatar
     - [ ] Player portal
       - [ ] shows open tournaments, and past ones
       - [ ] shows personal stats
