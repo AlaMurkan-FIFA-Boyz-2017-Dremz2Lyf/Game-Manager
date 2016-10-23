@@ -72,6 +72,7 @@ Game Manager is an app for managing a local (offline) competition. Currently des
   - [ ] For the list of existing players on the landing page, add a customized (soccer ball?) badge with the count of how many tournament that player has Won
     Something like this if you could replace the badge with an image?
       `<li class="list-group-item">New <span class="badge">12</span></li>`
+  - [ ] Some sort of Congratulations to the winner when you end a tournament.
   - [x] Possible to create multiple tournaments without logins?
     - [x] home page shows every tournament and expand on selection?
   - [ ] Doubles tournaments
