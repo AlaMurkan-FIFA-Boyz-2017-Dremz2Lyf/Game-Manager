@@ -60,7 +60,7 @@ class Main extends React.Component {
     utils.getOngoingTournaments().then(function(tourneys) {
       self.setState({
         // Add the ongoing tournaments to the state
-        ongoingTournamentsList: tourneys.data
+        ongoingTournamentsList: tourneys
       });
     });
   }
@@ -202,7 +202,6 @@ class Main extends React.Component {
     });
     // call our getAllPlayers
     utils.getAllPlayers(this.state).then(res => {
-      console.log(res)
       self.setState({
         allPlayersList: res
       });
@@ -356,7 +355,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable stats={this.state.statLines} />
+              <StatsTable stats={this.state.statLines} changeView={this.toggleStatsView.bind(this)}/>
             </div>
 
             <div className="col-xs-1">

@@ -43,6 +43,14 @@ exports.getAllPlayers = function(state) {
 // This function makes a call for all tournaments from the server and adds them to the state.
 exports.getOngoingTournaments = function() {
   return axios.get('/api/tournaments')
+    .then(function(tourneys) {
+      //Here we take the existing tournaments and filter out the possible blank tournament since currently
+      //one tournament can be created with a blank name.
+      var existingTourneys = tourneys.data
+      return noBlankTourney = existingTourneys.filter(function(tourn) {
+        return tourn.tournament_name !== '';
+      })
+    })
     .catch(function(err) {
       // Handle any errors here
       console.log('Error in getting tourneys from the DB', err);
