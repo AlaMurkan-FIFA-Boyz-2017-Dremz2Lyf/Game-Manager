@@ -209,7 +209,7 @@ class Main extends React.Component {
     // and call our getOngoingTournaments
     utils.getOngoingTournaments().then(function(tourneys) {
       self.setState({
-        ongoingTournamentsList: tourneys.data
+        ongoingTournamentsList: tourneys
       });
     });
   }
@@ -355,7 +355,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable stats={this.state.statLines} changeView={this.toggleStatsView.bind(this)}/>
+              <StatsTable stats={this.state.statLines} />
             </div>
 
             <div className="col-xs-1">
