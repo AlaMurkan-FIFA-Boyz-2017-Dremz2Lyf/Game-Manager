@@ -156,3 +156,20 @@ li a:hover {
   color: #FAD817;
   text-shadow: 1px 1px 4px #1E2329;
 }
+
+.tourney-oops {
+  color: #FAD817;
+  text-shadow: 1px 1px 4px #1E2329;
+}
+
+.tourney-exists-btn {
+  font-size: 11px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+.player-exists-btn {
+  font-size: 11px;
+  padding-top: 8.75px;
+  padding-bottom: 8.75px;
+}
