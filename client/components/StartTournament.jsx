@@ -61,7 +61,7 @@ class StartTournament extends React.Component {
               placeholder="Tournament Name"
               onChange={this.handleInputChange.bind(this)} />
           </div>
-          <button type="submit" className="btn btn-danger tourney-exist-btn">TOURNAMENT EXISTS!</button>
+          <button type="submit" className="btn btn-danger tourney-exists-btn">TOURNAMENT EXISTS</button>
           <p className="tourney-oops">Tournament name already exists! Please try again!</p>
         </form>
 

@@ -68,7 +68,7 @@ class Form extends React.Component {
               placeholder="Please try again"
               onChange={this.handleInputChange.bind(this)} />
           </div>
-          <button type="submit" className="btn btn-danger">USER EXISTS</button>
+          <button type="submit" className="btn btn-danger player-exists-btn">USER EXISTS</button>
           <p className="user-oops">Oops, that name is taken! Try again!</p>
         </form>
 
