@@ -116,9 +116,9 @@ routes.put('/api/tournaments', function(req, res) {
 });
 
 routes.get('/api/games/table/', function(req, res) {
-  var id = Number(req.query.id);
+  var tourneyId = Number(req.query.id);
 
-  helpers.getTable(id)
+  helpers.getTable(tourneyId)
     .then(function(res) {
       res.status(200).send(res);
     }).catch(function(err) {

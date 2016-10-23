@@ -37,12 +37,12 @@ exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
 
 exports.getTable = function(tourneyId) {
 
-  knex('games').where('tournament_id', id)
+  return knex('games').where('tournament_id', tourneyId)
     .then(function(games) {
-      console.log(game);
+      console.log(games);
     })
     .catch(function(err) {
-
+      throw err;
     });
 };
 
@@ -51,9 +51,10 @@ exports.setGameStatus = function(req, res) {
   // create the object to pass into the knex update
   var updateStatus = {};
 
-  // if we are setting
+  // The 'current' key on the body will be a boolean. True means set to active, false means set back to created.
   req.body.current ? updateStatus.status = 'active' : updateStatus.status = 'created';
 
+  // Query the database for the correct game, and update it with the object we made above.
   knex('games').where('id', req.body.game.id).update(updateStatus).then(function(response) {
     res.status(201);
   }).catch(function(err) {
