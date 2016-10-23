@@ -42,7 +42,7 @@ class Form extends React.Component {
     if (this.state.noError) {
       return (
 
-        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)}>
+        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} autoComplete="off">
           <div className="form-group">
             <input type="text"
               className="form-control user-form"
