@@ -30,7 +30,9 @@ exports.getAllPlayers = function(state) {
           return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
         });
 
-        return notAdded;
+        return notAdded.filter(function(player) {
+          return player.username !== '';
+        });
       })
       .catch(function(err) {
         // Handle any errors here.
