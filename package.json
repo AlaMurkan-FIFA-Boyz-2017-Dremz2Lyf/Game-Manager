@@ -64,6 +64,9 @@
     "webpack",
     "express"
   ],
+  "engines": {
+    "node": "4.1.1"
+  },
   "bugs": {
     "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager/issues"
   }
