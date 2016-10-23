@@ -214,25 +214,6 @@ class Main extends React.Component {
     });
   }
 
-  resetTournament() {
-    var self = this;
-    this.setState({
-      tourneyPlayersList: [],
-    });
-    utils.getAllPlayers(this.state).then(res => {
-      console.log(res)
-      self.setState({
-        allPlayersList: res
-      });
-    });
-    utils.getOngoingTournaments().then(function(tourneys) {
-      self.setState({
-        ongoingTournamentsList: tourneys.data,
-        currentTournament: null
-      });
-    });
-  }
-
 
   finishTournament() {
     // set our context here.
@@ -374,7 +355,7 @@ class Main extends React.Component {
               <a className="navbar-brand" href="#">FIFA TOURNAMENT MANAGER</a>
             </div>
             <ul className="nav navbar-nav">
-              <li><a href="#"><span onClick={this.resetTournament.bind(this)}>Home</span></a></li>
+              <li><a href="/"><span>Home</span></a></li>
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
             </ul>
           </nav>
@@ -397,14 +378,7 @@ class Main extends React.Component {
           </div>
 
           <div className="row">
-            <div className="col-xs-1"></div>
-            <div className="col-xs-4">
-            </div>
-            <div className="col-xs-3"></div>
-            <div className="col-xs-3">
-              <button type="submit" className="btn btn-default" onClick={this.resetTournament.bind(this)}>HOME</button>
-            </div>
-            <div className="col-xs-1"></div>
+            <div className="col-xs-12"></div>
 
           </div>
 
