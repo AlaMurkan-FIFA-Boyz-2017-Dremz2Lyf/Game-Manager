@@ -187,6 +187,11 @@ class Main extends React.Component {
         allPlayersList: res
       });
     });
+    utils.getOngoingTournaments().then(function(tourneys) {
+      self.setState({
+        ongoingTournamentsList: tourneys.data
+      });
+    });
   }
 
   resetTournament() {
