@@ -7,7 +7,8 @@ class StartTournament extends React.Component {
     super();
 
     this.state = {
-      tourneyName: ''
+      tourneyName: '',
+      noError: true
     };
   }
 
@@ -18,25 +19,58 @@ class StartTournament extends React.Component {
   }
 
   startTourney(event) {
-    var context = this;
+    var self = this;
     event.preventDefault();
-    this.props.create(this.state.tourneyName);
+    this.props.createTournament(this.state.tourneyName)
+    .then(function(res) {
+      console.log('Success')
+    })
+    .catch(function(err) {
+      self.setState({
+        noError: false
+      })
+    })
+    
   }
 
   render() {
-    return (
-      <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
-        <div className="form-group">
-          <input type="text"
-            className="form-control"
-            id="tourneyName"
-            placeholder="Tournament Name"
-            onChange={this.handleInputChange.bind(this)} />
-        </div>
-        <button type="submit" className="btn btn-default">CREATE!</button>
-      </form>
-    );
+    if(this.state.noError) {
+      return (
+
+        <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
+          <div className="form-group">
+            <input type="text"
+              className="form-control"
+              id="tourneyName"
+              placeholder="Tournament Name"
+              onChange={this.handleInputChange.bind(this)} />
+          </div>
+          <button type="submit" className="btn btn-default">CREATE!</button>
+        </form>
+
+      );
+    } else {
+
+      return (
+
+        <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
+          <div className="form-group">
+            <input type="text"
+              className="form-control"
+              id="tourneyName"
+              placeholder="Tournament Name"
+              onChange={this.handleInputChange.bind(this)} />
+          </div>
+          <button type="submit" className="btn btn-danger tourney-exist-btn">TOURNAMENT EXISTS!</button>
+          <p className="tourney-oops">Tournament name already exists! Please try again!</p>
+        </form>
+
+      );
+    }
+
   }
 }
+
+      
 
 module.exports = StartTournament;

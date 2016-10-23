@@ -83,8 +83,8 @@ class Main extends React.Component {
   createTournament(tourneyName) {
     var context = this;
     // post request to the /api/tournaments endpoint with the tourneyName included
-    axios.post('/api/tournaments', {
-      // NOTE: This route is not finished yet
+    return axios.post('/api/tournaments', {
+
       tournament_name: tourneyName
     }).then(function(response) {
       // response.data holds an array with one number in it
@@ -100,7 +100,7 @@ class Main extends React.Component {
       context.createGames.call(context, tourneyId);
     }).catch(function(err) {
       // handles some errors
-      console.log(err, 'failed to create tournament');
+      throw err
     });
   }
 
@@ -495,7 +495,7 @@ class Main extends React.Component {
                   <h4>CREATE NEW TOURNAMENT</h4>
                 </div>
                 <div className="panel-body">
-                  <StartTournament create={this.createTournament.bind(this)}/>
+                  <StartTournament createTournament={this.createTournament.bind(this)}/>
                   <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
                 </div>
               </div>
