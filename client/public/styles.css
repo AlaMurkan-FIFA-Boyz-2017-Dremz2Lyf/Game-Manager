@@ -95,6 +95,25 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 2px 4px 0 rgba(250,216,23,0.2),0 1.5px 5px 0 rgba(250,216,23,0.19);
 }
 
+li a span {
+  color: #D6BC6F;
+  background: rgba(31,35,41,0.98);
+
+}
+
+li a:hover {
+  box-shadow: 0 8px 16px 0 rgba(250,216,23,0.2),0 6px 20px 0 rgba(250,216,23,0.19);
+  transform: scale3d(1.09,1.09,-1)
+}
+
+.navbar-inverse .navbar-brand {
+  color: white;
+}
+
+.navbar-inverse .navbar-brand:hover {
+  cursor: default;
+}
+
 .list-group-item:hover {
   box-shadow: 0 8px 16px 0 rgba(250,216,23,0.2),0 6px 20px 0 rgba(250,216,23,0.19);
   transform: scale3d(1.015,1.015,-1);

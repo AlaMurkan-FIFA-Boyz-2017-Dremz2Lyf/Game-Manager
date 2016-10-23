@@ -183,6 +183,7 @@ class Main extends React.Component {
       tourneyPlayersList: []
     });
     utils.getAllPlayers(this.state).then(res => {
+      console.log(res)
       self.setState({
         allPlayersList: res
       });
@@ -195,8 +196,21 @@ class Main extends React.Component {
   }
 
   resetTournament() {
+    var self = this;
     this.setState({
-      currentTournament: null
+      tourneyPlayersList: [],
+    });
+    utils.getAllPlayers(this.state).then(res => {
+      console.log(res)
+      self.setState({
+        allPlayersList: res
+      });
+    });
+    utils.getOngoingTournaments().then(function(tourneys) {
+      self.setState({
+        ongoingTournamentsList: tourneys.data,
+        currentTournament: null
+      });
     });
   }
 
@@ -289,6 +303,15 @@ class Main extends React.Component {
     if (this.state.statsView) {
       return (
         <div className="background">
+          <nav className="navbar navbar-inverse">
+            <div className="navbar-header">
+              <a className="navbar-brand" href="#">FIFA TOURNAMENT MANAGER</a>
+            </div>
+            <ul className="nav navbar-nav">
+              <li><a href="#"><span onClick={this.toggleStatsView.bind(this)} >Home</span></a></li>
+              <li><a href="#"><span>Stats</span></a></li>
+            </ul>
+          </nav>
           <div className="container">
             <div className="jumbotron header">
               <h1>VIEW YOUR STATS!</h1>
@@ -300,18 +323,10 @@ class Main extends React.Component {
           </div>
 
           <div className="row">
-            <div className="col-xs-1"></div>
-            <div className="col-xs-4">
+            <div className="col-xs-12">
                 <h3>.</h3>
                 <h3>.</h3>
             </div>
-            <div className="col-xs-3"></div>
-            <div className="col-xs-3">
-              <h3>.</h3>
-              <button type="submit" className="btn btn-default" onClick={this.toggleStatsView.bind(this)}>VIEW TOURNAMENTS</button>
-            </div>
-            <div className="col-xs-1"></div>
-
           </div>
 
 
@@ -322,7 +337,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable stats={this.state.statLines} changeView={this.toggleStatsView.bind(this)}/>
+              <StatsTable stats={this.state.statLines} />
             </div>
 
             <div className="col-xs-1">
@@ -336,6 +351,15 @@ class Main extends React.Component {
       // render the CurrentTournament app
       return (
         <div className="background">
+          <nav className="navbar navbar-inverse">
+            <div className="navbar-header">
+              <a className="navbar-brand" href="#">FIFA TOURNAMENT MANAGER</a>
+            </div>
+            <ul className="nav navbar-nav">
+              <li><a href="#"><span onClick={this.resetTournament.bind(this)}>Home</span></a></li>
+              <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
+            </ul>
+          </nav>
           <div className="container">
             <div className="jumbotron header">
               <h1>GAME TIME!</h1>
@@ -408,7 +432,16 @@ class Main extends React.Component {
       // otherwise render the create tournament app.
       return (
         <div className="background">
-
+          <nav className="navbar navbar-inverse">
+            <div className="navbar-header">
+              <a className="navbar-brand" href="#">FIFA TOURNAMENT MANAGER</a>
+            </div>
+            <ul className="nav navbar-nav">
+              <li><a href="#"><span>Home</span></a></li>
+              <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
+            </ul>
+          </nav>
+          
           {/* this container holds the jumbotron */}
           <div className="container">
             <div className="jumbotron header">
@@ -427,13 +460,7 @@ class Main extends React.Component {
                 <h3>ADD PLAYER</h3>
                 <AddPlayerForm addPlayer={this.addPlayer.bind(this)} />
             </div>
-            <div className="col-xs-3"></div>
-            <div className="col-xs-3">
-              <h3>.</h3>
-              <button type="submit" className="btn btn-default" onClick={this.toggleStatsView.bind(this)}>VIEW STATS</button>
-            </div>
-            <div className="col-xs-1"></div>
-
+            <div className="col-xs-7"></div>
           </div>
 
 
