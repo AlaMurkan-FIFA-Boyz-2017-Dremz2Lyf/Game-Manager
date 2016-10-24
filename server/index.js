@@ -30,9 +30,11 @@ routes.get('/', function(req, res) {
   res.sendFile(Path.resolve('client/public/index.html'));
 });
 
-// /api/player
+
 // **************************************************
-// GET request
+
+  // NOTE: Routes for players
+
 routes.get('/api/player', function(req, res) {
   helpers.getAllPlayers(req.query.tournament_players)
     .then(players => {
@@ -44,44 +46,46 @@ routes.get('/api/player', function(req, res) {
 });
 
 
-// POST request handler
 routes.post('/api/player', function(req, res) {
   //Prevent server from posting blank usernames with this if statement
   if (req.body.username === '') {
-    res.status(404).send('Cannot Insert Empty String Into Databse');
+    res.status(404).send('Cannot Insert Empty String Into Database');
   } else {
-    knex('players').insert({
-      username: req.body.username
-    }).then(function(result) {
-      res.status(201).send('Posted new user to the database');
-    }).catch(function(err) {
-      res.status(400).send('User already exists');
-    });
+    helpers.makePlayer(req)
+      .then(function(result) {
+        res.status(201).send('Posted new user to the database');
+      }).catch(function(err) {
+        res.status(400).send('User already exists');
+      });
   }
 });
 
 
 // **************************************************
 
-// /api/tournaments
+  // NOTE: Routes for tournaments
+
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
-  //Prevent server from posting blank tournament names with this if statement
+  // To do validation on the name, and the amount of players in the tournament,
+    // we need to check if the name is an empty string.
   if (tourneyName === '') {
+    // If it is, send back a message to show the user the error.
     res.status(400).json({'message': 'IT\'S GOTTA HAVE A NAME!'});
   } else if (!req.body.enough) {
+    // If we have passed the 'enough' boolean from the app as false,
+      // then there are not enough players to make a tournament. Send back the message.
     res.status(400).json({'message': 'YOU CAN\'T JUST PLAY ALONE!'});
   } else {
-    knex('tournaments').insert({
-      tournament_name: tourneyName
-    }).then(function(response) {
-      res.status(201).send(response);
-    }).catch(function(err) {
-      res.status(500).send(err);
-    });
+    // Otherwise make the call for the query!
+    helpers.makeTourney(tourneyName)
+      .then(function(response) {
+        res.status(201).send(response);
+      }).catch(function(err) {
+        res.status(500).send(err);
+      });
   }
 });
-
 
 routes.put('/api/tournaments', function(req, res) {
 
@@ -95,18 +99,7 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
-routes.get('/api/games/table/', function(req, res) {
-
-  helpers.getTable(req.query.id)
-    .then(function(response) {
-      res.status(200).send(response);
-    }).catch(function(err) {
-      res.status(500).send(err);
-    });
-});
-
-
-//Note, the below will only fetch ONGOING tournaments
+//NOTE: REFACTOR, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
   knex('tournaments').where('winner_id', null)
   .orderBy('id', 'desc')
@@ -114,22 +107,15 @@ routes.get('/api/tournaments', function(req, res) {
     res.send(data);
   });
 });
+
+
 // **************************************************
 
-// /api/games
+  // NOTE: Routes for the games
+
 routes.post('/api/games', function(req, res) {
 
-  // get the tourneyId from the request body
-  var tourneyId = req.body.tourneyId;
-
-  // get the players list from the request body
-  var list = req.body.players;
-
-  // run those through the createGamesForTourney function
-  var games = helpers.createGamesForTourney(tourneyId, list);
-
-  // insert the games array into the db
-  knex('games').insert(games)
+  helpers.createGamesForTourney(req)
     .then(function(response) {
       res.status(201).send(response);
     })
@@ -165,18 +151,8 @@ routes.get('/api/games', function(req, res) {
 });
 
 routes.put('/api/games', function(req, res) {
-  //this will use the game id from the query as gameId.
-  //then use knex to insert the player scores in the database that has that gameId
-  //it will also update the status of the game in the database to disabled.
-  var gameId = req.body.id;
-  var player1Score = req.body.player1_score;
-  var player2Score = req.body.player2_score;
-  var status = req.body.status;
 
-  knex('games').where('id', gameId)
-    .update('player1_score', player1Score)
-    .update('player2_score', player2Score)
-    .update('status', status)
+  helpers.updateGames(req)
     .then(function(response) {
       res.status(202).send('Successfully Updated Game Score');
     }).catch(function(err) {
@@ -185,6 +161,20 @@ routes.put('/api/games', function(req, res) {
 });
 
 
+// *******************************************
+
+  // NOTE: Route for the table
+
+routes.get('/api/table/', function(req, res) {
+
+  helpers.getTable(req.query.id)
+  .then(function(response) {
+    res.status(200).send(response);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+});
+// *******************************************
 //
 // Static assets (html, etc.)
 //

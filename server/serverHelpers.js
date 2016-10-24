@@ -1,3 +1,8 @@
+// NOTE:
+// IF YOU HAVE COME IN HERE I AM SORRY,
+// FOR SERVERHELPERS IS DARK AND FULL OF TERRORS
+
+
 var knex = require('knex')({
   client: 'sqlite3',
   connection: {
@@ -6,33 +11,47 @@ var knex = require('knex')({
   useNullAsDefault: true
 });
 
-exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
+exports.createGamesForTourney = function(req) {
   // games array will be returned by this function
-  var games = [];
+  // get the tourneyId from the request body
+  var tourneyId = req.body.tourneyId;
 
-  // while there is more than one player in the tourneyPlayersList,
-  while (playersInTourneyList.length > 1) {
+  // get the players list from the request body
+  var list = req.body.players;
 
-    // shift the first item off and hold it with our nextPlayer variable
-    var nextPlayer = playersInTourneyList.shift();
+  // This inner function is used to makeGames.
+  function makeGames(tourneyId, list) {
+    var games = [];
 
-    // then forEach player left in there, create a game with the nextPlayer
-      // and push that game into the games array
-    playersInTourneyList.forEach(function(playerObj) {
+    // while there is more than one player in the tourneyPlayersList,
+    while (list.length > 1) {
 
-      // this will be the object pushed into the games array
-      var gameObj = {};
+      // shift the first item off and hold it with our nextPlayer variable,
+      var nextPlayer = list.shift();
 
-      // set the needed values for the game object
-      gameObj.player1_id = nextPlayer.id;
-      gameObj.player2_id = playerObj.id;
-      gameObj.tournament_id = tourneyId;
+      // then forEach player left in there, create a game with the nextPlayer
+      // and push that game into the games array.
+      list.forEach(function(playerObj) {
 
-      // push into the games array
-      games.push(gameObj);
-    });
+        // This will be the object pushed into the games array.
+        var gameObj = {};
+
+        // set the needed values for the game object
+        gameObj.player1_id = nextPlayer.id;
+        gameObj.player2_id = playerObj.id;
+        gameObj.tournament_id = tourneyId;
+
+        // push into the games array
+        games.push(gameObj);
+      });
+    }
+    return games;
   }
-  return games;
+  // Call it!!
+  var games = makeGames(tourneyId, list);
+  // return the promise from the query
+  return knex('games').insert(games);
+
 };
 
 exports.getTable = function(tourneyId) {
@@ -133,4 +152,34 @@ exports.setTournamentWinner = function(tourneyId, winnerId) {
   return knex('tournaments')
     .where('id', tourneyId)
     .update('winner_id', winnerId);
+};
+
+exports.updateGames = (req) => {
+  //updateGames will use the game id to query the db for the correct game.
+  var gameId = req.body.id;
+
+  //This handles score validation.
+  var player1Score = req.body.player1_score === '' ? null : req.body.player1_score;
+  var player2Score = req.body.player2_score === '' ? null : req.body.player2_score;
+
+  //Then set the status. This also is a validation thing, if there are no scores,
+    // the game is definitely not finished! Keep it created
+  var status = player2Score === null ? 'created' : req.body.status;
+
+  return knex('games').where('id', gameId)
+    .update('player1_score', player1Score)
+    .update('player2_score', player2Score)
+    .update('status', status);
+};
+
+exports.makePlayer = function(req) {
+  return knex('players').insert({
+    username: req.body.username
+  });
+};
+
+exports.makeTourney = function(tourneyName) {
+  return knex('tournaments').insert({
+    tournament_name: tourneyName
+  });
 };
