@@ -79,7 +79,9 @@ exports.getTable = function(tourneyId) {
         idString += ('-' + key);
       }
 
-
+      // getAllPlayers function was made to accept a query string from a put request.
+        // So we need to convert our array of player ids into a string with each
+        // id separated by a '-' (dash).
       return exports.getAllPlayers(idString)
         .then(playersArray => {
           var standingsArray = [];
