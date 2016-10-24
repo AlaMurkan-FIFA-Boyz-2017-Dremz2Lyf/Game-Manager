@@ -48,18 +48,15 @@ Game Manager is an app for managing a local (offline) competition. Currently des
       - [x] Existing players 'drop down', or other component to select people for the tournament.
       - [x] Add person, field if not existing
       - [x] "Added Players to tournament" Component
-    - [ ] Current Tournament View
-      - [ ] Current Table component
-        - [ ] PlayerTable components (sorted by points, with Goal Differential as a tie breaker)
+    - [x] Current Tournament View
+      - [x] Current Table component
+        - [x] PlayerTable components (sorted by points, with Goal Differential as a tie breaker)
       - [x] Games component
         - [x] Game components
           - [x] has player name, and game score
         - [x] Current game component
         - [x] Enter Game stats
           - [x] Score
-          - [ ] Shots
-          - [ ] Possession
-          - [ ] Shots on Goal
 
 ## Stretch Goals
 
@@ -69,10 +66,15 @@ Game Manager is an app for managing a local (offline) competition. Currently des
   - [ ] Player Stats Page
     - [ ] Sortable by each stat
     - [ ] Include tournament win count
+    - [ ] Shots
+    - [ ] Possession
+    - [ ] Shots on Goal
+    - [ ] Moar?
+  - [ ] Refactor to use PostgreSQL.... 
   - [ ] For the list of existing players on the landing page, add a customized (soccer ball?) badge with the count of how many tournament that player has Won
     Something like this if you could replace the badge with an image?
       `<li class="list-group-item">New <span class="badge">12</span></li>`
-  - [ ] Some sort of Congratulations to the winner when you end a tournament.
+  - [ ] Some sort of (better) Congratulations to the winner when you end a tournament.
   - [x] Possible to create multiple tournaments without logins?
     - [x] home page shows every tournament and expand on selection?
   - [ ] Doubles tournaments
