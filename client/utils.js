@@ -93,3 +93,23 @@ exports.getGamesByTourneyId = function(tourneyId) {
     return err;
   });
 };
+
+exports.getTableForTourney = function(tourneyId) {
+  return axios.get('/api/games/table', {
+    params: {
+      id: tourneyId
+    }
+  }).then(function(res) {
+
+    var table = res.data.sort(function(prevPlayer, currentPlayer) {
+      // if (prevPlayer.points) {
+      prevPlayer.points === currentPlayer.points ? return prevPlayer.gd - currentPlayer.gd : return prevPlayer.points - currentPlayer.points
+      // }
+      // return prevPlayer.points - currentPlayer.points;
+    });
+    console.log('Should be sorted table:', table);
+    return table;
+  }).catch(function(err) {
+    throw err;
+  });
+};

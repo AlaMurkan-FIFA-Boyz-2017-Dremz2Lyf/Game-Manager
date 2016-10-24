@@ -73,7 +73,6 @@ routes.post('/api/player', function(req, res) {
 // **************************************************
 
 // /api/tournaments
-// TODO: GET, PUT (update with winner)
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
   //Prevent server from posting blank tournament names with this if statement
@@ -116,11 +115,10 @@ routes.put('/api/tournaments', function(req, res) {
 });
 
 routes.get('/api/games/table/', function(req, res) {
-  var tourneyId = Number(req.query.id);
 
-  helpers.getTable(tourneyId)
-    .then(function(res) {
-      res.status(200).send(res);
+  helpers.getTable(req.query.id)
+    .then(function(response) {
+      res.status(200).send(response);
     }).catch(function(err) {
       res.status(500).send(err);
     });
@@ -166,6 +164,7 @@ routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
+
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
     // query the db here with the tourneyId

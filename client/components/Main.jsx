@@ -56,7 +56,7 @@ class Main extends React.Component {
         allPlayersList: response
       });
     });
-    //
+    // getOngoingTournaments populates the in progress tournament list
     utils.getOngoingTournaments().then(function(tourneys) {
       self.setState({
         // Add the ongoing tournaments to the state
@@ -184,6 +184,7 @@ class Main extends React.Component {
   }
 
   setCurrentTournament(index, tourneyId) {
+    var self = this;
     // Set the state of currentTournament to the tournament that was clicked on.
       // We do this by passing the index of the clicked on item up to this function,
       // then using that index to find the correct tournament in the ongoingTournamentsList.
@@ -192,6 +193,15 @@ class Main extends React.Component {
     });
     // When we have a currentTournament, update the games and players.
     this.updateGames(tourneyId, this.updatePlayers);
+
+    utils.getTableForTourney(tourneyId).then(function(res) {
+
+      self.setState({
+        currentTournamentTable: res
+      });
+    }).catch(function(err) {
+      throw err;
+    });
   }
 
   toggleStatsView() {
@@ -222,7 +232,7 @@ class Main extends React.Component {
     // the sorting for the tournament table should happen on game submits,
       // so that means the first item in the currentTournamentTable array
       // should be the winner of our tournament when we end it!
-    var winner = this.state.currentTournamentTable.shift();
+    var winner = this.state.currentTournamentTable.pop();
 
     // grab the tournament we are in from state,
     var tournament = this.state.currentTournament;
@@ -433,7 +443,7 @@ class Main extends React.Component {
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
             </ul>
           </nav>
-          
+
           {/* this container holds the jumbotron */}
           <div className="container">
             <div className="jumbotron header">
