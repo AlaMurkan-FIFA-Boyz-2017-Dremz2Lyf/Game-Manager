@@ -4,6 +4,7 @@ var express = require('express');
 var Path = require('path');
 var helpers = require('./serverHelpers.js');
 var bodyParser = require('body-parser');
+var db = require('./db')
 
 
 var routes = express.Router();
@@ -11,18 +12,16 @@ var routes = express.Router();
 routes.use( require('body-parser').json() );
 
 var knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: './database.sqlite3'
-  },
-  useNullAsDefault: true
-});
+    client: 'postgresql',
+    connection: {
+      database: 'database'
+    }
+  })
 
 routes.use(bodyParser.json());
 
 routes.use(express.static(Path.join(__dirname, 'public')));
 
-console.log(Path.join(__dirname, './public/index.html'));
 // Home page
 routes.get('/', function(req, res) {
   // res.sendFile(Path.join(__dirname, './public/index.html'));

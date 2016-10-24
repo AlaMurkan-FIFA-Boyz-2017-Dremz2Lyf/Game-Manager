@@ -3,9 +3,9 @@
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'postgresql',
     connection: {
-      filename: './database.sqlite3'
+      database: 'database'
     },
     seeds: {
       directory: './seeds'
@@ -29,9 +29,9 @@ module.exports = {
   // },
 
   production: {
-    client: 'sqlite3',
+    client: 'postgresql',
     connection: {
-      filename: './database.sqlite3'
+      database: 'database'
     },
   }
 

@@ -4,12 +4,11 @@
 
 
 var knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: './database.sqlite3'
-  },
-  useNullAsDefault: true
-});
+    client: 'postgresql',
+    connection: {
+      database: 'database'
+    }
+  })
 
 exports.createGamesForTourney = function(req) {
   // games array will be returned by this function
