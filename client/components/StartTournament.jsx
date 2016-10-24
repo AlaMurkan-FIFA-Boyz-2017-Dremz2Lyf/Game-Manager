@@ -39,7 +39,7 @@ class StartTournament extends React.Component {
 
     var errorSwitch = {};
     errorSwitch.buttonClass = this.state.error ? 'btn btn-danger tourney-exists-btn' : 'btn btn-default';
-    errorSwitch.buttonContent = this.state.error ? 'Tournament Exists' : 'Create';
+    errorSwitch.buttonContent = this.state.error ? 'Whoops' : 'Create';
 
     return (
         <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
