@@ -173,3 +173,7 @@ li a:hover {
   padding-top: 8.75px;
   padding-bottom: 8.75px;
 }
+
+.table>tbody>tr>td {
+  color: #D6BC6F;
+}

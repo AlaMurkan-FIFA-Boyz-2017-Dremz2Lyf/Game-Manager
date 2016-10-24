@@ -34,30 +34,21 @@ routes.get('/', function(req, res) {
 // **************************************************
 // GET request
 routes.get('/api/player', function(req, res) {
-  playerIds = req.query.tournament_players;
-
-
-  if (playerIds) {
-    knex('players')
-    .whereIn('id', playerIds)
-    .then(function(data) {
-      res.send(data);
+  helpers.getAllPlayers(req.query.tournament_players)
+    .then(players => {
+      res.status(200).send(players);
+    })
+    .catch(err => {
+      res.status(500).send(err);
     });
-  } else
-
-  knex('players')
-  .orderBy('id', 'desc')
-  .then(function(data) {
-    res.send(data);
-  });
 });
 
 
 // POST request handler
 routes.post('/api/player', function(req, res) {
   //Prevent server from posting blank usernames with this if statement
-  if(req.body.username === '') {
-    res.status(404).send('Cannot Insert Empty String Into Databse')
+  if (req.body.username === '') {
+    res.status(404).send('Cannot Insert Empty String Into Databse');
   } else {
     knex('players').insert({
       username: req.body.username
@@ -73,12 +64,11 @@ routes.post('/api/player', function(req, res) {
 // **************************************************
 
 // /api/tournaments
-// TODO: GET, PUT (update with winner)
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
   //Prevent server from posting blank tournament names with this if statement
-  if(tourneyName === '') {
-    res.status(404).send('Cannot use blank tournament name')
+  if (tourneyName === '') {
+    res.status(404).send('Cannot use blank tournament name');
   } else {
     knex('tournaments').insert({
       tournament_name: tourneyName
@@ -91,23 +81,10 @@ routes.post('/api/tournaments', function(req, res) {
 });
 
 routes.put('/api/tournaments', function(req, res) {
-  var tourneyId = req.body.id;
 
-  var winnerName = req.body.winnerName;
-
-  knex('players')
-    .where('username', winnerName)
-    .select('id')
-    .then(function(winnerId) {
-      knex('tournaments')
-      .where('id', tourneyId)
-      .update('winner', winnerId)
-      .then(function(response) {
-        res.status(202).send(response);
-      })
-      .catch(function(err) {
-        res.status(500).send(err);
-      });
+  helpers.setTournamentWinner(req.body.id, req.body.winner_id)
+    .then(function(response) {
+      res.sendStatus(202);
     })
     .catch(function(err) {
       res.status(500).send(err);
@@ -115,81 +92,14 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
-routes.get('/api/games/table/:id', function(req, res) {
-  var id = Number(req.params.id);
+routes.get('/api/games/table/', function(req, res) {
 
-  knex('players')
-.orderBy('id', 'asc')
-.then(function(data) {
-  var playersArray = data.map(function(item) {
-    return {
-      id: item.id,
-      wins: 0,
-      losses: 0,
-      draws: 0,
-      gp: 0,
-      gd: 0
-    };
-  });
-
-  knex('games').where('tournament_id', id)
-  .then(function(data) {
-    data.forEach(function(item) {
-      var diff = Math.abs(item.player1_score - item.player2_score);
-      var winner;
-      var loser;
-      var draw1;
-      var draw2;
-
-      if (item.player1_score === item.player2_score) {
-        draw1 = item.player1_id;
-        draw2 = item.player2_id;
-
-        playersArray.forEach(function(item) {
-          if (item.id === draw1 || item.id === draw2) {
-            item.draws += 1;
-            item.gp += 1;
-          }
-        });
-      } else if (item.player1_score > item.player2_score) {
-        winner = item.player1_id;
-        loser = item.player2_id;
-
-        playersArray.forEach(function(item) {
-          if (item.id === winner) {
-            item.wins++;
-            item.gp++;
-            item.gd += diff;
-          }
-          if (item.id === loser) {
-            item.losses++;
-            item.gp++;
-            item.gd -= diff;
-          }
-
-        });
-
-      } else {
-        winner = item.player2_id;
-        loser = item.player1_id;
-
-        playersArray.forEach(function(item) {
-          if (item.id === winner) {
-            item.wins++;
-            item.gp++;
-            item.gd += diff;
-          }
-          if (item.id === loser) {
-            item.losses++;
-            item.gp++;
-            item.gd -= diff;
-          }
-        });
-      }
+  helpers.getTable(req.query.id)
+    .then(function(response) {
+      res.status(200).send(response);
+    }).catch(function(err) {
+      res.status(500).send(err);
     });
-    res.send(playersArray);
-  });
-});
 });
 
 
@@ -232,6 +142,7 @@ routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
+
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
     // query the db here with the tourneyId

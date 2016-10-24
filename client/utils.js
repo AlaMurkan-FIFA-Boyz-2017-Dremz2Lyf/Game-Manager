@@ -22,22 +22,22 @@ exports.getFirstUnplayed = function(games) {
 exports.getAllPlayers = function(state) {
     // axios rocks and makes nice promise based calls to the server for us.
   return axios.get('/api/player')
-      .then(function(playerData) {
-        var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {
-          return tourneyPlayer.id; //Returns a list of players already in the tourney
-        });
-        var notAdded = playerData.data.filter(function(player) {
-          return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
-        });
-
-        return notAdded.filter(function(player) {
-          return player.username !== '';
-        });
-      })
-      .catch(function(err) {
-        // Handle any errors here.
-        console.log('Error in getting players from the DB:', err);
+    .then(function(playerData) {
+      var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {
+        return tourneyPlayer.id; //Returns a list of players already in the tourney
       });
+      var notAdded = playerData.data.filter(function(player) {
+        return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
+      });
+
+      return notAdded.filter(function(player) {
+        return player.username !== '';
+      });
+    })
+    .catch(function(err) {
+      // Handle any errors here.
+      console.log('Error in getting players from the DB:', err);
+    });
 };
 
 // This function makes a call for all tournaments from the server and adds them to the state.
@@ -46,10 +46,10 @@ exports.getOngoingTournaments = function() {
     .then(function(tourneys) {
       //Here we take the existing tournaments and filter out the possible blank tournament since currently
       //one tournament can be created with a blank name.
-      var existingTourneys = tourneys.data
+      var existingTourneys = tourneys.data;
       return noBlankTourney = existingTourneys.filter(function(tourn) {
         return tourn.tournament_name !== '';
-      })
+      });
     })
     .catch(function(err) {
       // Handle any errors here
@@ -92,4 +92,39 @@ exports.getGamesByTourneyId = function(tourneyId) {
 
     return err;
   });
+};
+
+exports.getTableForTourney = function(tourneyId) {
+  return axios.get('/api/games/table', {
+    params: {
+      id: tourneyId
+    }
+  }).then(function(res) {
+    var table = res.data.sort(function(prevPlayer, currentPlayer) {
+      return prevPlayer.points === currentPlayer.points ? currentPlayer.gd - prevPlayer.gd : currentPlayer.points - prevPlayer.points;
+    });
+    return table;
+  }).catch(function(err) {
+    throw err;
+  });
+};
+
+exports.postGames = (tourneyId, list) => {
+
+  return axios.post('/api/games', {
+    tourneyId: tourneyId,
+    players: list
+  });
+};
+
+exports.filterToUniquePlayers = (playersList) => {
+  var dictionary = {};
+
+  var uniqueList = [];
+
+  playersList.forEach(playaObj => {
+    dictionary[playaObj.id] ? '' : (uniqueList.push(playaObj), dictionary[playaObj.id] = 'found');
+  });
+
+  return uniqueList;
 };

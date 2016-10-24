@@ -32,88 +32,73 @@ exports.createGamesForTourney = function(tourneyId, playersInTourneyList) {
       games.push(gameObj);
     });
   }
-
   return games;
 };
 
 exports.getTable = function(tourneyId) {
 
-  knex('players')
-.orderBy('id', 'asc')
-.then(function(data) {
-  var playersArray = data.map(function(item) {
-    return {
-      id: item.id,
-      wins: 0,
-      losses: 0,
-      draws: 0,
-      gp: 0,
-      gd: 0
-    };
-  });
+  return knex('games').where('tournament_id', tourneyId)
+    .then(function(games) {
+      var standingsObj = games.filter(game =>
+        game.player1_score !== null
+      ).reduce(function(standings, currGame) {
+        // collect the player ids for this game
+        var p1 = currGame.player1_id;
+        var p2 = currGame.player2_id;
 
-  knex('games')
-  .then(function(data) {
-    data.forEach(function(item) {
-      var diff = Math.abs(item.player1_score - item.player2_score);
-      var winner;
-      var loser;
-      var draw1;
-      var draw2;
+        // If player 1 and player 2 already have keys on the standings object, increment their games played.
+          // Otherwise create the new stats object and count the first game.
+        standings[p1] ? standings[p1].gp++ : standings[p1] = {gp: 1, win: 0, loss: 0, draw: 0, gd: 0, points: 0};
+        standings[p2] ? standings[p2].gp++ : standings[p2] = {gp: 1, win: 0, loss: 0, draw: 0, gd: 0, points: 0};
 
-      if (item.player1_score === item.player2_score) {
-        draw1 = item.player1_id;
-        draw2 = item.player2_id;
+        // Collect the scores for each player for this game.
+        var p1Score = currGame.player1_score;
+        var p2Score = currGame.player2_score;
 
-        playersArray.forEach(function(item) {
-          if (item.id === draw1 || item.id === draw2) {
-            item.draws += 1;
-            item.gp += 1;
-          }
-        });
-      }
-      else if (item.player1_score > item.player2_score) {
-        winner = item.player1_id;
-        loser = item.player2_id;
+        // Using Math.abs gives us a positive number always, we add this to the winner's Goal Differential,
+          // and subtract it from the loser's GD
+        var goalDiff = Math.abs(p1Score - p2Score);
 
-        playersArray.forEach(function(item) {
-          if (item.id === winner) {
-            item.wins++;
-            item.gp++;
-            item.gd += diff;
-          }
-          if (item.id === loser) {
-            item.losses++;
-            item.gp++;
-            item.gd -= diff;
-          }
+        // This monstrosity of a nested ternary operation handles the accumulation of points and wins/losses/draws
+          // First it checks if the game was a draw, if it was we have all the info we need to finish setting everything.
+        p1Score === p2Score ? (
+          standings[p1].draw++, standings[p2].draw++, standings[p1].points += 1, standings[p2].points += 1
+          // If the game wasn't a draw, we go about finding a winner and setting the data we need.
+        ) : p1Score > p2Score ? (
+          standings[p1].win++, standings[p2].loss++, standings[p1].points += 3, standings[p1].gd += goalDiff, standings[p2].gd -= goalDiff
+        ) : (
+          standings[p2].win++, standings[p1].loss++, standings[p2].points += 3, standings[p1].gd -= goalDiff, standings[p2].gd += goalDiff
+        );
 
-        });
+        return standings;
+      }, {});
 
-      } else {
-        winner = item.player2_id;
-        loser = item.player1_id;
+      var idString = '';
 
-        playersArray.forEach(function(item) {
-          if (item.id === winner) {
-            item.wins++;
-            item.gp++;
-            item.gd += diff;
-          }
-          if (item.id === loser) {
-            item.losses++;
-            item.gp++;
-            item.gd -= diff;
-          }
-        });
+      for (key in standingsObj) {
+        idString += ('-' + key);
       }
 
 
+      return exports.getAllPlayers(idString)
+        .then(playersArray => {
+          var standingsArray = [];
+          playersArray.forEach(player => {
+            standingsObj[player.id].name = player.username;
+            standingsObj[player.id].playerId = player.id;
+            standingsArray.push(standingsObj[player.id]);
+          });
 
+          return standingsArray;
+        })
+        .catch(err => {
+          throw err;
+        });
+
+
+    }).catch(function(err) {
+      throw err;
     });
-  });
-
-});
 };
 
 exports.setGameStatus = function(req, res) {
@@ -121,13 +106,29 @@ exports.setGameStatus = function(req, res) {
   // create the object to pass into the knex update
   var updateStatus = {};
 
-  // if we are setting
+  // The 'current' key on the body will be a boolean. True means set to active, false means set back to created.
   req.body.current ? updateStatus.status = 'active' : updateStatus.status = 'created';
 
+  // Query the database for the correct game, and update it with the object we made above.
   knex('games').where('id', req.body.game.id).update(updateStatus).then(function(response) {
     res.status(201);
   }).catch(function(err) {
     res.status(500).send('err', err);
-    console.log('Error getting game with id of:' + req.body.game.id, err);
+    throw err;
   });
+};
+
+exports.getAllPlayers = function(stringOfIds) {
+  if (stringOfIds) {
+    var arrayOfIds = stringOfIds.split('-');
+    return knex('players').whereIn('id', arrayOfIds);
+  } else {
+    return knex('players').select();
+  }
+};
+
+exports.setTournamentWinner = function(tourneyId, winnerId) {
+  return knex('tournaments')
+    .where('id', tourneyId)
+    .update('winner_id', winnerId);
 };
