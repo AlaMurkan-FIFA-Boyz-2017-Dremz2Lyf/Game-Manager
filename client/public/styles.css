@@ -177,3 +177,9 @@ li a:hover {
 .table>tbody>tr>td {
   color: #D6BC6F;
 }
+
+.fin {
+  text-align: center;
+  color: #D6BC6F;
+  text-shadow: 0px 0px 0px #1E2329;
+}

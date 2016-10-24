@@ -397,7 +397,18 @@ class Main extends React.Component {
 
             </div>
           </div>
-
+          <div className="well"></div>
+          <div className="row">
+            <div className="col-xs-2"></div>
+            <div className="col-xs-8">
+              <div className="panel panel-default">
+                <div className="panel-body">
+                  <h1 className="fin">Fin</h1>
+                </div>
+              </div>
+            </div>
+            <div className="col-xs-2"></div>
+          </div>
         </div>
       );
     } else if (this.state.currentTournament) {
@@ -453,7 +464,18 @@ class Main extends React.Component {
 
             </div>
           </div>
-
+          <div className="well"></div>
+          <div className="row">
+            <div className="col-xs-2"></div>
+            <div className="col-xs-8">
+              <div className="panel panel-default">
+                <div className="panel-body">
+                  <h1 className="fin">Fin</h1>
+                </div>
+              </div>
+            </div>
+            <div className="col-xs-2"></div>
+          </div>
         </div>
       );
     } else {
@@ -518,6 +540,18 @@ class Main extends React.Component {
 
             <div className="col-xs-1">
             </div>
+          </div>
+          <div className="well"></div>
+          <div className="row">
+            <div className="col-xs-2"></div>
+            <div className="col-xs-8">
+              <div className="panel panel-default">
+                <div className="panel-body">
+                  <h1 className="fin">Fin</h1>
+                </div>
+              </div>
+            </div>
+            <div className="col-xs-2"></div>
           </div>
         </div>
       );
