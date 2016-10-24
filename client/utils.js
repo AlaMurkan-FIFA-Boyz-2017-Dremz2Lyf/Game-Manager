@@ -46,10 +46,10 @@ exports.getOngoingTournaments = function() {
     .then(function(tourneys) {
       //Here we take the existing tournaments and filter out the possible blank tournament since currently
       //one tournament can be created with a blank name.
-      var existingTourneys = tourneys.data
+      var existingTourneys = tourneys.data;
       return noBlankTourney = existingTourneys.filter(function(tourn) {
         return tourn.tournament_name !== '';
-      })
+      });
     })
     .catch(function(err) {
       // Handle any errors here
@@ -102,12 +102,8 @@ exports.getTableForTourney = function(tourneyId) {
   }).then(function(res) {
 
     var table = res.data.sort(function(prevPlayer, currentPlayer) {
-      // if (prevPlayer.points) {
-      prevPlayer.points === currentPlayer.points ? return prevPlayer.gd - currentPlayer.gd : return prevPlayer.points - currentPlayer.points
-      // }
-      // return prevPlayer.points - currentPlayer.points;
+      return prevPlayer.points === currentPlayer.points ? prevPlayer.gd - currentPlayer.gd : prevPlayer.points - currentPlayer.points;
     });
-    console.log('Should be sorted table:', table);
     return table;
   }).catch(function(err) {
     throw err;

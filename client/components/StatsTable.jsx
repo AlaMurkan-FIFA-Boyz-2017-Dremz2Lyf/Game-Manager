@@ -1,10 +1,10 @@
-var StatLine = require('./StatLine.jsx')
+var StatLine = require('./StatLine.jsx');
 var React = require('react');
 
 var StatsTable = (props) => {
 
-  var statLines = props.stats.map(function(player, index) {
-    return <StatLine statsObj={player} key={index} />;
+  var statLines = props.table.map(function(playerStats, index) {
+    return <StatLine playerStats={playerStats} key={index} />;
   });
 
   return (
@@ -18,13 +18,16 @@ var StatsTable = (props) => {
           <tr>
             <th>Player</th>
             <th>GP</th>
+            <th>Points</th>
             <th>Won</th>
             <th>Loss</th>
             <th>Draw</th>
             <th>GD</th>
           </tr>
         </thead>
-
+        <tbody>
+          {statLines}
+        </tbody>
       </table>
     </div>
   </div>

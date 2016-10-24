@@ -100,7 +100,7 @@ class Main extends React.Component {
       context.createGames.call(context, tourneyId);
     }).catch(function(err) {
       // handles some errors
-      throw err
+      throw err;
     });
   }
 
@@ -346,7 +346,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable stats={this.state.statLines} />
+              <StatsTable table={this.state.currentTournamentTable} />
             </div>
 
             <div className="col-xs-1">
@@ -389,7 +389,6 @@ class Main extends React.Component {
 
           <div className="row">
             <div className="col-xs-12"></div>
-
           </div>
 
           <div className="row">
@@ -403,24 +402,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-5">
-              <div className="panel panel-default">
-                <div className="panel-heading"><h3>TABLE</h3></div>
-                <div className="panel-body">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>Player</th>
-                        <th>GP</th>
-                        <th>Won</th>
-                        <th>Loss</th>
-                        <th>Draw</th>
-                        <th>GD</th>
-                      </tr>
-                    </thead>
-                    {/* NOTE: THIS WILL BE WHERE THE TABLE IS RENDERED. An outer element of <tbody> around each player's stats */}
-                  </table>
-                </div>
-              </div>
+              <StatsTable playersList={this.state.tourneyPlayersList} table={this.state.currentTournamentTable} />
             </div>
 
             <div className="col-xs-1">
