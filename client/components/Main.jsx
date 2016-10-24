@@ -82,21 +82,21 @@ class Main extends React.Component {
     // new tournament into the DB, and after that call the createGames function
   createTournament(tourneyName) {
     var context = this;
-    var enough = true
+    var enough = true;
     // post request to the /api/tournaments endpoint with the tourneyName included
-    if(this.state.tourneyPlayersList.length < 2) {
+    if (this.state.tourneyPlayersList.length < 2) {
       enough = false;
-    } 
+    }
 
-      return axios.post('/api/tournaments', {
-        tournament_name: tourneyName,
-        enough: enough
-      }).then(function(response) {
+    return axios.post('/api/tournaments', {
+      tournament_name: tourneyName,
+      enough: enough
+    }).then(function(response) {
         // response.data holds an array with one number in it
           // this number is the tournamentId
-        var tourneyId = response.data[0];
+      var tourneyId = response.data[0];
 
-        context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+      context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
             context.setState({
               // currentTournamentTable: res,
@@ -123,10 +123,10 @@ class Main extends React.Component {
 
 
         // then call createGames with the new tourney ID
-      }).catch(function(err) {
+    }).catch(function(err) {
         // handles some errors
-        throw err;
-      });
+      throw err;
+    });
   }
 
   // createGames will be called when the button linked to createTournament is clicked.
