@@ -18,11 +18,11 @@ var StatsTable = (props) => {
           <tr>
             <th>Player</th>
             <th>GP</th>
-            <th>Points</th>
             <th>Won</th>
-            <th>Loss</th>
             <th>Draw</th>
+            <th>Loss</th>
             <th>GD</th>
+            <th>Points</th>
           </tr>
         </thead>
         <tbody>

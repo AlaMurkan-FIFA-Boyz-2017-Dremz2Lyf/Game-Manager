@@ -72,14 +72,28 @@ exports.getTable = function(tourneyId) {
         return standings;
       }, {});
 
-      var standingsArray = [];
+      var idString = '';
+
       for (key in standingsObj) {
-        standingsObj[key].playerId = key;
-        standingsArray.push(
-          standingsObj[key]
-        );
+        idString += ('-' + key);
       }
-      return standingsArray;
+
+
+      return exports.getAllPlayers(idString)
+        .then(playersArray => {
+          var standingsArray = [];
+          playersArray.forEach(player => {
+            standingsObj[player.id].name = player.username;
+            standingsArray.push(standingsObj[player.id]);
+          });
+
+          return standingsArray;
+        })
+        .catch(err => {
+          throw err;
+        });
+
+
     }).catch(function(err) {
       throw err;
     });
@@ -98,6 +112,15 @@ exports.setGameStatus = function(req, res) {
     res.status(201);
   }).catch(function(err) {
     res.status(500).send('err', err);
-    console.log('Error getting game with id of:' + req.body.game.id, err);
+    throw err;
   });
+};
+
+exports.getAllPlayers = function(stringOfIds) {
+  if (stringOfIds) {
+    var arrayOfIds = stringOfIds.split('-');
+    return knex('players').whereIn('id', arrayOfIds);
+  } else {
+    return knex('players').select();
+  }
 };

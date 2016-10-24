@@ -266,8 +266,9 @@ class Main extends React.Component {
         currentTournamentGames: res.games,
         currentGame: res.nextGame
       });
+    }).then(res => {
+      typeof callback === 'function' ? callback(tourneyId, self) : '';
     });
-    typeof callback === 'function' ? callback(tourneyId, self) : '';
   }
 
   updatePlayers(tourneyId, context) {
@@ -292,10 +293,11 @@ class Main extends React.Component {
 
     });
 
+    var idsString = uniquePlayerIds.join('-');
 
     axios.get('./api/player', {
       params: {
-        tournament_players: uniquePlayerIds
+        tournament_players: idsString
       }
     })
     .then(function(playersInCurrentTourney) {

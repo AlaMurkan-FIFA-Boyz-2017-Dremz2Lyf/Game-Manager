@@ -100,9 +100,8 @@ exports.getTableForTourney = function(tourneyId) {
       id: tourneyId
     }
   }).then(function(res) {
-
     var table = res.data.sort(function(prevPlayer, currentPlayer) {
-      return prevPlayer.points === currentPlayer.points ? prevPlayer.gd - currentPlayer.gd : prevPlayer.points - currentPlayer.points;
+      return prevPlayer.points === currentPlayer.points ? currentPlayer.gd - prevPlayer.gd : currentPlayer.points - prevPlayer.points;
     });
     return table;
   }).catch(function(err) {

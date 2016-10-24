@@ -34,30 +34,21 @@ routes.get('/', function(req, res) {
 // **************************************************
 // GET request
 routes.get('/api/player', function(req, res) {
-  playerIds = req.query.tournament_players;
-
-
-  if (playerIds) {
-    knex('players')
-    .whereIn('id', playerIds)
-    .then(function(data) {
-      res.send(data);
+  helpers.getAllPlayers(req.query.tournament_players)
+    .then(players => {
+      res.status(200).send(players);
+    })
+    .catch(err => {
+      res.status(500).send(err);
     });
-  } else
-
-  knex('players')
-  .orderBy('id', 'desc')
-  .then(function(data) {
-    res.send(data);
-  });
 });
 
 
 // POST request handler
 routes.post('/api/player', function(req, res) {
   //Prevent server from posting blank usernames with this if statement
-  if(req.body.username === '') {
-    res.status(404).send('Cannot Insert Empty String Into Databse')
+  if (req.body.username === '') {
+    res.status(404).send('Cannot Insert Empty String Into Databse');
   } else {
     knex('players').insert({
       username: req.body.username
@@ -76,8 +67,8 @@ routes.post('/api/player', function(req, res) {
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
   //Prevent server from posting blank tournament names with this if statement
-  if(tourneyName === '') {
-    res.status(404).send('Cannot use blank tournament name')
+  if (tourneyName === '') {
+    res.status(404).send('Cannot use blank tournament name');
   } else {
     knex('tournaments').insert({
       tournament_name: tourneyName
