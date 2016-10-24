@@ -8,7 +8,7 @@ class StartTournament extends React.Component {
 
     this.state = {
       tourneyName: '',
-      noError: true
+      noError: null
     };
   }
 
@@ -23,20 +23,25 @@ class StartTournament extends React.Component {
     event.preventDefault();
     this.props.createTournament(this.state.tourneyName)
     .then(function(res) {
-      console.log('Success')
+      self.setState({
+        error: null
+      });
     })
     .catch(function(err) {
       self.setState({
-        noError: false
+        error: err.response.data.message
       });
     });
 
   }
 
   render() {
-    if (this.state.noError) {
-      return (
 
+    var errorSwitch = {};
+    errorSwitch.buttonClass = this.state.error ? 'btn btn-danger tourney-exists-btn' : 'btn btn-default';
+    errorSwitch.buttonContent = this.state.error ? 'Whoops' : 'Create';
+
+    return (
         <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
           <div className="form-group">
             <input type="text"
@@ -45,28 +50,11 @@ class StartTournament extends React.Component {
               placeholder="Tournament Name"
               onChange={this.handleInputChange.bind(this)} />
           </div>
-          <button type="submit" className="btn btn-default">CREATE!</button>
+          <button type="submit" className={errorSwitch.buttonClass}>{errorSwitch.buttonContent.toUpperCase()}</button>
+          <p className="tourney-oops">{this.state.error}</p>
         </form>
-
       );
-    } else {
-
-      return (
-
-        <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
-          <div className="form-group">
-            <input type="text"
-              className="form-control"
-              id="tourneyName"
-              placeholder="Tournament Name"
-              onChange={this.handleInputChange.bind(this)} />
-          </div>
-          <button type="submit" className="btn btn-danger tourney-exists-btn">TOURNAMENT EXISTS</button>
-          <p className="tourney-oops">Tournament name already exists! Please try again!</p>
-        </form>
-
-      );
-    }
+    // }
 
   }
 }
