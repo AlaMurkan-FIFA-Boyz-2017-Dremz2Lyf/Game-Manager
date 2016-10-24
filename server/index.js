@@ -118,7 +118,7 @@ routes.post('/api/games', function(req, res) {
 
   // get the tourneyId from the request body
   var tourneyId = req.body.tourneyId;
-  
+
   // get the players list from the request body
   var list = req.body.players;
 

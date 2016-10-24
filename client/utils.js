@@ -22,22 +22,22 @@ exports.getFirstUnplayed = function(games) {
 exports.getAllPlayers = function(state) {
     // axios rocks and makes nice promise based calls to the server for us.
   return axios.get('/api/player')
-      .then(function(playerData) {
-        var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {
-          return tourneyPlayer.id; //Returns a list of players already in the tourney
-        });
-        var notAdded = playerData.data.filter(function(player) {
-          return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
-        });
-
-        return notAdded.filter(function(player) {
-          return player.username !== '';
-        });
-      })
-      .catch(function(err) {
-        // Handle any errors here.
-        console.log('Error in getting players from the DB:', err);
+    .then(function(playerData) {
+      var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {
+        return tourneyPlayer.id; //Returns a list of players already in the tourney
       });
+      var notAdded = playerData.data.filter(function(player) {
+        return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
+      });
+
+      return notAdded.filter(function(player) {
+        return player.username !== '';
+      });
+    })
+    .catch(function(err) {
+      // Handle any errors here.
+      console.log('Error in getting players from the DB:', err);
+    });
 };
 
 // This function makes a call for all tournaments from the server and adds them to the state.
@@ -95,7 +95,6 @@ exports.getGamesByTourneyId = function(tourneyId) {
 };
 
 exports.getTableForTourney = function(tourneyId) {
-  console.log(tourneyId);
   return axios.get('/api/games/table', {
     params: {
       id: tourneyId
@@ -112,10 +111,20 @@ exports.getTableForTourney = function(tourneyId) {
 
 exports.postGames = (tourneyId, list) => {
 
-  console.log('in post games', list);
-
   return axios.post('/api/games', {
     tourneyId: tourneyId,
     players: list
   });
+};
+
+exports.filterToUniquePlayers = (playersList) => {
+  var dictionary = {};
+
+  var uniqueList = [];
+
+  playersList.forEach(playaObj => {
+    dictionary[playaObj.id] ? '' : (uniqueList.push(playaObj), dictionary[playaObj.id] = 'found');
+  });
+
+  return uniqueList;
 };

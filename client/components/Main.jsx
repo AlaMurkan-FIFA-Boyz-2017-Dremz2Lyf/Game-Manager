@@ -92,20 +92,26 @@ class Main extends React.Component {
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
         .then(res => {
-
+          context.setState({
+            // currentTournamentTable: res,
+            currentTournament: { id: tourneyId, tournament_name: tourneyName }
+          });
+          // NOTE: This function call is failing because when we create a new tournament,
+            // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+            // On the result of that filter, we call a reduce function to create the objects for the table.
+            // This is not a problem right now, but in the future.
           utils.getTableForTourney(tourneyId)
           .then(res => {
-
             // set the currentTournament key on state to an object with the id and name
             context.setState({
-              currentTournamentTable: res,
-              currentTournament: { id: tourneyId, tournament_name: tourneyName }
+              currentTournamentTable: res
             });
-
           })
           .catch(err => {
             throw err;
           });
+        }).catch(err => {
+          throw err;
         });
 
 
@@ -120,7 +126,7 @@ class Main extends React.Component {
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(context, tourneyId, list) {
     var self = this;
-    console.log('list', list);
+
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     return utils.postGames(tourneyId, list)
       .then(function(response) {
@@ -241,22 +247,40 @@ class Main extends React.Component {
     var tournament = this.state.currentTournament;
     // set the winner for the tournament based on the winner's id
     tournament.winner_id = winner.playerId;
-    console.log(tournament);
+
     // That results object will be passed into the put request to the server.
-    axios.put('/api/tournaments', tournament).then(function(response) {
-      // This (untested) alert definitely doesnt work right now, but is a place holder for some sort of
-        // Congradulations to the winner.
-      alert('Congratulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
+    axios.put('/api/tournaments', tournament)
+      .then(function(response) {
+        // This (untested) alert definitely doesnt work right now, but is a place holder for some sort of
+          // Congradulations to the winner.
+        alert('Congratulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
 
-      // Then we set our currentTournament back to null to go back to the create tournament page.
-      self.setState({
-        currentTournament: null
+
+        var allPlayas = self.state.allPlayersList.concat(self.state.tourneyPlayersList);
+
+
+        var uniquePlayas = utils.filterToUniquePlayers(allPlayas);
+        // Then we set our currentTournament back to null to go back to the create tournament page.
+        self.setState({
+          currentTournament: null,
+          allPlayersList: uniquePlayas,
+          tourneyPlayersList: []
+        });
+
+      })
+      .then(res => {
+        utils.getOngoingTournaments()
+          .then(function(tourneys) {
+            self.setState({
+              ongoingTournamentsList: tourneys,
+              currentTournamentTable: []
+            });
+          });
+      })
+      .catch(function(err) {
+        // A catch in the event the put request fails.
+        console.log('FinishTournament Error:', err);
       });
-
-    }).catch(function(err) {
-      // A catch in the event the put request fails.
-      console.log('FinishTournament Error:', err);
-    });
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
