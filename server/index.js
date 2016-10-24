@@ -51,13 +51,12 @@ routes.post('/api/player', function(req, res) {
   if (req.body.username === '') {
     res.status(404).send('Cannot Insert Empty String Into Database');
   } else {
-    knex('players').insert({
-      username: req.body.username
-    }).then(function(result) {
-      res.status(201).send('Posted new user to the database');
-    }).catch(function(err) {
-      res.status(400).send('User already exists');
-    });
+    helpers.makePlayer(req)
+      .then(function(result) {
+        res.status(201).send('Posted new user to the database');
+      }).catch(function(err) {
+        res.status(400).send('User already exists');
+      });
   }
 });
 
@@ -68,19 +67,23 @@ routes.post('/api/player', function(req, res) {
 
 routes.post('/api/tournaments', function(req, res) {
   var tourneyName = req.body.tournament_name;
-  //Prevent server from posting blank tournament names with this if statement
+  // To do validation on the name, and the amount of players in the tournament,
+    // we need to check if the name is an empty string.
   if (tourneyName === '') {
+    // If it is, send back a message to show the user the error.
     res.status(400).json({'message': 'IT\'S GOTTA HAVE A NAME!'});
   } else if (!req.body.enough) {
+    // If we have passed the 'enough' boolean from the app as false,
+      // then there are not enough players to make a tournament. Send back the message.
     res.status(400).json({'message': 'YOU CAN\'T JUST PLAY ALONE!'});
   } else {
-    knex('tournaments').insert({
-      tournament_name: tourneyName
-    }).then(function(response) {
-      res.status(201).send(response);
-    }).catch(function(err) {
-      res.status(500).send(err);
-    });
+    // Otherwise make the call for the query!
+    helpers.makeTourney(tourneyName)
+      .then(function(response) {
+        res.status(201).send(response);
+      }).catch(function(err) {
+        res.status(500).send(err);
+      });
   }
 });
 
@@ -96,7 +99,7 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
-//Note, the below will only fetch ONGOING tournaments
+//NOTE: REFACTOR, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
   knex('tournaments').where('winner_id', null)
   .orderBy('id', 'desc')

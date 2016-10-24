@@ -171,3 +171,15 @@ exports.updateGames = (req) => {
     .update('player2_score', player2Score)
     .update('status', status);
 };
+
+exports.makePlayer = function(req) {
+  return knex('players').insert({
+    username: req.body.username
+  });
+};
+
+exports.makeTourney = function(tourneyName) {
+  return knex('tournaments').insert({
+    tournament_name: tourneyName
+  });
+};

@@ -8,7 +8,7 @@ class StartTournament extends React.Component {
 
     this.state = {
       tourneyName: '',
-      noError: null
+      error: null
     };
   }
 
@@ -37,9 +37,9 @@ class StartTournament extends React.Component {
 
   render() {
 
-    var errorSwitch = {};
-    errorSwitch.buttonClass = this.state.error ? 'btn btn-danger tourney-exists-btn' : 'btn btn-default';
-    errorSwitch.buttonContent = this.state.error ? 'Whoops' : 'Create';
+
+    var buttonClass = this.state.error ? 'btn btn-danger tourney-exists-btn' : 'btn btn-default';
+    var buttonContent = this.state.error ? 'Whoops' : 'Create';
 
     return (
         <form className="form-inline" onSubmit={this.startTourney.bind(this)} autoComplete="off">
@@ -50,7 +50,7 @@ class StartTournament extends React.Component {
               placeholder="Tournament Name"
               onChange={this.handleInputChange.bind(this)} />
           </div>
-          <button type="submit" className={errorSwitch.buttonClass}>{errorSwitch.buttonContent.toUpperCase()}</button>
+          <button type="submit" className={buttonClass}>{buttonContent.toUpperCase()}</button>
           <p className="tourney-oops">{this.state.error}</p>
         </form>
       );
