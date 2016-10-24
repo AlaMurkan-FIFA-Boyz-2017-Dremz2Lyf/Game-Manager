@@ -23,7 +23,7 @@ class StartTournament extends React.Component {
     event.preventDefault();
     this.props.createTournament(this.state.tourneyName)
     .then(function(res) {
-      '';
+      console.log('Success')
     })
     .catch(function(err) {
       self.setState({

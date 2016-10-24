@@ -69,6 +69,8 @@ routes.post('/api/tournaments', function(req, res) {
   //Prevent server from posting blank tournament names with this if statement
   if (tourneyName === '') {
     res.status(404).send('Cannot use blank tournament name');
+  } else if (!req.body.enough) {
+    res.status(404).send('Not enough players in tournament');
   } else {
     knex('tournaments').insert({
       tournament_name: tourneyName
@@ -79,6 +81,7 @@ routes.post('/api/tournaments', function(req, res) {
     });
   }
 });
+
 
 routes.put('/api/tournaments', function(req, res) {
 

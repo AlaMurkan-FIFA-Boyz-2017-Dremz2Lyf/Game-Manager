@@ -82,45 +82,51 @@ class Main extends React.Component {
     // new tournament into the DB, and after that call the createGames function
   createTournament(tourneyName) {
     var context = this;
+    var enough = true
     // post request to the /api/tournaments endpoint with the tourneyName included
-    return axios.post('/api/tournaments', {
-      tournament_name: tourneyName
-    }).then(function(response) {
-      // response.data holds an array with one number in it
-        // this number is the tournamentId
-      var tourneyId = response.data[0];
+    if(this.state.tourneyPlayersList.length < 2) {
+      enough = false;
+    } 
 
-      context.createGames(context, tourneyId, context.state.tourneyPlayersList)
-        .then(res => {
-          context.setState({
-            // currentTournamentTable: res,
-            currentTournament: { id: tourneyId, tournament_name: tourneyName }
-          });
-          // NOTE: This function call is failing because when we create a new tournament,
-            // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
-            // On the result of that filter, we call a reduce function to create the objects for the table.
-            // This is not a problem right now, but in the future.
-          utils.getTableForTourney(tourneyId)
+      return axios.post('/api/tournaments', {
+        tournament_name: tourneyName,
+        enough: enough
+      }).then(function(response) {
+        // response.data holds an array with one number in it
+          // this number is the tournamentId
+        var tourneyId = response.data[0];
+
+        context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
-            // set the currentTournament key on state to an object with the id and name
             context.setState({
-              currentTournamentTable: res
+              // currentTournamentTable: res,
+              currentTournament: { id: tourneyId, tournament_name: tourneyName }
             });
-          })
-          .catch(err => {
+            // NOTE: This function call is failing because when we create a new tournament,
+              // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+              // On the result of that filter, we call a reduce function to create the objects for the table.
+              // This is not a problem right now, but in the future.
+            utils.getTableForTourney(tourneyId)
+            .then(res => {
+              // set the currentTournament key on state to an object with the id and name
+              context.setState({
+                currentTournamentTable: res
+              });
+            })
+            .catch(err => {
+              throw err;
+            });
+          }).catch(err => {
             throw err;
           });
-        }).catch(err => {
-          throw err;
-        });
 
 
 
-      // then call createGames with the new tourney ID
-    }).catch(function(err) {
-      // handles some errors
-      throw err;
-    });
+        // then call createGames with the new tourney ID
+      }).catch(function(err) {
+        // handles some errors
+        throw err;
+      });
   }
 
   // createGames will be called when the button linked to createTournament is clicked.
