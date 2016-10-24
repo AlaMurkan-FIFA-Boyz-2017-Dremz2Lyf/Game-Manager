@@ -84,20 +84,33 @@ class Main extends React.Component {
     var context = this;
     // post request to the /api/tournaments endpoint with the tourneyName included
     return axios.post('/api/tournaments', {
-
       tournament_name: tourneyName
     }).then(function(response) {
       // response.data holds an array with one number in it
         // this number is the tournamentId
       var tourneyId = response.data[0];
 
-        // set the currentTournament key on state to an object with the id and name
-      context.setState({
-        currentTournament: { id: tourneyId, tournament_name: tourneyName }
-      });
+      context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+        .then(res => {
+
+          utils.getTableForTourney(tourneyId)
+          .then(res => {
+
+            // set the currentTournament key on state to an object with the id and name
+            context.setState({
+              currentTournamentTable: res,
+              currentTournament: { id: tourneyId, tournament_name: tourneyName }
+            });
+
+          })
+          .catch(err => {
+            throw err;
+          });
+        });
+
+
 
       // then call createGames with the new tourney ID
-      context.createGames.call(context, tourneyId);
     }).catch(function(err) {
       // handles some errors
       throw err;
@@ -105,31 +118,28 @@ class Main extends React.Component {
   }
 
   // createGames will be called when the button linked to createTournament is clicked.
-  createGames(tourneyId) {
-
+  createGames(context, tourneyId, list) {
     var self = this;
+    console.log('list', list);
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
-    axios.post('/api/games', {
-      tourneyId: tourneyId,
-      players: this.state.tourneyPlayersList
-    })
-    .then(function(response) {
-      // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
-      utils.getGamesByTourneyId(tourneyId).then(function(res) {
-        self.setState({
-          // We take those and set them to their appropriate state keys.
-          currentTournamentGames: res.games,
-          currentGame: res.nextGame
+    return utils.postGames(tourneyId, list)
+      .then(function(response) {
+        // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
+        utils.getGamesByTourneyId(tourneyId).then(function(res) {
+          self.setState({
+            // We take those and set them to their appropriate state keys.
+            currentTournamentGames: res.games,
+            currentGame: res.nextGame
+          });
+        })
+        .catch(function(err) {
+          // This error handles failures in the getting of games back.
+          console.log('Error in get games by tourneyID:', err);
         });
-      })
-      .catch(function(err) {
-        // This error handles failures in the getting of games back.
-        console.log('Error in get games by tourneyID:', err);
+      }).catch(function(err) {
+        // This error handles failures posting games to the server/database.
+        console.log(err, 'failed to post to games');
       });
-    }).catch(function(err) {
-      // This error handles failures posting games to the server/database.
-      console.log(err, 'failed to post to games');
-    });
   }
 
   // this function moves a Player component to the list they are not in
@@ -184,6 +194,7 @@ class Main extends React.Component {
   }
 
   setCurrentTournament(index, tourneyId) {
+
     var self = this;
     // Set the state of currentTournament to the tournament that was clicked on.
       // We do this by passing the index of the clicked on item up to this function,
@@ -194,14 +205,6 @@ class Main extends React.Component {
     // When we have a currentTournament, update the games and players.
     this.updateGames(tourneyId, this.updatePlayers);
 
-    utils.getTableForTourney(tourneyId).then(function(res) {
-
-      self.setState({
-        currentTournamentTable: res
-      });
-    }).catch(function(err) {
-      throw err;
-    });
   }
 
   toggleStatsView() {
@@ -232,16 +235,15 @@ class Main extends React.Component {
     // the sorting for the tournament table should happen on game submits,
       // so that means the first item in the currentTournamentTable array
       // should be the winner of our tournament when we end it!
-    var winner = this.state.currentTournamentTable.pop();
+    var winner = this.state.currentTournamentTable.shift();
 
-    // grab the tournament we are in from state,
+    // grab the tournament we are in from the state,
     var tournament = this.state.currentTournament;
-
-    // and extend an object containing the winners name with the tournament object.
-    var results = Object.assign({winnerName: winner.name}, tournament);
-
+    // set the winner for the tournament based on the winner's id
+    tournament.winner_id = winner.playerId;
+    console.log(tournament);
     // That results object will be passed into the put request to the server.
-    axios.put('/api/tournament', results).then(function(response) {
+    axios.put('/api/tournaments', tournament).then(function(response) {
       // This (untested) alert definitely doesnt work right now, but is a place holder for some sort of
         // Congradulations to the winner.
       alert('Congratulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
@@ -266,6 +268,16 @@ class Main extends React.Component {
         currentTournamentGames: res.games,
         currentGame: res.nextGame
       });
+    }).then(res =>{
+      utils.getTableForTourney(tourneyId)
+        .then(res => {
+          self.setState({
+            currentTournamentTable: res
+          });
+        })
+        .catch(err => {
+          throw err;
+        });
     }).then(res => {
       typeof callback === 'function' ? callback(tourneyId, self) : '';
     });

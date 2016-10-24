@@ -39,8 +39,9 @@ exports.getTable = function(tourneyId) {
 
   return knex('games').where('tournament_id', tourneyId)
     .then(function(games) {
-
-      var standingsObj = games.reduce(function(standings, currGame) {
+      var standingsObj = games.filter(game =>
+        game.player1_score !== null
+      ).reduce(function(standings, currGame) {
         // collect the player ids for this game
         var p1 = currGame.player1_id;
         var p2 = currGame.player2_id;
@@ -84,6 +85,7 @@ exports.getTable = function(tourneyId) {
           var standingsArray = [];
           playersArray.forEach(player => {
             standingsObj[player.id].name = player.username;
+            standingsObj[player.id].playerId = player.id;
             standingsArray.push(standingsObj[player.id]);
           });
 
@@ -123,4 +125,10 @@ exports.getAllPlayers = function(stringOfIds) {
   } else {
     return knex('players').select();
   }
+};
+
+exports.setTournamentWinner = function(tourneyId, winnerId) {
+  return knex('tournaments')
+    .where('id', tourneyId)
+    .update('winner_id', winnerId);
 };

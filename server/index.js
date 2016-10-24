@@ -81,23 +81,10 @@ routes.post('/api/tournaments', function(req, res) {
 });
 
 routes.put('/api/tournaments', function(req, res) {
-  var tourneyId = req.body.id;
 
-  var winnerName = req.body.winnerName;
-
-  knex('players')
-    .where('username', winnerName)
-    .select('id')
-    .then(function(winnerId) {
-      knex('tournaments')
-      .where('id', tourneyId)
-      .update('winner', winnerId)
-      .then(function(response) {
-        res.status(202).send(response);
-      })
-      .catch(function(err) {
-        res.status(500).send(err);
-      });
+  helpers.setTournamentWinner(req.body.id, req.body.winner_id)
+    .then(function(response) {
+      res.sendStatus(202);
     })
     .catch(function(err) {
       res.status(500).send(err);
@@ -131,7 +118,7 @@ routes.post('/api/games', function(req, res) {
 
   // get the tourneyId from the request body
   var tourneyId = req.body.tourneyId;
-
+  
   // get the players list from the request body
   var list = req.body.players;
 

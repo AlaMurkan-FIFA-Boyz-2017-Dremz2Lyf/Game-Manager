@@ -95,6 +95,7 @@ exports.getGamesByTourneyId = function(tourneyId) {
 };
 
 exports.getTableForTourney = function(tourneyId) {
+  console.log(tourneyId);
   return axios.get('/api/games/table', {
     params: {
       id: tourneyId
@@ -106,5 +107,15 @@ exports.getTableForTourney = function(tourneyId) {
     return table;
   }).catch(function(err) {
     throw err;
+  });
+};
+
+exports.postGames = (tourneyId, list) => {
+
+  console.log('in post games', list);
+
+  return axios.post('/api/games', {
+    tourneyId: tourneyId,
+    players: list
   });
 };
