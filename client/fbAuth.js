@@ -1,11 +1,16 @@
+var firebase = require('firebase');
+require('firebase/auth');
+require('firebase/database')
+
 var provider = new firebase.auth.FacebookAuthProvider();
 
-exports.signIn = firebase.auth().signInWithPopup(provider).then(function(result) {
+exports.fbSignIn = firebase.auth().signInWithPopup(provider)
+  .then(function(result) {
   // This gives you a Facebook Access Token. You can use it to access the Facebook API.
   var token = result.credential.accessToken;
   // The signed-in user info.
   var user = result.user;
-  console.log('')
+  console.log('user: ', user)
   // ...
 }).catch(function(error) {
   // Handle Errors here.
@@ -18,7 +23,7 @@ exports.signIn = firebase.auth().signInWithPopup(provider).then(function(result)
   console.log('errorCode: ', errorCode, 'message: ', errorMessage)
 });
 
-exports.signOut = firebase.auth().signOut().then(function() {
+exports.fbSignOut = firebase.auth().signOut().then(function() {
   console.log('signed out')
 }, function(error) {
   console.log(error)
