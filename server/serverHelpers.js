@@ -3,12 +3,12 @@
 // FOR SERVERHELPERS IS DARK AND FULL OF TERRORS
 
 
-var knex = require('knex')({
-  client: 'postgresql',
-  connection: {
-    filename: './database.sqlite3'
-  }
-});
+// var knex = require('knex')({
+//   client: 'postgresql',
+//   connection: {
+//     filename: './database.sqlite3'
+//   }
+// });
 
 exports.createGamesForTourney = function(req) {
   // games array will be returned by this function

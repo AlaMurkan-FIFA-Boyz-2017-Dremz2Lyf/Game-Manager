@@ -9,12 +9,12 @@ var routes = express.Router();
 
 routes.use( require('body-parser').json() );
 
-var knex = require('knex')({
-  client: 'postgresql',
-  connection: {
-    filename: '../knexfile.js'
-  }
-});
+// var knex = require('knex')({
+//   client: 'postgresql',
+//   connection: {
+//     filename: '../knexfile.js'
+//   }
+// });
 
 //
 // Provide a browserified file at a specified path

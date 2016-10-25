@@ -22,9 +22,12 @@
       storageBucket: "",
       messagingSenderId: "530646916470"
     };
+    var firebase = require("firebase/app");
+    require("firebase/auth");
+    require("firebase/database");
     firebase.initializeApp(config);
   </script>
-  
+
   <script src="/app-bundle.js"></script>
 </body>
 </html>
