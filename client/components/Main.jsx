@@ -94,7 +94,8 @@ class Main extends React.Component {
     }).then(function(response) {
         // response.data holds an array with one number in it
           // this number is the tournamentId
-      var tourneyId = response.data[0];
+      var tourneyName = JSON.parse(response.config.data).tournament_name;
+      console.log('response from post to tournaments:', response);
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
