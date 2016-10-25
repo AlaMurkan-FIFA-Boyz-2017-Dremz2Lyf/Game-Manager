@@ -1,19 +1,19 @@
-var browserify = require('browserify-middleware');
-var babelify = require('babelify');
-var express = require('express');
-var Path = require('path');
-var helpers = require('./serverHelpers.js');
+/*jshint esversion: 6 */
+const browserify = require('browserify-middleware');
+const babelify = require('babelify');
+const express = require('express');
+const Path = require('path');
+const helpers = require('./serverHelpers.js');
 
 var routes = express.Router();
 
 routes.use( require('body-parser').json() );
 
 var knex = require('knex')({
-  client: 'sqlite3',
+  client: 'postgresql',
   connection: {
-    filename: './database.sqlite3'
-  },
-  useNullAsDefault: true
+    filename: '../knexfile.js'
+  }
 });
 
 //
@@ -134,6 +134,7 @@ routes.get('/api/games', function(req, res) {
 
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
+    console.log('tourney id in games get request:', tourneyId);
     // query the db here with the tourneyId
     knex('games').where('tournament_id', tourneyId).then(function(response) {
       res.status(200).send(response);

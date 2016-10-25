@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      database: 'database.pg'
+      database: 'db/database.pg'
     },
     migrations: {
       directory: './migrations'
@@ -37,7 +37,7 @@ module.exports = {
   production: {
     client: 'pg',
     connection: {
-      database: 'database'
+      database: 'db/database.pg'
     },
     pool: {
       min: 2,

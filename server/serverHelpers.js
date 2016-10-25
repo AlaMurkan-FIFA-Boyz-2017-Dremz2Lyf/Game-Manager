@@ -4,11 +4,10 @@
 
 
 var knex = require('knex')({
-  client: 'sqlite3',
+  client: 'postgresql',
   connection: {
     filename: './database.sqlite3'
-  },
-  useNullAsDefault: true
+  }
 });
 
 exports.createGamesForTourney = function(req) {
