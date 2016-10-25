@@ -1,7 +1,7 @@
 {
   "name": "Game-Manager",
   "version": "0.1.0",
-  "description": "FIFA tournament manager",
+  "description": "Game tournament manager",
   "main": "server/index.js",
   "scripts": {
     "prestart": "knex migrate:rollback | knex migrate:latest",
@@ -10,7 +10,7 @@
     "up": "knex migrate:latest",
     "down": "knex migrate:rollback"
   },
-  "author": "Scott <scotthorn0@gmail.com>",
+  "author": "Brett <brettcnelson@gmail.com>",
   "dependencies": {
     "axios": "^0.15.1",
     "babel-preset-es2015": "^6.16.0",
@@ -21,6 +21,7 @@
     "express": "^4.14.0",
     "knex": "^0.12.5",
     "path": "^0.12.7",
+    "pg": "^6.1.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "reactify": "^1.1.1",
@@ -35,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager"
+    "url": "https://github.com/MKS47GreenfieldAndLegacy/Game-Manager"
   },
   "keywords": [
     "boilerplate",
@@ -44,6 +45,6 @@
     "mithril"
   ],
   "bugs": {
-    "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager/issues"
+    "url": "https://github.com/MKS47GreenfieldAndLegacy/Game-Manager/issues"
   }
 }
