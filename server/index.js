@@ -7,10 +7,10 @@ const helpers = require('./serverHelpers.js');
 
 const routes = express.Router();
 
-const db = require('firebaseinitialize.js');
-const usersRef = db.child('users');
-const tourneysRef = db.child('tournaments');
-const gamesRef = db.child('games');
+const db = require('./../firebaseinitialize.js');
+const usersRef = db.ref('users/');
+const tourneysRef = db.ref('tournaments/');
+const gamesRef = db.ref('games/');
 
 routes.use( require('body-parser').json() );
 
