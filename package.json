@@ -8,6 +8,7 @@
     "test": "./test/run.sh"
   },
   "author": "Brett Christian Calvin Zach",
+  "license": "UNLICENSED",
   "dependencies": {
     "axios": "^0.15.1",
     "babel-preset-es2015": "^6.16.0",
