@@ -23,8 +23,8 @@ exports.twitterSignIn = firebase.auth().signInWithPopup(provider).then(function(
   console.log('sign in failed')
 });
 
-exports.twitterSignOut = firebase.auth().signOut().then(function() {
-  console.log('signed out of twitter')
-}, function(error) {
-  console.log(error)
-});
+// exports.twitterSignOut = firebase.auth().signOut().then(function() {
+//   console.log('signed out of twitter')
+// }, function(error) {
+//   console.log(error)
+// });

@@ -14,8 +14,8 @@ exports.userSignIn = firebase.auth().signInWithEmailAndPassword(email, password)
   var errorMessage = error.message;
 })
 
-exports.userSignOut = firebase.auth().signOut().then(function(){
-  console.log('signed out')
-}, function(error){
-  console.log(error)
-})
+// exports.userSignOut = firebase.auth().signOut().then(function(){
+//   console.log('signed out')
+// }, function(error){
+//   console.log(error)
+// })

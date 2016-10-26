@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 const React = require('react');
 const ReactDOM = require('react-dom');
 // const axios = require('axios'); //Used for AJAX calls
@@ -20,7 +18,9 @@ const FinishTournament = require('./FinishTournament.jsx');
 const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 const StatsTable = require('./StatsTable.jsx');
 const utils = require('../fireUtils.js');
-
+const Twitter = require('./Twitter.jsx');
+const Facebook = require('./Facebook.jsx');
+const Google = require('./Google.jsx');
 
 class Main extends React.Component {
 

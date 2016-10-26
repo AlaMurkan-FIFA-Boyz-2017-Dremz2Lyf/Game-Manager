@@ -23,7 +23,7 @@ exports.fbSignIn = firebase.auth().signInWithPopup(provider)
   console.log('errorCode: ', errorCode, 'message: ', errorMessage)
 });
 
-exports.fbSignOut = firebase.auth().signOut().then(function() {
+exports.signOut = firebase.auth().signOut().then(function() {
   console.log('signed out')
 }, function(error) {
   console.log(error)

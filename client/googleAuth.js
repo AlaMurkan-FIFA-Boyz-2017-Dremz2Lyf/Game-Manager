@@ -21,9 +21,9 @@ exports.googleSignIn = firebase.auth().signInWithPopup(provider).then(function(r
   console.log('errorCode: ', errorCode, 'errorMessage: ', errorMessage);
 });
 
-exports.googleSignOut = firebase.auth().signOut().then(function() {
-  //sign out was success
-  console.log('signed out');
-}, function(error) {
-  console.log(error)
-})
+// exports.googleSignOut = firebase.auth().signOut().then(function() {
+//   //sign out was success
+//   console.log('signed out');
+// }, function(error) {
+//   console.log(error)
+// })

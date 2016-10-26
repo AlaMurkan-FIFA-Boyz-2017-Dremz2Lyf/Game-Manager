@@ -14,12 +14,12 @@ var FbLogin = (props) => {
   }
 }
 
-var FbLogout = (props) => {
+var Logout = (props) => {
   render() {
     return (
       <Button
         style={{ borderWidth: 1, borderColor: 'blue'}}
-        onPress={ fb.fbSignOut() }>
+        onPress={ fb.signOut() }>
           Sign out
         </Button>
     )
