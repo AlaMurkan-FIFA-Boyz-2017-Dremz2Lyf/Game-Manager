@@ -1,3 +1,5 @@
 node_modules/
 database.sqlite3
 db
+client/components/Rebase.jsx
+TournamentManager-592bc37d77cb.json

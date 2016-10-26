@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var axios = require('axios'); //Used for AJAX calls
+var rebase = require('./Rebase.jsx');//used to hook up firebase and react
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');

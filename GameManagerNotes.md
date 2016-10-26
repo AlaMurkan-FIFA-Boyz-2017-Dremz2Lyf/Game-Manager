@@ -8,10 +8,10 @@
 
   - Team roles
     - Product Owner
-      - Scott
+      - Brett
     - Scrum Master
-      - Nick
-  - Ben, Chris, Nick, Scott.
+      - Calvin
+  - Brett, Calvin, Christian, Zach.
 
 ----------------------------------------------------------------------
 

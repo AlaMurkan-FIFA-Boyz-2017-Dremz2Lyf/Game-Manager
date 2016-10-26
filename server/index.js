@@ -5,7 +5,12 @@ const express = require('express');
 const Path = require('path');
 const helpers = require('./serverHelpers.js');
 
-var routes = express.Router();
+const routes = express.Router();
+
+const db = require('firebaseinitialize.js');
+const usersRef = db.child('users');
+const tourneysRef = db.child('tournaments');
+const gamesRef = db.child('games');
 
 routes.use( require('body-parser').json() );
 
@@ -78,7 +83,7 @@ routes.post('/api/tournaments', function(req, res) {
     res.status(400).json({'message': 'YOU CAN\'T JUST PLAY ALONE!'});
   } else {
     // Otherwise make the call for the query!
-    helpers.makeTourney(tourneyName)
+    helpers.makeTourney(tourneyName)//refactor to send tourney ID
       .then(function(response) {
         res.status(201).send(response);
       }).catch(function(err) {
@@ -99,13 +104,15 @@ routes.put('/api/tournaments', function(req, res) {
 
 });
 
+//NOTE: should be handled on the front end now with FIREBASE
 //NOTE: REFACTOR, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
-  knex('tournaments').where('winner_id', null)
-  .orderBy('id', 'desc')
-  .then(function(data) {
-    res.send(data);
-  });
+
+  // knex('tournaments').where('winner_id', null)
+  // .orderBy('id', 'desc')
+  // .then(function(data) {
+    // res.send(data);
+  // });
 });
 
 
@@ -116,7 +123,7 @@ routes.get('/api/tournaments', function(req, res) {
 routes.post('/api/games', function(req, res) {
 
   helpers.createGamesForTourney(req)
-    .then(function(response) {
+    .then(function(response) {//now getting the path to the data
       res.status(201).send(response);
     })
     .catch(function(err) {
@@ -124,7 +131,7 @@ routes.post('/api/games', function(req, res) {
     });
 });
 
-
+//NOTE: should be handled on the front end now with FIREBASE
   // If a tournament_id is passed in as a query, just send the games in that tournament
   // If not, we send ALL the games in the DB
 routes.get('/api/games', function(req, res) {
@@ -136,18 +143,18 @@ routes.get('/api/games', function(req, res) {
   if (tourneyId) {
     console.log('tourney id in games get request:', tourneyId);
     // query the db here with the tourneyId
-    knex('games').where('tournament_id', tourneyId).then(function(response) {
-      res.status(200).send(response);
-    }).catch(function(err) {
-      res.status(500).send(err);
-    });
+    // knex('games').where('tournament_id', tourneyId).then(function(response) {
+    //   res.status(200).send(response);
+    // }).catch(function(err) {
+    //   res.status(500).send(err);
+    // });
   } else {
     // query the db here for all games
-    knex.select().from('games').then(function(response) {
-      res.status(200).send(response);
-    }).catch(function(err) {
-      res.status(500).send(err);
-    });
+    // knex.select().from('games').then(function(response) {
+    //   res.status(200).send(response);
+    // }).catch(function(err) {
+    //   res.status(500).send(err);
+    // });
   }
 });
 
