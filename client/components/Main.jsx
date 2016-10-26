@@ -1,18 +1,6 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var axios = require('axios'); //Used for AJAX calls
-var AllPlayersList = require('./AllPlayersList.jsx');
-var Player = require('./Player.jsx');
-var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-var GameStatsForm = require('./GameStatsForm.jsx');
-var AddPlayerForm = require('./AddPlayerForm.jsx');
-var StartTournament = require('./StartTournament.jsx');
-var CurrentTournament = require('./CurrentTournament.jsx');
-var FinishTournament = require('./FinishTournament.jsx');
-var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
-var StatsTable = require('./StatsTable.jsx');
-var utils = require('../utils.js');
+
 /*jshint esversion: 6 */
+
 const React = require('react');
 const ReactDOM = require('react-dom');
 // const axios = require('axios'); //Used for AJAX calls
@@ -20,7 +8,7 @@ const ReactDOM = require('react-dom');
 
 const firebase = require("firebase/app");
 const db = require('./../../firebaseinitialize.js');
-const rebase = require('./Rebase.jsx');//used to hook up firebase and react
+// const rebase = require('./Rebase.jsx');//used to hook up firebase and react
 
 const AllPlayersList = require('./AllPlayersList.jsx');
 const Player = require('./Player.jsx');
@@ -509,7 +497,7 @@ class Main extends React.Component {
               <div className="panel panel-default">
                 <div className="panel-body">
                   <h1 className="fin">
-                    <ul className="nav navbar-foot">  
+                    <ul className="nav navbar-foot">
                       <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
                       <li><a href="#"><span>PING PONGss</span></a></li>
                     </ul>

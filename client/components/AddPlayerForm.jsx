@@ -1,5 +1,11 @@
-var React = require('react');
-var axios = require('axios');
+/*jshint esversion: 6 */
+const React = require('react');
+// var axios = require('axios');
+// const firebase = require("firebase/app");
+const db = require('../../firebaseinitialize.js');
+const usersRef = db.ref('users/');
+const tourneysRef = db.ref('tournaments/');
+const gamesRef = db.ref('games/');
 
 class Form extends React.Component {
 
@@ -24,18 +30,36 @@ class Form extends React.Component {
   addNewPlayer(event) {
     var self = this;
     event.preventDefault();
-    axios.post('/api/player', {
+
+    var userPath = usersRef.child(this.state.value).set({
       username: this.state.value
     }).then(function(res) {
-      self.state.noError = true;
-      self.state.value = '';
+      self.setState({
+        value: '',
+        noError: true
+      });
       self.props.addPlayer();
     }).catch(function(error) {
       console.log(error);
-      self.state.noError = false;
-      self.state.value = '';
+      self.setState({
+        value: '',
+        noError: false
+      });
       self.props.addPlayer();
     });
+
+    // axios.post('/api/player', {
+    //   username: this.state.value
+    // }).then(function(res) {
+    //   self.state.noError = true;
+    //   self.state.value = '';
+    //   self.props.addPlayer();
+    // }).catch(function(error) {
+    //   console.log(error);
+    //   self.state.noError = false;
+    //   self.state.value = '';
+    //   self.props.addPlayer();
+    // });
   }
 
   render() {

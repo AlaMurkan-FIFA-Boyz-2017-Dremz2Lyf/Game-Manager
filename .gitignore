@@ -1,5 +1,4 @@
 node_modules/
 database.sqlite3
 db
-client/components/Rebase.jsx
 firebaseinitialize.js
