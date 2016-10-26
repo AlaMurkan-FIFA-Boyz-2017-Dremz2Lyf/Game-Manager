@@ -1,3 +1,4 @@
+
 /*jshint esversion: 6 */
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -19,6 +20,22 @@ const FinishTournament = require('./FinishTournament.jsx');
 const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 const StatsTable = require('./StatsTable.jsx');
 const utils = require('../fireUtils.js');
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+var axios = require('axios'); //Used for AJAX calls
+var AllPlayersList = require('./AllPlayersList.jsx');
+var Player = require('./Player.jsx');
+var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
+var GameStatsForm = require('./GameStatsForm.jsx');
+var AddPlayerForm = require('./AddPlayerForm.jsx');
+var StartTournament = require('./StartTournament.jsx');
+var CurrentTournament = require('./CurrentTournament.jsx');
+var FinishTournament = require('./FinishTournament.jsx');
+var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
+var StatsTable = require('./StatsTable.jsx');
+var utils = require('../utils.js');
+
 
 class Main extends React.Component {
 
@@ -105,8 +122,7 @@ class Main extends React.Component {
     }).then(function(response) {
         // response.data holds an array with one number in it
           // this number is the tournamentId
-      var tourneyName = JSON.parse(response.config.data).tournament_name;
-      console.log('response from post to tournaments:', response);
+      var tourneyId = response.data[0];
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
