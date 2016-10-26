@@ -12,6 +12,28 @@ var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 var StatsTable = require('./StatsTable.jsx');
 var utils = require('../utils.js');
+/*jshint esversion: 6 */
+const React = require('react');
+const ReactDOM = require('react-dom');
+// const axios = require('axios'); //Used for AJAX calls
+
+
+const firebase = require("firebase/app");
+const db = require('./../../firebaseinitialize.js');
+const rebase = require('./Rebase.jsx');//used to hook up firebase and react
+
+const AllPlayersList = require('./AllPlayersList.jsx');
+const Player = require('./Player.jsx');
+const NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
+const GameStatsForm = require('./GameStatsForm.jsx');
+const AddPlayerForm = require('./AddPlayerForm.jsx');
+const StartTournament = require('./StartTournament.jsx');
+const CurrentTournament = require('./CurrentTournament.jsx');
+const FinishTournament = require('./FinishTournament.jsx');
+const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
+const StatsTable = require('./StatsTable.jsx');
+const utils = require('../fireUtils.js');
+
 
 class Main extends React.Component {
 
@@ -40,11 +62,15 @@ class Main extends React.Component {
       ongoingTournamentsList: [],
 
       statsView: false,
+
+      pongView: false,
+
       statLines: []
     };
   }
 
   componentDidMount() {
+
     var self = this;
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
@@ -239,6 +265,13 @@ class Main extends React.Component {
     });
   }
 
+  togglePongView() {
+    var self = this;
+    this.setState({
+      pongView: !this.state.pongView
+    });
+  }
+
 
   finishTournament() {
     // set our context here.
@@ -403,7 +436,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -470,7 +508,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">  
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONGss</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -547,7 +590,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONG</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
