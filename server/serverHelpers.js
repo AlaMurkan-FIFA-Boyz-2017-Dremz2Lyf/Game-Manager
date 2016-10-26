@@ -11,6 +11,7 @@
 //     filename: './database.sqlite3'
 //   }
 // });
+const firebase = require("firebase/app");
 
 const db = require('./../firebaseinitialize.js');
 const usersRef = db.ref('users/');
@@ -148,7 +149,7 @@ exports.getTable = function(tourneyId) {
 };
 
 // NOTE:this function doesn't appear to be called anywhere, so I'm commenting it out
-// exports.setGameStatus = function(req, res) {
+exports.setGameStatus = function(req, res) {
 //
 //   // create the object to pass into the knex update
 //   var updateStatus = {};
@@ -163,17 +164,17 @@ exports.getTable = function(tourneyId) {
 //   //   res.status(500).send('err', err);
 //   //   throw err;
 //   // });
-// };
+};
 
 //NOTE:should be done with listeners on the front end
-// exports.getAllPlayers = function(stringOfIds) {
+exports.getAllPlayers = function(stringOfIds) {
 //   if (stringOfIds) {
 //     var arrayOfIds = stringOfIds.split('-');
 //     // return knex('players').whereIn('id', arrayOfIds);
 //   } else {
 //     // return knex('players').select();
 //   }
-// };
+};
 
 exports.setTournamentWinner = function(tourneyId, winnerId) {
   return tourneysRef.child(tourneyId).set({

@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 
+const firebase = require("firebase/app");
 const db = require('./../firebaseinitialize.js');
 const usersRef = db.ref('users/');
 const tourneysRef = db.ref('tournaments/');

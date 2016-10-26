@@ -7,6 +7,8 @@ const helpers = require('./serverHelpers.js');
 
 const routes = express.Router();
 
+const firebase = require("firebase/app");
+
 const db = require('./../firebaseinitialize.js');
 const usersRef = db.ref('users/');
 const tourneysRef = db.ref('tournaments/');

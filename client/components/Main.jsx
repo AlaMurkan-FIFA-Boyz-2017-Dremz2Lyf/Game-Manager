@@ -1,17 +1,24 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var axios = require('axios'); //Used for AJAX calls
-var AllPlayersList = require('./AllPlayersList.jsx');
-var Player = require('./Player.jsx');
-var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-var GameStatsForm = require('./GameStatsForm.jsx');
-var AddPlayerForm = require('./AddPlayerForm.jsx');
-var StartTournament = require('./StartTournament.jsx');
-var CurrentTournament = require('./CurrentTournament.jsx');
-var FinishTournament = require('./FinishTournament.jsx');
-var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
-var StatsTable = require('./StatsTable.jsx');
-var utils = require('../utils.js');
+/*jshint esversion: 6 */
+const React = require('react');
+const ReactDOM = require('react-dom');
+// const axios = require('axios'); //Used for AJAX calls
+
+
+const firebase = require("firebase/app");
+const db = require('./../../firebaseinitialize.js');
+const rebase = require('./Rebase.jsx');//used to hook up firebase and react
+
+const AllPlayersList = require('./AllPlayersList.jsx');
+const Player = require('./Player.jsx');
+const NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
+const GameStatsForm = require('./GameStatsForm.jsx');
+const AddPlayerForm = require('./AddPlayerForm.jsx');
+const StartTournament = require('./StartTournament.jsx');
+const CurrentTournament = require('./CurrentTournament.jsx');
+const FinishTournament = require('./FinishTournament.jsx');
+const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
+const StatsTable = require('./StatsTable.jsx');
+const utils = require('../fireUtils.js');
 
 class Main extends React.Component {
 
@@ -48,6 +55,7 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+
     var self = this;
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
@@ -97,7 +105,8 @@ class Main extends React.Component {
     }).then(function(response) {
         // response.data holds an array with one number in it
           // this number is the tournamentId
-      var tourneyId = response.data[0];
+      var tourneyName = JSON.parse(response.config.data).tournament_name;
+      console.log('response from post to tournaments:', response);
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
