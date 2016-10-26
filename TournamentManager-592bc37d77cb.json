@@ -1,0 +1,12 @@
+{
+ "type": "service_account",
+ "project_id": "tournamentmanager-a5463",
+ "private_key_id": "592bc37d77cbe72e6c0e4fbd061d46dc3cb5e9bd",
+ "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC/RA/8E45tqO/7\nv5GYprUaYjXHQ3sVY1kAHAF8PBVGUtLL69DweMrK4rv3175wYogsnD39crlrpOkB\nrh2Xlf0fOwhrGkIBJ6IbWzJoxdv22hQpDqHu7u2K+T2sVn/C6V8piJv1jiQS5fyg\nEemB7Up3Wtw0iA9T2BYyoko8yIGQmnguyo4AexSlyso6p7zR/GRmjWl1t9V8iuZX\nWS2x1s1Pj922zgDTXnUsW1CiEq5vOPCCbeFIEYUrJnloaKLQeOIreybFp/tPTdsL\nZ63wMHSVUvPaaoF1i0YrSPqVkjdlPoAK6hbucH/VboyWJh18GnujlVSodcTmfAFi\nNZaKqUMHAgMBAAECggEBAKsy2+/w/UqwrWY0Wbk+dtpPz/01LKW/UDml17qA+TYC\nCobW5CVqqXIisscsCF0GBQeRLnd+yfNNH/cOB5TYf0IGEAn17eCkvhgocB2SBMqW\n9vatD0sT9/GuGIL6xc8MHs7JZXfNLALyc0Y/4jgW0tG0tWgb5URSJcRauYJgooBw\nBz7VYYeyWFhPRgm1ScEFD1hDVQezjtk/cpu7AhdBBnu+tysD3a9CgJh0WwIvhPG2\ndUY5PYHCQH3CJVPWev0/zgDRHm/4Dw9PbWYjUbRgfkaBZuuBaXNVHc6O4HQhciLk\nOMA3e51Cf4YVrKhOEB5OSAQXkaFn4CkSknbD9pq3uGkCgYEA33qGPseXHgSXmqHP\njQmpewmSmy8lvsGa/EMsThI+wU6Ll6am3R3RGYAsWJ4PpWSbS2PEf/3p0N8G8rio\nmfFL3XoXRgFJ/mcSxpZF0Gsk9VM1PqoMV85GD4JgEc72lxCJ7jvgDAVDKAvJg8Up\n8kcMJFqVt8lvKSJoxVg4rGQuWZUCgYEA2xl760fVZEGeuTjYzMqPIBC0xAY7r9BB\nGX05ZREBrhhFmqBqV8oP+9RPqqtK6Sk4HGLxnXc17zQPsoKt0eCJ0IbRd5RtASf4\nV3X4rrC5Uaz5zGbaBOwX7Db6jZj29MUCKgDbuSa+qIQN9eprhA/t4lFrJzHJt/m0\nyiPWuSFXmysCgYEArkh5hWBWg/yE1v02RgGxANk4Unn0b83BNtaUKNalxk+hIcXA\nAFWOitqguwOZpBzP132Y81BsFo64dnZ4VoYN6k2a9Odwc0yjIehzzdShYAliTtqD\nAb9GeDXvAjRrrughCX/8fKNl+kcnAvKygdXSrE9Qz6HyZRwGpVDl8du3IfkCgYEA\nx7BzW95NpCGWm3QvTH91cSEoz9xqe/QP0T5rmCym3liq36JDKh408S3xKjkSfm2e\nAWlAk2b6VjiZ8fXenIHMuayWryktLDeUxYn1DKpvTPydc2luXbwclaMKOxHmSvJf\n5Y6AtECW1pn861wrf+LQykuwoLllA3PoDbAaXQMBiJ8CgYAViyMGGsmLDhFexUbj\n4nUnwc+iRaRIYwP7v2nyHK57/RArhrX0QUrn7ZtGAY3s3Fr8Wb3J0HLFXMsg24pQ\ntHoN2erMzWhK8bs9y8tB0VLDqWC7WoGj5IRT6FYXi96EKgzO6loGGqFazq9CxpAQ\nsdfGLRYUQLZb6KAAScU5Pf4E8w==\n-----END PRIVATE KEY-----\n",
+ "client_email": "tournamentmanagerserver@tournamentmanager-a5463.iam.gserviceaccount.com",
+ "client_id": "115416176581948791958",
+ "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+ "token_uri": "https://accounts.google.com/o/oauth2/token",
+ "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+ "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tournamentmanagerserver%40tournamentmanager-a5463.iam.gserviceaccount.com"
+}
