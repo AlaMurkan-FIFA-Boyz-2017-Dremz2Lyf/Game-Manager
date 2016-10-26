@@ -1,7 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var axios = require('axios'); //Used for AJAX calls
-var rebase = require('./Rebase.jsx');//used to hook up firebase and react
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
 var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
@@ -41,6 +40,9 @@ class Main extends React.Component {
       ongoingTournamentsList: [],
 
       statsView: false,
+
+      pongView: false,
+
       statLines: []
     };
   }
@@ -95,8 +97,7 @@ class Main extends React.Component {
     }).then(function(response) {
         // response.data holds an array with one number in it
           // this number is the tournamentId
-      var tourneyName = JSON.parse(response.config.data).tournament_name;
-      console.log('response from post to tournaments:', response);
+      var tourneyId = response.data[0];
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
@@ -238,6 +239,13 @@ class Main extends React.Component {
       self.setState({
         ongoingTournamentsList: tourneys
       });
+    });
+  }
+
+  togglePongView() {
+    var self = this;
+    this.setState({
+      pongView: !this.state.pongView
     });
   }
 
@@ -405,7 +413,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -472,7 +485,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">  
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONGss</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -549,7 +567,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONG</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
