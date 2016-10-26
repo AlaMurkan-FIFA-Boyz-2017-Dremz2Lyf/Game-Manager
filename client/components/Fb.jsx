@@ -7,7 +7,7 @@ var FbLogin = (props) => {
     return (
       <Button
         style={{ borderWidth: 1, borderColor='blue'}}
-        onPress={ fb.fbSignIn }>
+        onPress={ fb.fbSignIn() }>
           Sign in with Facebook
         </Button>
     )
@@ -19,7 +19,7 @@ var FbLogout = (props) => {
     return (
       <Button
         style={{ borderWidth: 1, borderColor: 'blue'}}
-        onPress={ fb.fbSignOut }>
+        onPress={ fb.fbSignOut() }>
           Sign out
         </Button>
     )

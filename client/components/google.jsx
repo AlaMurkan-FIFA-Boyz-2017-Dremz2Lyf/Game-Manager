@@ -7,7 +7,7 @@ var GoogleLogin = (props) => {
     return (
       <Button
         style={{ borderWidth: 1, borderColor='green'}}
-        onPress={ google.googleSignIn }>
+        onPress={ google.googleSignIn() }>
           Sign in with Google
         </Button>
     )
@@ -19,7 +19,7 @@ var GoogleLogout = (props) => {
     return (
       <Button
         style={{ borderWidth: 1, borderColor: 'green'}}
-        onPress={ google.googleSignOut }>
+        onPress={ google.googleSignOut() }>
           Sign out
         </Button>
     )
