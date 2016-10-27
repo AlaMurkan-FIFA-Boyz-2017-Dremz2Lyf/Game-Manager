@@ -587,9 +587,6 @@ class Main extends React.Component {
               <li><a href="#"><span>Home</span></a></li>
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
               <li><Login /></li>
-              <li></li>
-              <li></li>
-              <li></li>
             </ul>
           </nav>
 
