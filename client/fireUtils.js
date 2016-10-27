@@ -5,6 +5,7 @@ const db = require('./../firebaseinitialize.js');
 const usersRef = db.ref('users/');
 const tourneysRef = db.ref('tournaments/');
 const gamesRef = db.ref('games/');
+const axios = require('axios')
 
 // const base = require('./components/Rebase.jsx');
 

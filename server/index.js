@@ -4,7 +4,7 @@ const babelify = require('babelify');
 const express = require('express');
 const Path = require('path');
 const helpers = require('./serverHelpers.js');
-
+const reactify = require('reactify')
 const routes = express.Router();
 
 const firebase = require("firebase/app");
@@ -13,7 +13,7 @@ const db = require('./../firebaseinitialize.js');
 const usersRef = db.ref('users/');
 const tourneysRef = db.ref('tournaments/');
 const gamesRef = db.ref('games/');
-
+const bodyParser = require('body-parser')
 routes.use( require('body-parser').json() );
 
 // var knex = require('knex')({
@@ -28,7 +28,7 @@ routes.use( require('body-parser').json() );
 //
 routes.get('/app-bundle.js',
   browserify('./client/app.js', {
-    transform: [ require('reactify') ]
+    transform: [ reactify ]
   }));
 
 

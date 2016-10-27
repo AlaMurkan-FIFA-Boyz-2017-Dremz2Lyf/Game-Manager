@@ -2,7 +2,7 @@ var React = require('react');
 var google = require('../googleAuth.js');
 var Button = require('react-native-button');
 
-var GoogleLogin = (props) => {
+var GoogleLogin = React.CreateClass ({
   render() {
     return (
       <Button
@@ -12,16 +12,4 @@ var GoogleLogin = (props) => {
         </Button>
     )
   }
-}
-
-var GoogleLogout = (props) => {
-  render() {
-    return (
-      <Button
-        style={{ borderWidth: 1, borderColor: 'green'}}
-        onPress={ google.googleSignOut() }>
-          Sign out
-        </Button>
-    )
-  }
-}
+})

@@ -1,20 +1,3 @@
-
-// var React = require('react');
-// var ReactDOM = require('react-dom');
-// var axios = require('axios'); //Used for AJAX calls
-// var AllPlayersList = require('./AllPlayersList.jsx');
-// var Player = require('./Player.jsx');
-// var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-// var GameStatsForm = require('./GameStatsForm.jsx');
-// var AddPlayerForm = require('./AddPlayerForm.jsx');
-// var StartTournament = require('./StartTournament.jsx');
-// var CurrentTournament = require('./CurrentTournament.jsx');
-// var FinishTournament = require('./FinishTournament.jsx');
-// var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
-// var StatsTable = require('./StatsTable.jsx');
-// var utils = require('../utils.js');
-/*jshint esversion: 6 */
-
 const React = require('react');
 const ReactDOM = require('react-dom');
 // const axios = require('axios'); //Used for AJAX calls
@@ -38,9 +21,8 @@ const FinishTournament = require('./FinishTournament.jsx');
 const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 const StatsTable = require('./StatsTable.jsx');
 const utils = require('../fireUtils.js');
-// const Twitter = require('./Twitter.jsx');
-// const Facebook = require('./Facebook.jsx');
-// const Google = require('./Google.jsx');
+const Login = require('./Login.jsx')
+
 
 class Main extends React.Component {
 
@@ -478,6 +460,7 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)} >Home</span></a></li>
               <li><a href="#"><span>Stats</span></a></li>
+
             </ul>
           </nav>
           <div className="container">
@@ -614,6 +597,10 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span>Home</span></a></li>
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
+              <li><Login /></li>
+              <li></li>
+              <li></li>
+              <li></li>
             </ul>
           </nav>
 
