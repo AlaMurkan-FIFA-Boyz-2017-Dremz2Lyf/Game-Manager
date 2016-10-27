@@ -22,6 +22,9 @@ const ReactDOM = require('react-dom');
 
 const firebase = require("firebase/app");
 const db = require('./../../firebaseinitialize.js');
+const usersRef = db.ref('users/');
+const tourneysRef = db.ref('tournaments/');
+const gamesRef = db.ref('games/');
 // const rebase = require('./Rebase.jsx');//used to hook up firebase and react
 
 const AllPlayersList = require('./AllPlayersList.jsx');
@@ -79,33 +82,68 @@ class Main extends React.Component {
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
       // It also returns a promise.
-    utils.getAllPlayers(this.state).then(function(response) {
+
+    var playersArr = [];
+    usersRef.once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        playersArr.push({
+          username: childSnapshot.key,
+          data: childSnapshot.val()
+        });
+      });
+    }).then(function () {
+      console.log(playersArr);
       // So within a .then we can set the state to the players array
       self.setState({
         // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: response
+        allPlayersList: playersArr
       });
     });
+
     // getOngoingTournaments populates the in progress tournament list
-    utils.getOngoingTournaments().then(function(tourneys) {
+
+
+    var tourneysArr = [];
+    tourneysRef.once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        tourneysArr.push({
+          tourneyId: childSnapshot.key,
+          data: childSnapshot.val()
+        });
+      });
+    }).then(function () {
+      console.log(tourneysArr);
+      // utils.getOngoingTournaments().then(function(tourneys) {
       self.setState({
         // Add the ongoing tournaments to the state
-        ongoingTournamentsList: tourneys
+        ongoingTournamentsList: tourneysArr
       });
+      // });
     });
+
   }
 
   addPlayer() {
     // get some 'this' binding
     var self = this;
     // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
-    utils.getAllPlayers(this.state).then(res => {
-      // It returns a promise object that resolves with the list of players filtered
-        // against players already in the tournament list. We set this to state.
+    var playersArr = [];
+    usersRef.once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        playersArr.push({
+          username: childSnapshot.key,
+          data: childSnapshot.val()
+        });
+      });
+    }).then(function () {
       self.setState({
-        allPlayersList: res
+        // Adds the players from the db not already in a tourney to allPlayersList
+        allPlayersList: playersArr
       });
     });
+
+    // utils.getAllPlayers(this.state).then(function(response) {
+      // So within a .then we can set the state to the players array
   }
 
   //createTournament will make a post request to the server, which will insert the
@@ -117,41 +155,35 @@ class Main extends React.Component {
     if (this.state.tourneyPlayersList.length < 2) {
       enough = false;
     }
-
-    return axios.post('/api/tournaments', {
-      tournament_name: tourneyName,
+    return tourneysRef.push().set({
+      tourneyName: tourneyName,
       enough: enough
     }).then(function(response) {
-        // response.data holds an array with one number in it
-          // this number is the tournamentId
-      var tourneyId = response.data[0];
-
+      var tourneyId = response;
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
             context.setState({
               // currentTournamentTable: res,
               currentTournament: { id: tourneyId, tournament_name: tourneyName }
             });
+            //TODO: figure out if this is working now NOTE NOTE
             // NOTE: This function call is failing because when we create a new tournament,
               // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
               // On the result of that filter, we call a reduce function to create the objects for the table.
               // This is not a problem right now, but in the future.
-            utils.getTableForTourney(tourneyId)
-            .then(res => {
-              // set the currentTournament key on state to an object with the id and name
-              context.setState({
-                currentTournamentTable: res
-              });
-            })
-            .catch(err => {
-              throw err;
-            });
+            // utils.getTableForTourney(tourneyId)
+            // .then(res => {
+            //   // set the currentTournament key on state to an object with the id and name
+            //   context.setState({
+            //     currentTournamentTable: res
+            //   });
+            // })
+            // .catch(err => {
+            //   throw err;
+            // });
           }).catch(err => {
             throw err;
           });
-
-
-
         // then call createGames with the new tourney ID
     }).catch(function(err) {
         // handles some errors
@@ -159,11 +191,57 @@ class Main extends React.Component {
     });
   }
 
+
+    // return axios.post('/api/tournaments', {
+    //   tournament_name: tourneyName,
+    //   enough: enough
+    // }).then(function(response) {
+        // response.data holds an array with one number in it
+          // this number is the tournamentId
+      // var tourneyId = response.data[0];
+
+  //     context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+  //         .then(res => {
+  //           context.setState({
+  //             // currentTournamentTable: res,
+  //             currentTournament: { id: tourneyId, tournament_name: tourneyName }
+  //           });
+  //           // NOTE: This function call is failing because when we create a new tournament,
+  //             // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+  //             // On the result of that filter, we call a reduce function to create the objects for the table.
+  //             // This is not a problem right now, but in the future.
+  //           utils.getTableForTourney(tourneyId)
+  //           .then(res => {
+  //             // set the currentTournament key on state to an object with the id and name
+  //             context.setState({
+  //               currentTournamentTable: res
+  //             });
+  //           })
+  //           .catch(err => {
+  //             throw err;
+  //           });
+  //         }).catch(err => {
+  //           throw err;
+  //         });
+  //
+  //
+  //
+  //       // then call createGames with the new tourney ID
+  //   }).catch(function(err) {
+  //       // handles some errors
+  //     throw err;
+  //   });
+  // }
+
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(context, tourneyId, list) {
     var self = this;
-
+    console.log('tourneyId:', tourneyId);
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
+    tourneysRef.child(tourneyId).child('players').push('list');
+
+
+
     return utils.postGames(tourneyId, list)
       .then(function(response) {
         // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame

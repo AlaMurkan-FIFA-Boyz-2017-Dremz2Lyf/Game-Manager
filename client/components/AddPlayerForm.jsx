@@ -4,8 +4,6 @@ const React = require('react');
 // const firebase = require("firebase/app");
 const db = require('../../firebaseinitialize.js');
 const usersRef = db.ref('users/');
-const tourneysRef = db.ref('tournaments/');
-const gamesRef = db.ref('games/');
 
 class Form extends React.Component {
 
