@@ -6,15 +6,17 @@ require('firebase/database');
 const db = require('../../firebaseinitialize.js');
 const usersRef = db.ref('users/');
 
+
 class LoginForm extends React.Component {
   constructor(props) {
     super(props)
   }
 
   writeData (uid, username) {
-    return usersRef.set({
-      userId: uid,
-      username: username
+    var newUsersRef = usersRef.push()
+    newUsersRef.set({
+      username,
+      uid
     })
   }
 
@@ -27,7 +29,7 @@ class LoginForm extends React.Component {
       this.writeData(user.uid, user.displayName)
       console.log('user: ', user)
       return user
-    }).catch(function(error) {
+    }.bind(this)).catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;
       var email = error.email;
@@ -45,7 +47,7 @@ class LoginForm extends React.Component {
       var user = result.user;
       this.writeData(user.uid, user.displayName)
       console.log('user: ', user.displayName)
-    }).catch(function(error) {
+    }.bind(this)).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -65,7 +67,7 @@ class LoginForm extends React.Component {
       var user = result.user;
       console.log('user: ', user.displayName, ' uid: ', user.uid)
       this.writeData(user.uid, user.displayName)
-    }).catch(function(error) {
+    }.bind(this)).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
