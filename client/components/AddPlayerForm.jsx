@@ -3,7 +3,7 @@ const React = require('react');
 // var axios = require('axios');
 // const firebase = require("firebase/app");
 const db = require('../../firebaseinitialize.js');
-const usersRef = db.ref('users/');
+let playersRef;
 
 class Form extends React.Component {
 
@@ -28,8 +28,12 @@ class Form extends React.Component {
   addNewPlayer(event) {
     var self = this;
     event.preventDefault();
-
-    var userPath = usersRef.child(this.state.value).set({
+    if(!this.state.pongView){
+      playersRef = db.ref('fifa/players/');
+    } else {
+      playersRef = db.ref('pong/players/');
+    }
+    var userPath = playersRef.child(this.state.value).set({
       username: this.state.value
     }).then(function(res) {
       self.setState({

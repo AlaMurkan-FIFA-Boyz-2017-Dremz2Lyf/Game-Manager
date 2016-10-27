@@ -1,3 +1,4 @@
+/* jshint esversion:6 */
 const React = require('react');
 const ReactDOM = require('react-dom');
 // const axios = require('axios'); //Used for AJAX calls
@@ -5,9 +6,11 @@ const ReactDOM = require('react-dom');
 
 const firebase = require("firebase/app");
 const db = require('./../../firebaseinitialize.js');
-const usersRef = db.ref('users/');
-const tourneysRef = db.ref('tournaments/');
-const gamesRef = db.ref('games/');
+let usersRef;
+let playersRef;
+let tourneysRef;
+let gamesRef;
+
 // const rebase = require('./Rebase.jsx');//used to hook up firebase and react
 
 const AllPlayersList = require('./AllPlayersList.jsx');
@@ -21,7 +24,7 @@ const FinishTournament = require('./FinishTournament.jsx');
 const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 const StatsTable = require('./StatsTable.jsx');
 const utils = require('../fireUtils.js');
-const Login = require('./Login.jsx')
+const Login = require('./Login.jsx');
 
 
 class Main extends React.Component {
@@ -60,19 +63,51 @@ class Main extends React.Component {
 
   componentWillMount() {//for more info on this set up see
     //https://firebase.googleblog.com/2014/05/using-firebase-with-reactjs.html
+    console.log(this.state.pongView);
+    if(!this.state.pongView){
+      console.log('hi');
+      usersRef = 'fifa/users/';
+      playersRef = 'fifa/players/';
+      tourneysRef = 'fifa/tournaments/';
+      gamesRef = 'fifa/games/';
+      console.log(usersRef);
+    } else {
+      usersRef = 'pong/users/';
+      playersRef = 'pong/players/';
+      tourneysRef = 'pong/tournaments/';
+      gamesRef = 'pong/games/';
+    }
+    console.log(usersRef);
     var players = [];
-    usersRef.on('child_added', function(snapshot) {
+    db.ref(usersRef).on('child_added', function(snapshot) {
       players.push({
-        username: snapshot.key,
+        uid: snapshot.key,
         data: snapshot.val()
       });
-      players.filter(function (playerComponent) {//filters for those in a tournament
-        if (this.state.tourneyPlayersList.includes(playerComponent)) {
+      players.filter(function (player) {//filters for those in a tournament
+        if (this.state.tourneyPlayersList.includes(player)) {
           return false;
         }
         return true;
       }.bind(this));
-      console.log(players);
+      this.setState({
+        // Adds the players from the db not already in a tourney to allPlayersList
+        allPlayersList: players
+      });
+
+    }.bind(this));
+
+    db.ref(playersRef).on('child_added', function(snapshot) {
+      players.push({
+        username: snapshot.key,
+        data: snapshot.val()
+      });
+      players.filter(function (player) {//filters for those in a tournament
+        if (this.state.tourneyPlayersList.includes(player)) {
+          return false;
+        }
+        return true;
+      }.bind(this));
       this.setState({
         // Adds the players from the db not already in a tourney to allPlayersList
         allPlayersList: players
@@ -81,14 +116,12 @@ class Main extends React.Component {
     }.bind(this));
 
     var ongoingTournamentsList = [];
-    tourneysRef.on('child_added', function(snapshot) {
+    db.ref(tourneysRef).on('child_added', function(snapshot) {
       ongoingTournamentsList.push({
         tourneyId: snapshot.key,
         data: snapshot.val()
       });
-      console.log(ongoingTournamentsList);
       this.setState({
-        // Adds the players from the db not already in a tourney to allPlayersList
         ongoingTournamentsList: ongoingTournamentsList
       });
     }.bind(this));
@@ -122,11 +155,9 @@ class Main extends React.Component {
     // new tournament into the DB, and after that call the createGames function
   createTournament(tourneyName) {
     var context = this;
-    var enough = true;
     // post request to the /api/tournaments endpoint with the tourneyName included
     if (this.state.tourneyPlayersList.length < 2) {
-      console.log('not enough players in tournament')
-      return;
+      throw new Error('You need at least two players');
     }
 
     console.log('MAIN cT tourneyName: ', tourneyName)
@@ -187,7 +218,7 @@ class Main extends React.Component {
           // this number is the tournamentId
       // var tourneyId = response.data[0];
 
-  //     context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+      // context.createGames(context, tourneyId, context.state.tourneyPlayersList)
   //         .then(res => {
   //           context.setState({
   //             // currentTournamentTable: res,
