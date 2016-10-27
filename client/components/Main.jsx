@@ -38,9 +38,9 @@ const FinishTournament = require('./FinishTournament.jsx');
 const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 const StatsTable = require('./StatsTable.jsx');
 const utils = require('../fireUtils.js');
-const Twitter = require('./Twitter.jsx');
-const Facebook = require('./Facebook.jsx');
-const Google = require('./Google.jsx');
+// const Twitter = require('./Twitter.jsx');
+// const Facebook = require('./Facebook.jsx');
+// const Google = require('./Google.jsx');
 
 class Main extends React.Component {
 
@@ -505,7 +505,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable table={this.state.currentTournamentTable} />
+              <StatsTable table={this.state.allPlayersList} />
             </div>
 
             <div className="col-xs-1">
