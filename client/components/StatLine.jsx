@@ -5,7 +5,13 @@ var StatLine = (props) => {
   return (
 
     <tr>
-      <td>{stats.username}</td><td>{stats.gp}</td><td>{stats.won}</td><td>{stats.draw}</td><td>{stats.loss}</td><td>{stats.gd}</td><td>{stats.points}</td>
+      <td>{stats.username}</td>
+      <td>{stats.gp}</td>
+      <td>{stats.won}</td>
+      <td>{stats.draw}</td>
+      <td>{stats.loss}</td>
+      <td>{stats.gd}</td>
+      <td>{stats.points}</td>
     </tr>
   );
 };
