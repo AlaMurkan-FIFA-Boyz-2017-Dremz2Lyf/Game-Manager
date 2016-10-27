@@ -125,42 +125,57 @@ class Main extends React.Component {
     var enough = true;
     // post request to the /api/tournaments endpoint with the tourneyName included
     if (this.state.tourneyPlayersList.length < 2) {
-      enough = false;
+      console.log('not enough players in tournament')
+      return;
     }
-    return tourneysRef.push().set({
+
+    console.log('MAIN cT tourneyName: ', tourneyName)
+    var newTourneyRef = tourneysRef.push()
+
+    newTourneyRef.set({
       tourneyName: tourneyName,
-      enough: enough
-    }).then(function(response) {
-      var tourneyId = response;
-      context.createGames(context, tourneyId, context.state.tourneyPlayersList)
-          .then(res => {
-            context.setState({
-              // currentTournamentTable: res,
-              currentTournament: { id: tourneyId, tournament_name: tourneyName }
-            });
-            //TODO: figure out if this is working now NOTE NOTE
-            // NOTE: This function call is failing because when we create a new tournament,
-              // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
-              // On the result of that filter, we call a reduce function to create the objects for the table.
-              // This is not a problem right now, but in the future.
-            // utils.getTableForTourney(tourneyId)
-            // .then(res => {
-            //   // set the currentTournament key on state to an object with the id and name
-            //   context.setState({
-            //     currentTournamentTable: res
-            //   });
-            // })
-            // .catch(err => {
-            //   throw err;
-            // });
-          }).catch(err => {
-            throw err;
-          });
-        // then call createGames with the new tourney ID
-    }).catch(function(err) {
-        // handles some errors
-      throw err;
-    });
+    }, function(err) {
+      if (err) {
+        console.log('error: ', err)
+      }
+    })
+
+    this.createGames(newTourneyRef, this.state.tourneyPlayersList);
+
+
+    // .then(function(response) {
+    //   console.log('MAIN cT res: ', response)
+    //   var tourneyId = response;
+    //   context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+    //       .then(res => {
+    //         context.setState({
+    //           // currentTournamentTable: res,
+    //           currentTournament: { id: tourneyId, tournament_name: tourneyName }
+    //         });
+    //         //TODO: figure out if this is working now NOTE NOTE
+    //         // NOTE: This function call is failing because when we create a new tournament,
+    //           // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+    //           // On the result of that filter, we call a reduce function to create the objects for the table.
+    //           // This is not a problem right now, but in the future.
+    //         // utils.getTableForTourney(tourneyId)
+    //         // .then(res => {
+    //         //   // set the currentTournament key on state to an object with the id and name
+    //         //   context.setState({
+    //         //     currentTournamentTable: res
+    //         //   });
+    //         // })
+    //         // .catch(err => {
+    //         //   throw err;
+    //         // });
+    //       }).catch(err => {
+    //         throw err;
+    //       });
+    //     // then call createGames with the new tourney ID
+    // }).catch(function(err) {
+    //     // handles some errors
+    //   throw err;
+    // });
+
   }
 
 
@@ -206,18 +221,18 @@ class Main extends React.Component {
   // }
 
   // createGames will be called when the button linked to createTournament is clicked.
-  createGames(context, tourneyId, list) {
+  createGames(newTourneyRef, list) {
     var self = this;
-    console.log('tourneyId:', tourneyId);
+    console.log('tourneyId:', newTourneyRef);
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
-    tourneysRef.child(tourneyId).child('players').push('list');
+    tourneysRef.child(newTourneyRef).child('players').push('list');
 
 
 
-    return utils.postGames(tourneyId, list)
+    return utils.postGames(newTourneyRef, list)
       .then(function(response) {
         // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
-        utils.getGamesByTourneyId(tourneyId).then(function(res) {
+        utils.getGamesByTourneyId(newTourneyRef).then(function(res) {
           self.setState({
             // We take those and set them to their appropriate state keys.
             currentTournamentGames: res.games,

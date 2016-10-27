@@ -13,11 +13,8 @@ var StatsTable = (props) => {
   //   // return players objects sorted by column name property
   // }
 
-
   return (
   <div className="panel panel-default">
-    <div className="panel-heading">
-    </div>
     <div className="panel-body">
       <table className="table">
         <thead>

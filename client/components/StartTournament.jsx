@@ -21,8 +21,10 @@ class StartTournament extends React.Component {
   startTourney(event) {
     var self = this;
     event.preventDefault();
+    console.log('STC sT tourneyName: ', this.state.tourneyName)
     this.props.createTournament(this.state.tourneyName)
     .then(function(res) {
+      console.log('STC sT response', res)
       self.setState({
         error: null
       });
