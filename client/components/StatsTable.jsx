@@ -33,8 +33,6 @@ var StatsTable = (props) => {
     return <StatLine playerStats={user} key={i}/>
   })
 
-  console.log(props.table)
-
   return (
   <div className="panel panel-default">
     <div className="panel-heading">
