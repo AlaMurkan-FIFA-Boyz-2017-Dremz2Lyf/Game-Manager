@@ -183,3 +183,14 @@ li a:hover {
   color: #D6BC6F;
   text-shadow: 0px 0px 0px #1E2329;
 }
+
+.navbar-foot li a:hover {
+  background: #FAD817;
+}
+.navbar-foot li a:hover span {
+  color: #1E2329;
+}
+
+.navbar-foot li a span {
+  background:none;
+}
