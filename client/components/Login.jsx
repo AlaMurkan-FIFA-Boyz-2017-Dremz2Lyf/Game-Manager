@@ -3,12 +3,20 @@ var React = require('react');
 var firebase = require('firebase');
 require('firebase/auth');
 require('firebase/database');
+const db = require('../../firebaseinitialize.js');
+const usersRef = db.ref('users/');
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props)
   }
 
+  writeData (uid, username) {
+    return usersRef.set({
+      userId: uid,
+      username: username
+    })
+  }
 
   facebookLogin () {
     var provider = new firebase.auth.FacebookAuthProvider();
@@ -16,7 +24,9 @@ class LoginForm extends React.Component {
     .then(function(result) {
       var token = result.credential.accessToken;
       var user = result.user;
+      this.writeData(user.uid, user.displayName)
       console.log('user: ', user)
+      return user
     }).catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -33,7 +43,8 @@ class LoginForm extends React.Component {
       var secret = result.credential.secret;
       // The signed-in user info.
       var user = result.user;
-      console.log('user: ', user, ' is signed in')
+      this.writeData(user.uid, user.displayName)
+      console.log('user: ', user.displayName)
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -42,7 +53,7 @@ class LoginForm extends React.Component {
       var email = error.email;
       // The firebase.auth.AuthCredential type that was used.
       var credential = error.credential;
-      console.log('sign in failed');
+      console.log('errorMessage: ', errorMessage);
     })
   }
 
@@ -52,7 +63,8 @@ class LoginForm extends React.Component {
       var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
-      console.log('user: ', user, ' is signed in')
+      console.log('user: ', user.displayName, ' uid: ', user.uid)
+      this.writeData(user.uid, user.displayName)
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -72,6 +84,7 @@ class LoginForm extends React.Component {
       console.log('sign out failed: ', error);
     })
   }
+
 
   render () {
     return (
