@@ -436,7 +436,6 @@ class Main extends React.Component {
     });
   }
 
-
   render() {
 
     // if the stats view is enabled
