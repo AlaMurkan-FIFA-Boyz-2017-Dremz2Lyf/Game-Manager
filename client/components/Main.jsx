@@ -448,8 +448,10 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span>Home</span></a></li>
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
-              <li><Login /></li>
             </ul>
+            <div className='loginBar'>
+              <Login />
+            </div>
           </nav>
 
           {/* this container holds the jumbotron */}
@@ -532,7 +534,6 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)} >Home</span></a></li>
               <li><a href="#"><span>Stats</span></a></li>
-
             </ul>
           </nav>
           <div className="container">
@@ -575,8 +576,8 @@ class Main extends React.Component {
                 <div className="panel-body">
                   <h1 className="fin">
                     <ul className="nav navbar-foot">
-                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
-                      <li><a href="#"><span>PING</span></a></li>
+                      <li><a href="#"><span>FIFA</span></a></li>
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)}>PING PONG</span></a></li>
                     </ul>
                   </h1>
                 </div>
@@ -669,8 +670,10 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span>Home</span></a></li>
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
-              <li><Login /></li>
             </ul>
+            <div className='loginBar'>
+              <Login />
+            </div>
           </nav>
 
           {/* this container holds the jumbotron */}

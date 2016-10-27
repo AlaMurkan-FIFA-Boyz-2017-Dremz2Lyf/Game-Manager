@@ -76,31 +76,23 @@ class LoginForm extends React.Component {
   render () {
     return (
       <div>
-        <div className="google-btn">
-          <button type="submit"
-                  style={{ borderWidth: 1, borderColor: 'green'}}
-                  onClick={ this.googleLogin.bind(this) }>
+        <div className="login-btn google-btn">
+          <button type="submit" onClick={ this.googleLogin.bind(this) }>
           Sign in with Google
           </button>
         </div>
-        <div className="facebook-btn">
-          <button type="submit"
-                  style={{ borderWidth: 1, borderColor: 'blue'}}
-                  onClick={ this.facebookLogin.bind(this) }>
+        <div className="login-btn facebook-btn">
+          <button type="submit" onClick={ this.facebookLogin.bind(this) }>
           Sign in with Facebook
           </button>
         </div>
-        <div className="twitter-btn">
-          <button type="submit"
-                  style={{ borderWidth: 1, borderColor: 'lightblue'}}
-                  onClick={ this.twitterLogin.bind(this) }>
+        <div className="login-btn twitter-btn">
+          <button type="submit" onClick={ this.twitterLogin.bind(this) }>
           Sign in with Twitter
           </button>
         </div>
-        <div className="logout">
-          <button type="submit"
-                  style={{ borderWidth: 1, borderColor: 'red'}}
-                  onClick={ this.signOut.bind(this) }>
+        <div className="login-btn logout">
+          <button type="submit" onClick={ this.signOut.bind(this) }>
           Sign out
           </button>
         </div>

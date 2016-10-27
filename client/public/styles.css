@@ -196,10 +196,22 @@ li a:hover {
 .navbar-foot li a:hover {
   background: #FAD817;
 }
+
 .navbar-foot li a:hover span {
   color: #1E2329;
 }
 
 .navbar-foot li a span {
   background:none;
+}
+
+.login-btn {
+  color: #1E2329;
+  text-shadow: 1px 1px 5px #FAD817;
+  font-family: 'PT Sans', sans-serif;
+}
+
+.loginBar {
+  float:right;
+  text-align: right;
 }
