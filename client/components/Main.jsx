@@ -437,9 +437,92 @@ class Main extends React.Component {
   }
 
   render() {
+    // if the pong view is enabled
+    if(this.state.pongView) {
+      return (
+        <div className="pong">
+          <nav className="navbar navbar-inverse">
+            <div className="navbar-header">
+              <a className="navbar-brand" href="#">PING PONG TOURNAMENT MANAGER</a>
+            </div>
+            <ul className="nav navbar-nav">
+              <li><a href="#"><span>Home</span></a></li>
+              <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
+              <li><Login /></li>
+            </ul>
+          </nav>
 
-    // if the stats view is enabled
-    if (this.state.statsView) {
+          {/* this container holds the jumbotron */}
+          <div className="container">
+            <div className="jumbotron header">
+              <h1>WELCOME</h1>
+              <p>
+                Create your tournament below by adding new players or picking from the list on the right!
+              </p>
+            </div>
+          </div>
+
+
+          {/* This row holds the add player form */}
+          <div className="row">
+            <div className="col-xs-1"></div>
+            <div className="col-xs-4">
+                <h3>ADD PLAYER</h3>
+                <AddPlayerForm addPlayer={this.addPlayer.bind(this)} />
+            </div>
+            <div className="col-xs-7"></div>
+          </div>
+
+
+          {/* this row holds both lists of players */}
+          <div className="row">
+            <div className="col-xs-1">
+            </div>
+
+            <div className="col-xs-5">
+              {/* this will render out through the Player component into the players that we will make the tournament with */}
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h4>CREATE NEW TOURNAMENT</h4>
+                </div>
+                <div className="panel-body">
+                  <StartTournament createTournament={this.createTournament.bind(this)}/>
+                  <NewTournamentPlayers players={this.state.tourneyPlayersList} click={this.movePlayer.bind(this)} />
+                </div>
+              </div>
+              <OngoingTournamentsList tourneys={this.state.ongoingTournamentsList} click={this.setCurrentTournament.bind(this)}/>
+            </div>
+
+            <div className="col-xs-5">
+              {/* this will render out with the existing players in the database, and ones added through the form */}
+              <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
+            </div>
+
+            <div className="col-xs-1">
+            </div>
+          </div>
+          <div className="well"></div>
+          <div className="row">
+            <div className="col-xs-2"></div>
+            <div className="col-xs-8">
+              <div className="panel panel-default">
+                <div className="panel-body">
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONG</span></a></li>
+                    </ul>
+                  </h1>
+                </div>
+              </div>
+            </div>
+            <div className="col-xs-2"></div>
+          </div>
+        </div>
+        )
+    }
+
+    if(this.state.statsView) {
       return (
         <div className="background">
           <nav className="navbar navbar-inverse">
@@ -564,8 +647,8 @@ class Main extends React.Component {
                 <div className="panel-body">
                   <h1 className="fin">
                     <ul className="nav navbar-foot">
-                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
-                      <li><a href="#"><span>PING PONGss</span></a></li>
+                      <li><a href="#"><span>FIFA</span></a></li>
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)}>PING PONG</span></a></li>
                     </ul>
                   </h1>
                 </div>
@@ -647,8 +730,8 @@ class Main extends React.Component {
                 <div className="panel-body">
                   <h1 className="fin">
                     <ul className="nav navbar-foot">
-                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
-                      <li><a href="#"><span>PING PONG</span></a></li>
+                      <li><a href="#"><span>FIFA</span></a></li>
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)}>PING PONG</span></a></li>
                     </ul>
                   </h1>
                 </div>
