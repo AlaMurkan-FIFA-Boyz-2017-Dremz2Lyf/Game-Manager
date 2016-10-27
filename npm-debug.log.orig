@@ -1,5 +1,5 @@
 0 info it worked if it ends with ok
-<<<<<<< bcb3fb920c68b61fa8164be6cb89c7f9ef52fcd4
+<<<<<<< fd9c774e0e373af642bf3639c339161acb5b5575
 1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'start' ]
 2 info using npm@3.5.2
 3 info using node@v4.2.6

@@ -1,5 +1,5 @@
 var React = require('react');
-var axios = require('axios');
+// var axios = require('axios');
 
 class StartTournament extends React.Component {
 
@@ -29,7 +29,7 @@ class StartTournament extends React.Component {
     })
     .catch(function(err) {
       self.setState({
-        error: err.response.data.message
+        error: err
       });
     });
 

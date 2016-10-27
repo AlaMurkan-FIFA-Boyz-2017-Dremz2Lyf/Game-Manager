@@ -43,7 +43,7 @@ class Form extends React.Component {
         value: '',
         noError: false
       });
-      self.props.addPlayer();
+      // self.props.addPlayer();
     });
 
     // axios.post('/api/player', {

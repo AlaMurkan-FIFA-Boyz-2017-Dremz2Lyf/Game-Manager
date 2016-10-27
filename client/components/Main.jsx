@@ -58,75 +58,65 @@ class Main extends React.Component {
     };
   }
 
-  componentDidMount() {
-
-    var self = this;
-    // utils.getAllPlayers makes a call to the server for all players from the database.
-      // State is passed in so we can check against the tournament players list.
-      // It also returns a promise.
-
-    var playersArr = [];
-    usersRef.once('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        playersArr.push({
-          username: childSnapshot.key,
-          data: childSnapshot.val()
-        });
+  componentWillMount() {//for more info on this set up see
+    //https://firebase.googleblog.com/2014/05/using-firebase-with-reactjs.html
+    var players = [];
+    usersRef.on('child_added', function(snapshot) {
+      players.push({
+        username: snapshot.key,
+        data: snapshot.val()
       });
-    }).then(function () {
-      console.log(playersArr);
-      // So within a .then we can set the state to the players array
-      self.setState({
+      players.filter(function (playerComponent) {//filters for those in a tournament
+        if (this.state.tourneyPlayersList.includes(playerComponent)) {
+          return false;
+        }
+        return true;
+      }.bind(this));
+      console.log(players);
+      this.setState({
         // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: playersArr
+        allPlayersList: players
       });
-    });
 
-    // getOngoingTournaments populates the in progress tournament list
+    }.bind(this));
 
-
-    var tourneysArr = [];
-    tourneysRef.once('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        tourneysArr.push({
-          tourneyId: childSnapshot.key,
-          data: childSnapshot.val()
-        });
+    var ongoingTournamentsList = [];
+    tourneysRef.on('child_added', function(snapshot) {
+      ongoingTournamentsList.push({
+        tourneyId: snapshot.key,
+        data: snapshot.val()
       });
-    }).then(function () {
-      console.log(tourneysArr);
-      // utils.getOngoingTournaments().then(function(tourneys) {
-      self.setState({
-        // Add the ongoing tournaments to the state
-        ongoingTournamentsList: tourneysArr
+      console.log(ongoingTournamentsList);
+      this.setState({
+        // Adds the players from the db not already in a tourney to allPlayersList
+        ongoingTournamentsList: ongoingTournamentsList
       });
-      // });
-    });
+    }.bind(this));
 
   }
 
-  addPlayer() {
+  addPlayer() {//NOTE:all handled by listeners in component willmount now
     // get some 'this' binding
-    var self = this;
-    // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
-    var playersArr = [];
-    usersRef.once('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        playersArr.push({
-          username: childSnapshot.key,
-          data: childSnapshot.val()
-        });
-      });
-    }).then(function () {
-      self.setState({
-        // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: playersArr
-      });
-    });
+    // var self = this;
+    // // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
+    // var playersArr = [];
+    // usersRef.once('value', function(snapshot) {
+    //   snapshot.forEach(function(childSnapshot) {
+    //     playersArr.push({
+    //       username: childSnapshot.key,
+    //       data: childSnapshot.val()
+    //     });
+    //   });
+    // }).then(function () {
+    //   self.setState({
+    //     // Adds the players from the db not already in a tourney to allPlayersList
+    //     allPlayersList: playersArr
+    //   });
+    // });
+  }
 
     // utils.getAllPlayers(this.state).then(function(response) {
       // So within a .then we can set the state to the players array
-  }
 
   //createTournament will make a post request to the server, which will insert the
     // new tournament into the DB, and after that call the createGames function
