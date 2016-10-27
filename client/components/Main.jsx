@@ -1,17 +1,28 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var axios = require('axios'); //Used for AJAX calls
-var AllPlayersList = require('./AllPlayersList.jsx');
-var Player = require('./Player.jsx');
-var NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
-var GameStatsForm = require('./GameStatsForm.jsx');
-var AddPlayerForm = require('./AddPlayerForm.jsx');
-var StartTournament = require('./StartTournament.jsx');
-var CurrentTournament = require('./CurrentTournament.jsx');
-var FinishTournament = require('./FinishTournament.jsx');
-var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
-var StatsTable = require('./StatsTable.jsx');
-var utils = require('../utils.js');
+const React = require('react');
+const ReactDOM = require('react-dom');
+// const axios = require('axios'); //Used for AJAX calls
+
+
+const firebase = require("firebase/app");
+const db = require('./../../firebaseinitialize.js');
+const usersRef = db.ref('users/');
+const tourneysRef = db.ref('tournaments/');
+const gamesRef = db.ref('games/');
+// const rebase = require('./Rebase.jsx');//used to hook up firebase and react
+
+const AllPlayersList = require('./AllPlayersList.jsx');
+const Player = require('./Player.jsx');
+const NewTournamentPlayers = require('./NewTournamentPlayers.jsx');
+const GameStatsForm = require('./GameStatsForm.jsx');
+const AddPlayerForm = require('./AddPlayerForm.jsx');
+const StartTournament = require('./StartTournament.jsx');
+const CurrentTournament = require('./CurrentTournament.jsx');
+const FinishTournament = require('./FinishTournament.jsx');
+const OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
+const StatsTable = require('./StatsTable.jsx');
+const utils = require('../fireUtils.js');
+const Login = require('./Login.jsx')
+
 
 class Main extends React.Component {
 
@@ -40,43 +51,72 @@ class Main extends React.Component {
       ongoingTournamentsList: [],
 
       statsView: false,
+
+      pongView: false,
+
       statLines: []
     };
   }
 
-  componentDidMount() {
-    var self = this;
-    // utils.getAllPlayers makes a call to the server for all players from the database.
-      // State is passed in so we can check against the tournament players list.
-      // It also returns a promise.
-    utils.getAllPlayers(this.state).then(function(response) {
-      // So within a .then we can set the state to the players array
-      self.setState({
+  componentWillMount() {//for more info on this set up see
+    //https://firebase.googleblog.com/2014/05/using-firebase-with-reactjs.html
+    var players = [];
+    usersRef.on('child_added', function(snapshot) {
+      players.push({
+        username: snapshot.key,
+        data: snapshot.val()
+      });
+      players.filter(function (playerComponent) {//filters for those in a tournament
+        if (this.state.tourneyPlayersList.includes(playerComponent)) {
+          return false;
+        }
+        return true;
+      }.bind(this));
+      console.log(players);
+      this.setState({
         // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: response
+        allPlayersList: players
       });
-    });
-    // getOngoingTournaments populates the in progress tournament list
-    utils.getOngoingTournaments().then(function(tourneys) {
-      self.setState({
-        // Add the ongoing tournaments to the state
-        ongoingTournamentsList: tourneys
+
+    }.bind(this));
+
+    var ongoingTournamentsList = [];
+    tourneysRef.on('child_added', function(snapshot) {
+      ongoingTournamentsList.push({
+        tourneyId: snapshot.key,
+        data: snapshot.val()
       });
-    });
+      console.log(ongoingTournamentsList);
+      this.setState({
+        // Adds the players from the db not already in a tourney to allPlayersList
+        ongoingTournamentsList: ongoingTournamentsList
+      });
+    }.bind(this));
+
   }
 
-  addPlayer() {
+  addPlayer() {//NOTE:all handled by listeners in component willmount now
     // get some 'this' binding
-    var self = this;
-    // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
-    utils.getAllPlayers(this.state).then(res => {
-      // It returns a promise object that resolves with the list of players filtered
-        // against players already in the tournament list. We set this to state.
-      self.setState({
-        allPlayersList: res
-      });
-    });
+    // var self = this;
+    // // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
+    // var playersArr = [];
+    // usersRef.once('value', function(snapshot) {
+    //   snapshot.forEach(function(childSnapshot) {
+    //     playersArr.push({
+    //       username: childSnapshot.key,
+    //       data: childSnapshot.val()
+    //     });
+    //   });
+    // }).then(function () {
+    //   self.setState({
+    //     // Adds the players from the db not already in a tourney to allPlayersList
+    //     allPlayersList: playersArr
+    //   });
+    // });
   }
+
+    // utils.getAllPlayers(this.state).then(function(response) {
+      // So within a .then we can set the state to the players array
 
   //createTournament will make a post request to the server, which will insert the
     // new tournament into the DB, and after that call the createGames function
@@ -87,41 +127,35 @@ class Main extends React.Component {
     if (this.state.tourneyPlayersList.length < 2) {
       enough = false;
     }
-
-    return axios.post('/api/tournaments', {
-      tournament_name: tourneyName,
+    return tourneysRef.push().set({
+      tourneyName: tourneyName,
       enough: enough
     }).then(function(response) {
-        // response.data holds an array with one number in it
-          // this number is the tournamentId
-      var tourneyId = response.data[0];
-
+      var tourneyId = response;
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
             context.setState({
               // currentTournamentTable: res,
               currentTournament: { id: tourneyId, tournament_name: tourneyName }
             });
+            //TODO: figure out if this is working now NOTE NOTE
             // NOTE: This function call is failing because when we create a new tournament,
               // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
               // On the result of that filter, we call a reduce function to create the objects for the table.
               // This is not a problem right now, but in the future.
-            utils.getTableForTourney(tourneyId)
-            .then(res => {
-              // set the currentTournament key on state to an object with the id and name
-              context.setState({
-                currentTournamentTable: res
-              });
-            })
-            .catch(err => {
-              throw err;
-            });
+            // utils.getTableForTourney(tourneyId)
+            // .then(res => {
+            //   // set the currentTournament key on state to an object with the id and name
+            //   context.setState({
+            //     currentTournamentTable: res
+            //   });
+            // })
+            // .catch(err => {
+            //   throw err;
+            // });
           }).catch(err => {
             throw err;
           });
-
-
-
         // then call createGames with the new tourney ID
     }).catch(function(err) {
         // handles some errors
@@ -129,11 +163,57 @@ class Main extends React.Component {
     });
   }
 
+
+    // return axios.post('/api/tournaments', {
+    //   tournament_name: tourneyName,
+    //   enough: enough
+    // }).then(function(response) {
+        // response.data holds an array with one number in it
+          // this number is the tournamentId
+      // var tourneyId = response.data[0];
+
+  //     context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+  //         .then(res => {
+  //           context.setState({
+  //             // currentTournamentTable: res,
+  //             currentTournament: { id: tourneyId, tournament_name: tourneyName }
+  //           });
+  //           // NOTE: This function call is failing because when we create a new tournament,
+  //             // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+  //             // On the result of that filter, we call a reduce function to create the objects for the table.
+  //             // This is not a problem right now, but in the future.
+  //           utils.getTableForTourney(tourneyId)
+  //           .then(res => {
+  //             // set the currentTournament key on state to an object with the id and name
+  //             context.setState({
+  //               currentTournamentTable: res
+  //             });
+  //           })
+  //           .catch(err => {
+  //             throw err;
+  //           });
+  //         }).catch(err => {
+  //           throw err;
+  //         });
+  //
+  //
+  //
+  //       // then call createGames with the new tourney ID
+  //   }).catch(function(err) {
+  //       // handles some errors
+  //     throw err;
+  //   });
+  // }
+
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(context, tourneyId, list) {
     var self = this;
-
+    console.log('tourneyId:', tourneyId);
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
+    tourneysRef.child(tourneyId).child('players').push('list');
+
+
+
     return utils.postGames(tourneyId, list)
       .then(function(response) {
         // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
@@ -236,6 +316,13 @@ class Main extends React.Component {
       self.setState({
         ongoingTournamentsList: tourneys
       });
+    });
+  }
+
+  togglePongView() {
+    var self = this;
+    this.setState({
+      pongView: !this.state.pongView
     });
   }
 
@@ -349,7 +436,6 @@ class Main extends React.Component {
     });
   }
 
-
   render() {
 
     // if the stats view is enabled
@@ -363,6 +449,7 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)} >Home</span></a></li>
               <li><a href="#"><span>Stats</span></a></li>
+
             </ul>
           </nav>
           <div className="container">
@@ -390,7 +477,7 @@ class Main extends React.Component {
             </div>
 
             <div className="col-xs-10">
-              <StatsTable table={this.state.currentTournamentTable} />
+              <StatsTable table={this.state.allPlayersList} />
             </div>
 
             <div className="col-xs-1">
@@ -403,7 +490,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -470,7 +562,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONGss</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
@@ -489,6 +586,7 @@ class Main extends React.Component {
             <ul className="nav navbar-nav">
               <li><a href="#"><span>Home</span></a></li>
               <li><a href="#"><span onClick={this.toggleStatsView.bind(this)}>Stats</span></a></li>
+              <li><Login /></li>
             </ul>
           </nav>
 
@@ -547,7 +645,12 @@ class Main extends React.Component {
             <div className="col-xs-8">
               <div className="panel panel-default">
                 <div className="panel-body">
-                  <h1 className="fin">Fin</h1>
+                  <h1 className="fin">
+                    <ul className="nav navbar-foot">
+                      <li><a href="#"><span onClick={this.togglePongView.bind(this)} >FIFA</span></a></li>
+                      <li><a href="#"><span>PING PONG</span></a></li>
+                    </ul>
+                  </h1>
                 </div>
               </div>
             </div>
