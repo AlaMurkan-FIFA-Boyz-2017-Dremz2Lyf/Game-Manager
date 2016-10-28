@@ -15,8 +15,8 @@ class LoginForm extends React.Component {
   writeData (uid, username) {
     var newUsersRef = usersRef.push()
     newUsersRef.set({
-      username,
-      uid
+      uid,
+      username
     })
   }
 

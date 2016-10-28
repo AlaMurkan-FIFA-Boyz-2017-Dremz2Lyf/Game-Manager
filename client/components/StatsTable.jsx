@@ -21,18 +21,9 @@ var StatsTable = (props) => {
   //   return <StatLine playerStats={playerStats} key={index} />;
   // });
 
-  var testArray = [{name: 'calvin', gp: 3, won: 3, draw: 0, loss: 8, gd: -3, points: 8}, {name: 'brett', gp: 7, won: 4, draw: 8, loss: 3, gd: 7, points: 6}]
-  var statLines = testArray.map(function(x) {
-    return <StatLine playerStats={x}/>
-  })
-
-
 // need to make table column headers sort on click
   return (
   <div className="panel panel-default">
-    <div className="panel-heading">
-    <h3>TABLE BRETT</h3>
-    </div>
     <div className="panel-body">
       <table className="table">
         <thead>
