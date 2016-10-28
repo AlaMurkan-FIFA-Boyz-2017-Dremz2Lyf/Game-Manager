@@ -29,6 +29,7 @@ exports.getFirstUnplayed = function(games) {
 
 exports.getAllPlayers = function(state) {
     // axios rocks and makes nice promise based calls to the server for us.
+          debugger;
   return axios.get('/api/player')
     .then(function(playerData) {
       var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {

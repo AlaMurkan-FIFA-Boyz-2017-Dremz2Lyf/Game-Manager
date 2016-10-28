@@ -73,50 +73,50 @@ routes.post('/api/player', function(req, res) {
 
   // NOTE: Routes for tournaments
 
-routes.post('/api/tournaments', function(req, res) {
-  var tourneyName = req.body.tournament_name;
-  // To do validation on the name, and the amount of players in the tournament,
-    // we need to check if the name is an empty string.
-  if (tourneyName === '') {
-    // If it is, send back a message to show the user the error.
-    res.status(400).json({'message': 'IT\'S GOTTA HAVE A NAME!'});
-  } else if (!req.body.enough) {
-    // If we have passed the 'enough' boolean from the app as false,
-      // then there are not enough players to make a tournament. Send back the message.
-    res.status(400).json({'message': 'YOU CAN\'T JUST PLAY ALONE!'});
-  } else {
-    // Otherwise make the call for the query!
-    helpers.makeTourney(tourneyName)//refactor to send tourney ID
-      .then(function(response) {
-        res.status(201).send(response);
-      }).catch(function(err) {
-        res.status(500).send(err);
-      });
-  }
-});
+// routes.post('/api/tournaments', function(req, res) {
+//   var tourneyName = req.body.tournament_name;
+//   // To do validation on the name, and the amount of players in the tournament,
+//     // we need to check if the name is an empty string.
+//   if (tourneyName === '') {
+//     // If it is, send back a message to show the user the error.
+//     res.status(400).json({'message': 'IT\'S GOTTA HAVE A NAME!'});
+//   } else if (!req.body.enough) {
+//     // If we have passed the 'enough' boolean from the app as false,
+//       // then there are not enough players to make a tournament. Send back the message.
+//     res.status(400).json({'message': 'YOU CAN\'T JUST PLAY ALONE!'});
+//   } else {
+//     // Otherwise make the call for the query!
+//     helpers.makeTourney(tourneyName)//refactor to send tourney ID
+//       .then(function(response) {
+//         res.status(201).send(response);
+//       }).catch(function(err) {
+//         res.status(500).send(err);
+//       });
+//   }
+// });
 
-routes.put('/api/tournaments', function(req, res) {
+// routes.put('/api/tournaments', function(req, res) {
 
-  helpers.setTournamentWinner(req.body.id, req.body.winner_id)
-    .then(function(response) {
-      res.sendStatus(202);
-    })
-    .catch(function(err) {
-      res.status(500).send(err);
-    });
+//   helpers.setTournamentWinner(req.body.id, req.body.winner_id)
+//     .then(function(response) {
+//       res.sendStatus(202);
+//     })
+//     .catch(function(err) {
+//       res.status(500).send(err);
+//     });
 
-});
+// });
 
 //NOTE: should be handled on the front end now with FIREBASE
 //NOTE: REFACTOR, the below will only fetch ONGOING tournaments
-routes.get('/api/tournaments', function(req, res) {
+// routes.get('/api/tournaments', function(req, res) {
 
   // knex('tournaments').where('winner_id', null)
   // .orderBy('id', 'desc')
   // .then(function(data) {
     // res.send(data);
   // });
-});
+// });
 
 
 // **************************************************

@@ -622,6 +622,7 @@ if (!this.state.pongView) {
     });
   }
 
+
   render() {
     // if the pong view is enabled
     if(this.state.pongView) {
@@ -815,7 +816,7 @@ if (!this.state.pongView) {
             </div>
 
             <div className="col-xs-5">
-              <CurrentTournament state={this.state} updateGames={this.updateGames.bind(this)} setCurrentGame={this.setCurrentGame.bind(this)}/>
+              <CurrentTournament tourney={this.state} updateGames={this.updateGames.bind(this)} setCurrentGame={this.setCurrentGame.bind(this)}/>
             </div>
 
             <div className="col-xs-5">
