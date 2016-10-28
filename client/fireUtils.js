@@ -1,6 +1,14 @@
-var axios = require('axios');
+/*jshint esversion: 6 */
 
-//NOTE: don't really need any of this for the firebase version, making new fireutils
+const firebase = require("firebase/app");
+const db = require('./../firebaseinitialize.js');
+const usersRef = db.ref('users/');
+const tourneysRef = db.ref('tournaments/');
+const gamesRef = db.ref('games/');
+const axios = require('axios')
+
+// const base = require('./components/Rebase.jsx');
+
 exports.getFirstUnplayed = function(games) {
   // reduce the games array down to one object, that object will have up to three keys.
     // Created, active, or disabled. Each key points to an array of games.
@@ -21,6 +29,7 @@ exports.getFirstUnplayed = function(games) {
 
 exports.getAllPlayers = function(state) {
     // axios rocks and makes nice promise based calls to the server for us.
+          debugger;
   return axios.get('/api/player')
     .then(function(playerData) {
       var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {

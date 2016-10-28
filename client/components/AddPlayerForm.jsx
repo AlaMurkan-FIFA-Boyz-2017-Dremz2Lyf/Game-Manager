@@ -1,5 +1,8 @@
-var React = require('react');
-var axios = require('axios');
+/*jshint esversion: 6 */
+const React = require('react');
+// var axios = require('axios');
+// const firebase = require("firebase/app");
+const db = require('../../firebaseinitialize.js');
 
 class Form extends React.Component {
 
@@ -8,7 +11,8 @@ class Form extends React.Component {
 
     this.state = {
       value: '',
-      noError: true
+      noError: true,
+      playersRef: 'fifa/players/'
     };
   }
 
@@ -24,18 +28,34 @@ class Form extends React.Component {
   addNewPlayer(event) {
     var self = this;
     event.preventDefault();
-    axios.post('/api/player', {
-      username: this.state.value
-    }).then(function(res) {
-      self.state.noError = true;
-      self.state.value = '';
-      self.props.addPlayer();
-    }).catch(function(error) {
-      console.log(error);
-      self.state.noError = false;
-      self.state.value = '';
-      self.props.addPlayer();
+    console.log('pongview?:', this.props.pongView);
+    if(!this.props.pongView){
+      this.setState({
+        playersRef:'fifa/players/'
+      });
+    } else {
+      this.setState({
+        playersRef:'pong/players/'
+      });
+    }
+    var userPath = db.ref(this.state.playersRef).push();
+    userPath.set({
+      username: this.state.value,
+      id: userPath.key
     });
+
+    // axios.post('/api/player', {
+    //   username: this.state.value
+    // }).then(function(res) {
+    //   self.state.noError = true;
+    //   self.state.value = '';
+    //   self.props.addPlayer();
+    // }).catch(function(error) {
+    //   console.log(error);
+    //   self.state.noError = false;
+    //   self.state.value = '';
+    //   self.props.addPlayer();
+    // });
   }
 
   render() {

@@ -63,6 +63,14 @@ h1, h2, h3, h4, h5, h6 {
   background-size: cover;
 }
 
+.pong {
+  background-image: url('./pong-paddles.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
 .panel-default {
   background: rgba(31,35,41,0.8);
   border: 1px solid #D6BC6F;
@@ -117,6 +125,7 @@ li a:hover {
 .list-group-item:hover {
   box-shadow: 0 8px 16px 0 rgba(250,216,23,0.2),0 6px 20px 0 rgba(250,216,23,0.19);
   transform: scale3d(1.015,1.015,-1);
+  font-size: 18px;
 }
 
 .list-group-item:active {
@@ -182,4 +191,27 @@ li a:hover {
   text-align: center;
   color: #D6BC6F;
   text-shadow: 0px 0px 0px #1E2329;
+}
+
+.navbar-foot li a:hover {
+  background: #FAD817;
+}
+
+.navbar-foot li a:hover span {
+  color: #1E2329;
+}
+
+.navbar-foot li a span {
+  background:none;
+}
+
+.login-btn {
+  color: #1E2329;
+  text-shadow: 1px 1px 5px #FAD817;
+  font-family: 'PT Sans', sans-serif;
+}
+
+.loginBar {
+  float:right;
+  text-align: right;
 }

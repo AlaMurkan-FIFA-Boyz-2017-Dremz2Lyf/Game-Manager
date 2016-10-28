@@ -4,6 +4,7 @@ var Player = require('./Player.jsx');
 var AllPlayersList = (props) => {
   // playerList will become and array of Player Components with the name of that player,
     // the movePlayer function, and it's index passed down as props
+    console.log('players in AllPlayersList:', props.players);
   var playerList = props.players.map(function(player, index) {
       return <Player playerObj={player} click={props.click} index={index} key={index} />;
     });

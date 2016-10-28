@@ -1,5 +1,5 @@
 var React = require('react');
-var axios = require('axios');
+// var axios = require('axios');
 
 class StartTournament extends React.Component {
 
@@ -21,17 +21,19 @@ class StartTournament extends React.Component {
   startTourney(event) {
     var self = this;
     event.preventDefault();
+    console.log('STC sT tourneyName: ', this.state.tourneyName)
     this.props.createTournament(this.state.tourneyName)
-    .then(function(res) {
-      self.setState({
-        error: null
-      });
-    })
-    .catch(function(err) {
-      self.setState({
-        error: err.response.data.message
-      });
-    });
+    // .then(function(res) {
+    //   console.log('STC sT response', res)
+    //   self.setState({
+    //     error: null
+    //   });
+    // })
+    // .catch(function(err) {
+    //   self.setState({
+    //     error: err
+    //   });
+    // });
 
   }
 
