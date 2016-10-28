@@ -3,7 +3,6 @@ const React = require('react');
 // var axios = require('axios');
 // const firebase = require("firebase/app");
 const db = require('../../firebaseinitialize.js');
-let playersRef;
 
 class Form extends React.Component {
 
@@ -12,7 +11,8 @@ class Form extends React.Component {
 
     this.state = {
       value: '',
-      noError: true
+      noError: true,
+      playersRef: 'fifa/players/'
     };
   }
 
@@ -28,13 +28,20 @@ class Form extends React.Component {
   addNewPlayer(event) {
     var self = this;
     event.preventDefault();
-    if(!this.state.pongView){
-      playersRef = db.ref('fifa/players/');
+    console.log('pongview?:', this.props.pongView);
+    if(!this.props.pongView){
+      this.setState({
+        playersRef:'fifa/players/'
+      });
     } else {
-      playersRef = db.ref('pong/players/');
+      this.setState({
+        playersRef:'pong/players/'
+      });
     }
-    var userPath = playersRef.child(this.state.value).set({
-      username: this.state.value
+    var userPath = db.ref(this.state.playersRef).push();
+    userPath.set({
+      username: this.state.value,
+      id: userPath.key
     }).then(function(res) {
       self.setState({
         value: '',

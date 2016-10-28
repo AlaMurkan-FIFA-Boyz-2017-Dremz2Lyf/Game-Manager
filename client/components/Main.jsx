@@ -10,6 +10,7 @@ let usersRef;
 let playersRef;
 let tourneysRef;
 let gamesRef;
+let currentPlayersList;
 
 // const rebase = require('./Rebase.jsx');//used to hook up firebase and react
 
@@ -38,6 +39,8 @@ class Main extends React.Component {
       // allPlayersList holds all existing players as objects.
         // These objects have id and username keys/values.
       allPlayersList: [],
+      allFifaPlayersList: [],
+      allPongPlayersList: [],
       // tourneyPlayersList holds all players in the current/to be created tournament
         // Same player objects as the allPlayersList
       tourneyPlayersList: [],
@@ -64,56 +67,61 @@ class Main extends React.Component {
   componentWillMount() {//for more info on this set up see
     //https://firebase.googleblog.com/2014/05/using-firebase-with-reactjs.html
     console.log(this.state.pongView);
+    const self = this;
     if(!this.state.pongView){
-      console.log('hi');
       usersRef = 'fifa/users/';
       playersRef = 'fifa/players/';
       tourneysRef = 'fifa/tournaments/';
       gamesRef = 'fifa/games/';
+      currentPlayersList = 'allFifaPlayersList';
+
       console.log(usersRef);
     } else {
       usersRef = 'pong/users/';
       playersRef = 'pong/players/';
       tourneysRef = 'pong/tournaments/';
       gamesRef = 'pong/games/';
+      currentPlayersList = 'allPongPlayersList';
     }
-    console.log(usersRef);
     var players = [];
+    var currPlayers;
     db.ref(usersRef).on('child_added', function(snapshot) {
-      players.push({
-        uid: snapshot.key,
-        data: snapshot.val()
-      });
-      players.filter(function (player) {//filters for those in a tournament
-        if (this.state.tourneyPlayersList.includes(player)) {
+      players.push(snapshot.val());
+      currPlayers = players.filter(function (player) {//filters for those in a tournament
+        if (self.state.tourneyPlayersList.includes(player)) {
           return false;
         }
         return true;
-      }.bind(this));
-      this.setState({
-        // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: players
       });
-
-    }.bind(this));
+      self.setState({
+        // Adds the players from the db not already in a tourney to allPlayersList
+        allPlayersList: currPlayers
+      });
+    });
 
     db.ref(playersRef).on('child_added', function(snapshot) {
-      players.push({
-        username: snapshot.key,
-        data: snapshot.val()
-      });
-      players.filter(function (player) {//filters for those in a tournament
-        if (this.state.tourneyPlayersList.includes(player)) {
+      players.push(snapshot.val());
+      currPlayers = players.filter(function (player) {//filters for those in a tournament
+        if (self.state.tourneyPlayersList.includes(player)) {
           return false;
         }
         return true;
-      }.bind(this));
-      this.setState({
-        // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: players
       });
+      console.log(currPlayers);
+      if (currentPlayersList === 'allFifaPlayersList') {
 
-    }.bind(this));
+        self.setState({
+          // Adds the players from the db not already in a tourney to allPlayersList
+          allFifaPlayersList: currPlayers
+        });
+      } else if (currentPlayersList === 'allPongPlayersList') {
+        self.setState({
+          // Adds the players from the db not already in a tourney to allPlayersList
+          allPongPlayersList: currPlayers
+        });
+
+      }
+    });
 
     var ongoingTournamentsList = [];
     db.ref(tourneysRef).on('child_added', function(snapshot) {
@@ -157,20 +165,20 @@ class Main extends React.Component {
     var context = this;
     // post request to the /api/tournaments endpoint with the tourneyName included
     if (this.state.tourneyPlayersList.length < 2) {
-      throw new Error('You need at least two players');
+      console.log('not enough players in tournament');
+      return;
     }
 
-    console.log('MAIN cT tourneyName: ', tourneyName)
-    var newTourneyRef = tourneysRef.push()
+    console.log('MAIN cT tourneyName: ', tourneyName);
+    var newTourneyRef = db.ref(tourneysRef).push();
 
     newTourneyRef.set({
       tourneyName: tourneyName,
     }, function(err) {
       if (err) {
-        console.log('error: ', err)
+        console.log('error: ', err);
       }
-    })
-
+    });
     this.createGames(newTourneyRef, this.state.tourneyPlayersList);
 
 
@@ -207,6 +215,39 @@ class Main extends React.Component {
     //   throw err;
     // });
 
+    // return db.ref(tourneysRef).push().set({
+    //   tourneyName: tourneyName
+    // }).then(function(response) {
+    //   var tourneyId = 5;
+    //   context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+    //       .then(res => {
+    //         context.setState({
+    //           // currentTournamentTable: res,
+    //           currentTournament: { id: tourneyId, tournament_name: tourneyName }
+    //         });
+            //TODO: figure out if this is working now NOTE NOTE
+            // NOTE: This function call is failing because when we create a new tournament,
+              // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+              // On the result of that filter, we call a reduce function to create the objects for the table.
+              // This is not a problem right now, but in the future.
+            // utils.getTableForTourney(tourneyId)
+            // .then(res => {
+            //   // set the currentTournament key on state to an object with the id and name
+            //   context.setState({
+            //     currentTournamentTable: res
+            //   });
+            // })
+            // .catch(err => {
+            //   throw err;
+            // });
+    //       }).catch(err => {
+    //         throw err;
+    //       });
+    //     // then call createGames with the new tourney ID
+    // }).catch(function(err) {
+    //     // handles some errors
+    //   throw err;
+    // });
   }
 
 
@@ -254,10 +295,10 @@ class Main extends React.Component {
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(newTourneyRef, list) {
     var self = this;
-    console.log('tourneyId:', newTourneyRef);
+    console.log('tourneyId:', newTourneyRef.key);
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
-    tourneysRef.child(newTourneyRef).child('players').push('list');
 
+    db.ref(tourneysRef).child(newTourneyRef.key).child('players').set(list);
 
 
     return utils.postGames(newTourneyRef, list)
@@ -283,29 +324,55 @@ class Main extends React.Component {
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
   movePlayer(playerComponent, index) {
+if (!this.state.pongView) {
+  // check if the tourneyPlayersList has this Player
+  if (this.state.tourneyPlayersList.includes(playerComponent)) {
 
-    // check if the tourneyPlayersList has this Player
-    if (this.state.tourneyPlayersList.includes(playerComponent)) {
+    // if so, we move from that list with a splice.
+    var out = this.state.tourneyPlayersList.splice(index, 1)[0];
 
-      // if so, we move from that list with a splice.
-      var out = this.state.tourneyPlayersList.splice(index, 1)[0];
+    // then push the first index of that spliced out array into the allPlayersList
+    this.state.allFifaPlayersList.push(out);
 
-      // then push the first index of that spliced out array into the allPlayersList
-      this.state.allPlayersList.push(out);
+    // force update should update the state now, as we are not setting state
+    // inside a this.setState function
+    this.forceUpdate();
 
-      // force update should update the state now, as we are not setting state
-        // inside a this.setState function
-      this.forceUpdate();
+  } else {
+    // otherwise, we remove it from the players list and add to the touney list
+    var out = this.state.allFifaPlayersList.splice(index, 1)[0];
 
-    } else {
-      // otherwise, we remove it from the players list and add to the touney list
-      var out = this.state.allPlayersList.splice(index, 1)[0];
+    // same thing as above, just removing from allPlayersList and adding to the
+    //  tourneylist
+    this.state.tourneyPlayersList.push(out);
+    this.forceUpdate();
+  }
 
-      // same thing as above, just removing from allPlayersList and adding to the
-        //  tourneylist
-      this.state.tourneyPlayersList.push(out);
-      this.forceUpdate();
-    }
+} else {
+  // check if the tourneyPlayersList has this Player
+  if (this.state.tourneyPlayersList.includes(playerComponent)) {
+
+    // if so, we move from that list with a splice.
+    var out = this.state.tourneyPlayersList.splice(index, 1)[0];
+
+    // then push the first index of that spliced out array into the allPlayersList
+    this.state.allPongPlayersList.push(out);
+
+    // force update should update the state now, as we are not setting state
+    // inside a this.setState function
+    this.forceUpdate();
+
+  } else {
+    // otherwise, we remove it from the players list and add to the touney list
+    var out = this.state.allPongPlayersList.splice(index, 1)[0];
+
+    // same thing as above, just removing from allPlayersList and adding to the
+    //  tourneylist
+    this.state.tourneyPlayersList.push(out);
+    this.forceUpdate();
+  }
+
+}
   }
 
   // setCurrentGame takes in the game 'to be active', and the currently active game.
@@ -374,9 +441,16 @@ class Main extends React.Component {
   }
 
   togglePongView() {
+    console.log('figure out why pong state doesnt transfer to add player form as props');
     var self = this;
+    if (currentPlayersList === 'allFifaPlayersList') {
+      currentPlayersList = 'allPongPlayersList';
+    } else {
+      currentPlayersList = 'allFifaPlayersList';
+    }
     this.setState({
-      pongView: !this.state.pongView
+      pongView: !this.state.pongView,
+      tourneyPlayersList: []
     });
   }
 
@@ -524,7 +598,7 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
             <div className="col-xs-4">
                 <h3>ADD PLAYER</h3>
-                <AddPlayerForm addPlayer={this.addPlayer.bind(this)} />
+                <AddPlayerForm pongView={this.state.pongView} addPlayer={this.addPlayer.bind(this)} />
             </div>
             <div className="col-xs-7"></div>
           </div>
@@ -551,7 +625,7 @@ class Main extends React.Component {
 
             <div className="col-xs-5">
               {/* this will render out with the existing players in the database, and ones added through the form */}
-              <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
+              <AllPlayersList players={this.state[currentPlayersList]} click={this.movePlayer.bind(this)}/>
             </div>
 
             <div className="col-xs-1">
@@ -773,7 +847,7 @@ class Main extends React.Component {
 
             <div className="col-xs-5">
               {/* this will render out with the existing players in the database, and ones added through the form */}
-              <AllPlayersList players={this.state.allPlayersList} click={this.movePlayer.bind(this)}/>
+              <AllPlayersList players={this.state[currentPlayersList]} click={this.movePlayer.bind(this)}/>
             </div>
 
             <div className="col-xs-1">
