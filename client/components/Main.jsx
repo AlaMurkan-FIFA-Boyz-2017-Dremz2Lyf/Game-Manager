@@ -365,6 +365,14 @@ class Main extends React.Component {
     });
   }
 
+  toggleBoth() {
+    var self = this;
+    this.setState({
+      statsView: !this.stat.statsView,
+      pongView: !this.state.pongView
+    })
+  }
+
   togglePongView() {
     var self = this;
     this.setState({
@@ -623,7 +631,7 @@ class Main extends React.Component {
                   <h1 className="fin">
                     <ul className="nav navbar-foot">
                       <li><a href="#"><span>FIFA</span></a></li>
-                      <li><a href="#"><span onClick={this.togglePongView.bind(this)}>PING PONG</span></a></li>
+                      <li><a href="#"><span onClick={this.toggleBoth.bind(this)}>PING PONG</span></a></li>
                     </ul>
                   </h1>
                 </div>
