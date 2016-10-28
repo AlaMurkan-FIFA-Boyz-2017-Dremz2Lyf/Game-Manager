@@ -493,7 +493,7 @@ if (!this.state.pongView) {
   toggleBoth() {
     var self = this;
     this.setState({
-      statsView: !this.stat.statsView,
+      statsView: !this.state.statsView,
       pongView: !this.state.pongView
     })
   }
