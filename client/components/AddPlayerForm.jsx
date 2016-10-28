@@ -42,26 +42,6 @@ class Form extends React.Component {
     userPath.set({
       username: this.state.value,
       id: userPath.key
-    if(!this.state.pongView){
-      playersRef = db.ref('fifa/players/');
-    } else {
-      playersRef = db.ref('pong/players/');
-    }
-    var userPath = playersRef.child(this.state.value).set({
-      username: this.state.value
-    }).then(function(res) {
-      self.setState({
-        value: '',
-        noError: true
-      });
-      self.props.addPlayer();
-    }).catch(function(error) {
-      console.log(error);
-      self.setState({
-        value: '',
-        noError: false
-      });
-      // self.props.addPlayer();
     });
 
     // axios.post('/api/player', {
