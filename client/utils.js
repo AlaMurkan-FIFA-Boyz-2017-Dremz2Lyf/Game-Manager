@@ -60,6 +60,10 @@ exports.getOngoingTournaments = function() {
 exports.updateGameStatus = function(toBeActive, currentActive) {
   // toBeActive and currentActive point to games.
   // This function returns the promise.all of each axios PUT request to the server.
+  if (currentActive.player1_score !== null && currentActive.player2_score !== null) {
+    currentActive.status = 'disabled';
+  }
+
   return Promise.all([
     // we update the new active game and the old active game.
     axios.put('/api/games', toBeActive),

@@ -7,48 +7,57 @@ class GameStatsForm extends React.Component {
   constructor(props) {
     super(props);
 
-
     this.state = {
-      player_1_score: '',
-      player_2_score: ''
+      player1_score: '',
+      player2_score: ''
     };
   }
 
   handleInputChangeHome(event) {
     this.setState({
-      player_1_score: event.target.value
+      player1_score: event.target.value
     });
   }
 
   handleInputChangeAway(event) {
     this.setState({
-      player_2_score: event.target.value
+      player2_score: event.target.value
     });
   }
 
   insertStats(event) {
-    var self = this;
-    var tourneyId = this.props.currentGame.tournament_id;
     event.preventDefault();
-    axios.put('/api/games', {
-      id: self.props.currentGame.id,
-      player1_score: this.state.player_1_score,
-      player2_score: this.state.player_2_score,
-      status: 'disabled'
-    })
-    .then(function() {
-      self.props.updateGames(tourneyId);
-      self.setState({
-        player_1_score: '',
-        player_2_score: ''
+
+    var tourneyId = this.props.currentGame.tournament_id;
+    var p1Score = this.state.player1_score;
+    var p2Score = this.state.player2_score;
+
+    if (p1Score === '' || p2Score === '') {
+      console.log(p1Score);
+      this.setState({
+        error: 'Did you forget Something?'
       });
-    })
-    .catch(function(err) {
-      res.status(500).send('Error Inserting Player Scores');
-    });
+    } else {
+      axios.put('/api/games', {
+        id: this.props.currentGame.id,
+        player1_score: this.state.player1_score,
+        player2_score: this.state.player2_score,
+        status: 'disabled'
+      })
+      .then(res => {
+        this.props.updateGames(tourneyId);
+        this.setState({
+          player1_score: '',
+          player2_score: '',
+          error: null
+        });
+      })
+      .catch(function(err) {
+        res.status(500).send('Error Inserting Player Scores');
+      });
+    }
   }
-            // <label htmlFor="player1_id">Home</label>
-            // <label htmlFor="player2_id" >Away</label>
+
 
   render() {
     return (
@@ -56,22 +65,26 @@ class GameStatsForm extends React.Component {
       <form className="form-inline" onSubmit={this.insertStats.bind(this)} autoComplete="off">
         <div className="row">
 
-          <div className="col-xs-10">
+          <div className="col-xs-7">
             <div className="form-group form-group-sm">
             <input type="text"
               className="form-control player1-score col-xs-2"
               id="player1_id"
-              value={this.state.player_1_score}
+              value={this.state.player1_score}
               onChange={this.handleInputChangeHome.bind(this)}
               placeholder="Home Final" />
 
             <input type="text"
               className="form-control player2-score col-xs-2"
               id="player2_id"
-              value={this.state.player_2_score}
+              value={this.state.player2_score}
               onChange={this.handleInputChangeAway.bind(this)}
               placeholder="Away Final" />
             </div>
+          </div>
+
+          <div className="col-xs-3">
+            <p className="whoops">{this.state.error}</p>
           </div>
 
           <div className="col-xs-2">

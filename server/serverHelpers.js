@@ -88,7 +88,6 @@ exports.getTable = function(tourneyId) {
         ) : (
           standings[p2].win++, standings[p1].loss++, standings[p2].points += 3, standings[p1].gd -= goalDiff, standings[p2].gd += goalDiff
         );
-
         return standings;
       }, {});
 
@@ -109,7 +108,6 @@ exports.getTable = function(tourneyId) {
             standingsObj[player.id].playerId = player.id;
             standingsArray.push(standingsObj[player.id]);
           });
-
           return standingsArray;
         })
         .catch(err => {
@@ -164,7 +162,8 @@ exports.updateGames = (req) => {
 
   //Then set the status. This also is a validation thing, if there are no scores,
     // the game is definitely not finished! Keep it created
-  var status = player2Score === null ? 'created' : req.body.status;
+  var status = req.body.status;
+
 
   return knex('games').where('id', gameId)
     .update('player1_score', player1Score)
