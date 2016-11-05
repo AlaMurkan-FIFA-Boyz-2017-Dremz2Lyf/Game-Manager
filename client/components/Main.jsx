@@ -199,10 +199,11 @@ class Main extends React.Component {
 
     // updateGameStatus takes the two games to be updated and returns a promise object
       // that we do nothing with :P, but we need to wait for that to finish before updating the games.
-    utils.updateGameStatus(toBeActive, currentActive).then(res => {
-      // Then we update the games with the current tournament id
-      self.updateGames(self.state.currentTournament.id);
-    });
+    utils.updateGameStatus(toBeActive, currentActive)
+      .then(res => {
+        // Then we update the games with the current tournament id
+        self.updateGames(self.state.currentTournament.id);
+      });
   }
 
   setCurrentTournament(index, tourneyId) {
@@ -291,26 +292,25 @@ class Main extends React.Component {
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
   updateGames(tourneyId, callback) {
-
-    var self = this;
-    utils.getGamesByTourneyId(tourneyId).then(res => {
-      self.setState({
-        currentTournamentGames: res.games,
-        currentGame: res.nextGame
-      });
-    }).then(res =>{
-      utils.getTableForTourney(tourneyId)
-        .then(res => {
-          self.setState({
-            currentTournamentTable: res
-          });
-        })
-        .catch(err => {
-          throw err;
+    utils.getGamesByTourneyId(tourneyId)
+      .then(res => {
+        this.setState({
+          currentTournamentGames: res.games,
+          currentGame: res.nextGame
         });
-    }).then(res => {
-      typeof callback === 'function' ? callback(tourneyId, self) : '';
-    });
+      }).then(res =>{
+        utils.getTableForTourney(tourneyId)
+          .then(res => {
+            this.setState({
+              currentTournamentTable: res
+            });
+          })
+          .catch(err => {
+            throw err;
+          });
+      }).then(res => {
+        typeof callback === 'function' ? callback(tourneyId, this) : '';
+      });
   }
 
   updatePlayers(tourneyId, context) {

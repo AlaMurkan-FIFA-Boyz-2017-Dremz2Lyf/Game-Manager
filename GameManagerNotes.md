@@ -152,3 +152,8 @@ ______________________________________________________________________
       - and returns a tableStats array with an object for each player
         - having the proper keys for all the data we want
       - then we set the currentTournamentTable to that array
+
+
+## Ranks DB.
+
+Redis - Automatically sorts data in the DB..... interesting... :D 

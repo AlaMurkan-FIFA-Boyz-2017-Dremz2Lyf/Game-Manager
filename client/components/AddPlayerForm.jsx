@@ -31,7 +31,7 @@ class Form extends React.Component {
       self.state.value = '';
       self.props.addPlayer();
     }).catch(function(error) {
-      console.log(error);
+      console.log('Error in posting username', error);
       self.state.noError = false;
       self.state.value = '';
       self.props.addPlayer();
