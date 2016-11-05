@@ -10,7 +10,19 @@
     "up": "knex migrate:latest",
     "down": "knex migrate:rollback"
   },
-  "author": "Scott <scotthorn0@gmail.com>",
+  "author": "Scott Charles Harris Horn <scotthorn0@gmail.com>",
+  "contributers": [
+    {
+      "name": "Scott Charles Harris Horn"
+    },
+    {
+      "name": "Ben Melito"
+    },
+    {
+      "name": "Nick Wise"
+    }
+  ],
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.15.1",
     "babel-preset-es2015": "^6.16.0",
@@ -41,7 +53,6 @@
     "boilerplate",
     "browserify",
     "express",
-    "mithril"
   ],
   "bugs": {
     "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager/issues"
