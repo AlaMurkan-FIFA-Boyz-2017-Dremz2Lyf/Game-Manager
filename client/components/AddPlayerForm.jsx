@@ -7,14 +7,13 @@ class Form extends React.Component {
     super(props);
 
     this.state = {
-      value: '',
       noError: true
     };
   }
 
   handleInputChange(event) {
     this.setState({
-      value: event.target.value
+      playerName: event.target.value
     });
   }
 
@@ -22,19 +21,26 @@ class Form extends React.Component {
   //refreshing, posts the new user to the database, then displays this new user in the player list.
   //If the username already exists in the database it will display an error on the page.
   addNewPlayer(event) {
-    var self = this;
+    var context = this;
+    console.log(this.state);
     event.preventDefault();
+
+    var playerName = this.state.playerName.toUpperCase();
+
     axios.post('/api/player', {
-      username: this.state.value
-    }).then(function(res) {
-      self.state.noError = true;
-      self.state.value = '';
-      self.props.addPlayer();
-    }).catch(function(error) {
+      username: playerName
+    }).then(res => {
+      context.setState({
+        noError: true,
+        playerName: ''
+      });
+      context.props.updatePlayers();
+    }).catch(error => {
       console.log('Error in posting username', error);
-      self.state.noError = false;
-      self.state.value = '';
-      self.props.addPlayer();
+      context.setState({
+        noError: false,
+        playerName: ''
+      });
     });
   }
 

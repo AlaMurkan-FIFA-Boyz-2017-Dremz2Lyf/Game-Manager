@@ -6,13 +6,15 @@ var Game = (props) => {
 
   return (
     <li className={'list-group-item ' + props.thisGame.status} onClick={function() { props.setCurrentGame(props.thisGame, props.activeGame); }}>
-      <span className="player1">{props.player1_name}</span>
-      <span className="score">
-        <span className="player1_score">{props.thisGame.player1_score}</span>
-        -
-        <span className="player2_score">{props.thisGame.player2_score}</span>
-      </span>
-      <span className="player2">{props.player2_name}</span>
+      <div className="row">
+        <div className="player1 col-xs-4">{props.player1_name}</div>
+        <div className="score col-xs-4">
+          <span className="player1_score">{props.thisGame.player1_score}</span>
+          -
+          <span className="player2_score">{props.thisGame.player2_score}</span>
+        </div>
+        <div className="player2 col-xs-4">{props.player2_name}</div>
+      </div>
     </li>
   );
 };

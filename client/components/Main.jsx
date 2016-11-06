@@ -65,14 +65,13 @@ class Main extends React.Component {
     });
   }
 
-  addPlayer() {
-    // get some 'this' binding
-    var self = this;
+  updatePlayers() {
     // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
+    console.log(this.state);
     utils.getAllPlayers(this.state).then(res => {
       // It returns a promise object that resolves with the list of players filtered
         // against players already in the tournament list. We set this to state.
-      self.setState({
+      this.setState({
         allPlayersList: res
       });
     });
@@ -216,7 +215,7 @@ class Main extends React.Component {
       currentTournament: this.state.ongoingTournamentsList[index]
     });
     // When we have a currentTournament, update the games and players.
-    this.updateGames(tourneyId, this.updatePlayers);
+    this.updateGames(tourneyId, this.updatePlayerNames);
 
   }
 
@@ -313,7 +312,7 @@ class Main extends React.Component {
       });
   }
 
-  updatePlayers(tourneyId, context) {
+  updatePlayerNames(tourneyId, context) {
     // After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
     // Slight change here, by adding a dictionary we can make this process O(n) instead of O(2^n).
     var dictionary = {};
@@ -508,7 +507,7 @@ class Main extends React.Component {
             <div className="col-xs-1"></div>
             <div className="col-xs-4">
                 <h3>ADD PLAYER</h3>
-                <AddPlayerForm addPlayer={this.addPlayer.bind(this)} />
+                <AddPlayerForm updatePlayers={this.updatePlayers.bind(this)} />
             </div>
             <div className="col-xs-7"></div>
           </div>

@@ -1,12 +1,12 @@
 .player1 {
-  float: left;
-  margin-left: 20px;
+  text-align: left;
 }
 
+input#player1_id, input#player2_id {
+  width: 70px;
+}
 .player2 {
-  float: right;
-  margin-right: 20px;
-
+  text-align: right;
 }
 
 .game {
