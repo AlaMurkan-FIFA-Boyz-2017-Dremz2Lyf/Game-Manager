@@ -166,6 +166,7 @@ routes.get('/api/table/', function(req, res) {
 
   helpers.getTable(req.query.id)
   .then(function(response) {
+    console.log('response from getting table', res)
     res.status(200).send(response);
   }).catch(function(err) {
     res.status(500).send(err);

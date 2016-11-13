@@ -23,14 +23,16 @@ class StartTournament extends React.Component {
     event.preventDefault();
     this.props.createTournament(this.state.tourneyName)
     .then(function(res) {
+      console.log('starttourney function', res)
       self.setState({
         error: null
       });
     })
     .catch(function(err) {
-      self.setState({
-        error: err.response.data.message
-      });
+      console.log('error in startTourney function', err)
+      // self.setState({
+      //   error: err.response.data.message
+      // });
     });
 
   }

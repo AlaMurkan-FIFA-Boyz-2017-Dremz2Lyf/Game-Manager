@@ -55,8 +55,9 @@ exports.createGamesForTourney = function(req) {
 
 exports.getTable = function(tourneyId) {
 
-  return knex('games').where('tournament_id', tourneyId)
+  return knex('games').where('tournament_id', tourneyId) //Currently throwing an error, need to fix
     .then(function(games) {
+      console.log('getting games response', games)
       var standingsObj = games.filter(game =>
         game.player1_score !== null
       ).reduce(function(standings, currGame) {
@@ -87,6 +88,7 @@ exports.getTable = function(tourneyId) {
         ) : (
           standings[p2].win++, standings[p1].loss++, standings[p2].points += 3, standings[p1].gd -= goalDiff, standings[p2].gd += goalDiff
         );
+        console.log(standings)
         return standings;
       }, {});
 
@@ -177,7 +179,9 @@ exports.makePlayer = function(req) {
 };
 
 exports.makeTourney = function(tourneyName) {
-  return knex('tournaments').insert({
+  return knex('tournaments')
+  .returning('id') //Needed for Postgres, when using sqlite3 not necessary
+  .insert({
     tournament_name: tourneyName
   });
 };

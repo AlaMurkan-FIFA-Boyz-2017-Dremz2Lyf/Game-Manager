@@ -109,6 +109,7 @@ exports.getTableForTourney = function(tourneyId) {
     });
     return table;
   }).catch(function(err) {
+    console.log('error in getting table', err)
     throw err;
   });
 };

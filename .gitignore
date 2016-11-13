@@ -6,3 +6,6 @@ database.sqlite3
 
 #bundle
 bundle.js
+
+#Some Postgres stuff ben might know more about
+.DS_Store

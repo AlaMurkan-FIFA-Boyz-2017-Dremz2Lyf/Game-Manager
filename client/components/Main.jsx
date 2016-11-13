@@ -92,8 +92,8 @@ class Main extends React.Component {
     }).then(function(response) {
       // response.data holds an array with one number in it
         // this number is the tournamentId
+      var tourneyId = response.data[0]
       var tourneyName = (JSON.parse(response.config.data).tournament_name)
-      console.log(response)
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
           .then(res => {
@@ -107,6 +107,7 @@ class Main extends React.Component {
               // This is not a problem right now, but in the future.
             utils.getTableForTourney(tourneyId)
             .then(res => {
+              console.log('getting table for tourney response', res)
               // set the currentTournament key on state to an object with the id and name
               context.setState({
                 currentTournamentTable: res
@@ -135,6 +136,7 @@ class Main extends React.Component {
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     return utils.postGames(tourneyId, list)
       .then(function(response) {
+        console.log('response after posting games', response)
         // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
         utils.getGamesByTourneyId(tourneyId).then(function(res) {
           self.setState({
