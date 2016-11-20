@@ -9,3 +9,60 @@ FATAL:  database "database" does not exist
 FATAL:  database "database" does not exist
 FATAL:  database "database" does not exist
 FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  lock file "postmaster.pid" already exists
+HINT:  Is another postmaster (PID 4267) running in data directory "/Users/benmelito/Desktop/Game-Manager/PGDATA"?
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "database" does not exist
+FATAL:  role "DATABASE" does not exist
+FATAL:  database "benmelito" does not exist
+FATAL:  database "database" does not exist
+FATAL:  role "database" does not exist
+FATAL:  role "database" does not exist
+FATAL:  database "benmelito" does not exist
+FATAL:  database "database" does not exist
+FATAL:  database "?" does not exist
+FATAL:  database "benmelito" does not exist
+FATAL:  database "benmelito" does not exist
+FATAL:  database "benmelito" does not exist
+FATAL:  lock file "postmaster.pid" already exists
+HINT:  Is another postmaster (PID 4267) running in data directory "/Users/benmelito/Desktop/Game-Manager/PGDATA"?
+LOG:  received fast shutdown request
+LOG:  aborting any active transactions
+LOG:  autovacuum launcher shutting down
+LOG:  shutting down
+LOG:  database system is shut down
+LOG:  database system was shut down at 2016-11-19 18:38:26 CST
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+LOG:  received fast shutdown request
+LOG:  aborting any active transactions
+LOG:  autovacuum launcher shutting down
+LOG:  shutting down
+LOG:  database system is shut down
+FATAL:  lock file "postmaster.pid" already exists
+HINT:  Is another postmaster (PID 6892) running in data directory "/Users/benmelito/Desktop/Game-Manager/PGDATA"?
+LOG:  database system was shut down at 2016-11-19 18:43:12 CST
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+FATAL:  role "postgres" does not exist
+FATAL:  role "postgres" does not exist
+ERROR:  database "database" already exists
+STATEMENT:  CREATE DATABASE database;
+FATAL:  database "benmelito" does not exist
+LOG:  received fast shutdown request
+LOG:  aborting any active transactions
+LOG:  autovacuum launcher shutting down
+FATAL:  terminating connection due to administrator command
+LOG:  shutting down
+LOG:  database system is shut down
