@@ -8,4 +8,5 @@ database.sqlite3
 bundle.js
 
 #Some Postgres stuff ben might know more about
+PGDATA/
 .DS_Store

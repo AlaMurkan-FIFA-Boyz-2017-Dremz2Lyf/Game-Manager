@@ -99,6 +99,7 @@ exports.getGamesByTourneyId = function(tourneyId) {
 };
 
 exports.getTableForTourney = function(tourneyId) {
+  console.log('get table for tourney', tourneyId)
   return axios.get('/api/table', {
     params: {
       id: tourneyId

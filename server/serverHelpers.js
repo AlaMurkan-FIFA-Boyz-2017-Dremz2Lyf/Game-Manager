@@ -57,7 +57,6 @@ exports.getTable = function(tourneyId) {
 
   return knex('games').where('tournament_id', tourneyId) //Currently throwing an error, need to fix
     .then(function(games) {
-      console.log('getting games response', games)
       var standingsObj = games.filter(game =>
         game.player1_score !== null
       ).reduce(function(standings, currGame) {
@@ -88,20 +87,21 @@ exports.getTable = function(tourneyId) {
         ) : (
           standings[p2].win++, standings[p1].loss++, standings[p2].points += 3, standings[p1].gd -= goalDiff, standings[p2].gd += goalDiff
         );
-        console.log(standings)
+        console.log('STANDINGS', standings)
         return standings;
       }, {});
 
-      var idString = '';
+      var playerIDs = Object.keys(standingsObj)
 
-      for (key in standingsObj) {
-        idString += ('-' + key);
-      }
+      // for (key in standingsObj) {
+      //   idString += ('-' + key);
+      // }
 
+      console.log('Player IDs', playerIDs)
       // getAllPlayers function was made to accept a query string from a put request.
         // So we need to convert our array of player ids into a string with each
         // id separated by a '-' (dash).
-      return exports.getAllPlayers(idString)
+      return exports.getAllPlayers(playerIDs)
         .then(playersArray => {
           var standingsArray = [];
           playersArray.forEach(player => {
@@ -112,6 +112,7 @@ exports.getTable = function(tourneyId) {
           return standingsArray;
         })
         .catch(err => {
+          console.log('Error in serverHelpers')
           throw err;
         });
 
@@ -138,9 +139,8 @@ exports.setGameStatus = function(req, res) {
   });
 };
 
-exports.getAllPlayers = function(stringOfIds) {
-  if (stringOfIds) {
-    var arrayOfIds = stringOfIds.split('-');
+exports.getAllPlayers = function(arrayOfIds) {
+  if (arrayOfIds) {
     return knex('players').whereIn('id', arrayOfIds);
   } else {
     return knex('players').select();

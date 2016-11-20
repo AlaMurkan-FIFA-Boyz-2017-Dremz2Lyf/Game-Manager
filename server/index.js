@@ -33,7 +33,10 @@ routes.get('/', function(req, res) {
   // NOTE: Routes for players
 
 routes.get('/api/player', function(req, res) {
-  helpers.getAllPlayers(req.query.tournament_players)
+  if (req.query.tournament_players){
+    var playerArr = req.query.tournament_players.split('-')
+  }
+  helpers.getAllPlayers(playerArr)
     .then(players => {
       res.status(200).send(players);
     })
@@ -163,12 +166,12 @@ routes.put('/api/games', function(req, res) {
   // NOTE: Route for the table
 
 routes.get('/api/table/', function(req, res) {
-
-  helpers.getTable(req.query.id)
+  helpers.getTable(Number(req.query.id))
   .then(function(response) {
-    console.log('response from getting table', res)
+    console.log('response from getting table', response)
     res.status(200).send(response);
   }).catch(function(err) {
+    console.log('ERROR',err)
     res.status(500).send(err);
   });
 });
