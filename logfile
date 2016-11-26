@@ -66,3 +66,8 @@ LOG:  autovacuum launcher shutting down
 FATAL:  terminating connection due to administrator command
 LOG:  shutting down
 LOG:  database system is shut down
+LOG:  database system was shut down at 2016-11-19 18:56:03 CST
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+FATAL:  role "*" does not exist
