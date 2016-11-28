@@ -1,2 +1,8 @@
+#node modules
 node_modules/
+
+#database
 database.sqlite3
+
+#bundle
+bundle.js

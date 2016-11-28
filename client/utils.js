@@ -132,3 +132,7 @@ exports.filterToUniquePlayers = (playersList) => {
 
   return uniqueList;
 };
+
+exports.formatName = (name) => (
+  name.split('').map((letter, index) => index === 0 ? letter.toUpperCase() : letter.toLowerCase() ).join('')
+);
