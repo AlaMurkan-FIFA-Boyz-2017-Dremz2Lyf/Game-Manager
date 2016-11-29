@@ -3,6 +3,8 @@ var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
 var helpers = require('./serverHelpers.js');
+var bodyParser = require('body-parser');
+
 
 var routes = express.Router();
 
@@ -16,18 +18,14 @@ var knex = require('knex')({
   useNullAsDefault: true
 });
 
-//
-// Provide a browserified file at a specified path
-//
-routes.get('/app-bundle.js',
-  browserify('./client/app.js', {
-    transform: [ require('reactify') ]
-  }));
+routes.use(bodyParser.json());
 
+routes.use(express.static(Path.join(__dirname, 'public')));
 
+console.log(Path.join(__dirname, './public/index.html'));
 // Home page
 routes.get('/', function(req, res) {
-  res.sendFile(Path.resolve('client/public/index.html'));
+  // res.sendFile(Path.join(__dirname, './public/index.html'));
 });
 
 

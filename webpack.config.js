@@ -3,14 +3,9 @@ const path = require('path');
 
 // settings for all environments
 const commonConfig = {
-  entry: [
-    'webpack-dev-server/client?http://localhost:4000',
-    'webpack/hot/only-dev-server',
-    './client/app.js'
-  ],
-
+  entry: './client/app.js',
   output: {
-    path: path.resolve(__dirname, '/client'),
+    path: './server/public',
     filename: 'bundle.js'
   },
 
@@ -24,10 +19,6 @@ const commonConfig = {
         test: /\.jsx?/,
         exclude: /node_modules/,
         loader: 'babel',
-        include: __dirname,
-        query: {
-          presets: [ 'es2015', 'react', 'react-hmre' ]
-        }
       }
     ]
   }
@@ -35,10 +26,12 @@ const commonConfig = {
 
 // development settings
 const devConfig = {
-  devtool: 'source-maps',
-  plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ]
+  devtool: 'source-map',
+  devServer: {
+    inline: true,
+    historyApiFallback: true,
+    contentBase: './server/public/'
+  }
 };
 
 // production settings

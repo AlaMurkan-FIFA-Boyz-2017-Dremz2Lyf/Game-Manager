@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "prestart": "knex migrate:rollback | knex migrate:latest",
-    "webpack": "webpack --process --colors --watch",
+    "build:watch": "webpack --watch --devtool inline-source-map",
     "start": "nodemon server/ --ignore client/",
     "test": "./test/run.sh",
     "up": "knex migrate:latest",
@@ -27,14 +27,14 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.15.1",
-    "babel-preset-es2015": "^6.16.0",
+    "babel-core": "^6.18.2",
     "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-react-hmre": "^1.1.1",
-    "babel-core": "^6.18.2",
     "babelify": "^7.3.0",
     "bluebird": "^3.2.2",
-    "body-parser": "^1.14.1",
+    "body-parser": "^1.15.2",
     "browserify-middleware": "^7.0.0",
     "express": "^4.14.0",
     "knex": "^0.12.5",
@@ -60,8 +60,8 @@
     "url": "https://github.com/AlaMurkan-FIFA-Boyz-2017-Dremz2Lyf/Game-Manager"
   },
   "keywords": [
-    "boilerplate",
-    "browserify",
+    "react",
+    "webpack",
     "express"
   ],
   "bugs": {
