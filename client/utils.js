@@ -44,10 +44,10 @@ exports.getAllPlayers = function(state) {
 exports.getOngoingTournaments = function() {
   return axios.get('/api/tournaments')
     .then(function(tourneys) {
-      //Here we take the existing tournaments and filter out the possible blank tournament since currently
-      //one tournament can be created with a blank name.
+      // Here we take the existing tournaments and filter out the possible blank tournament since currently
+        // one tournament can be created with a blank name.
       var existingTourneys = tourneys.data;
-      return noBlankTourney = existingTourneys.filter(function(tourn) {
+      return existingTourneys.filter(function(tourn) {
         return tourn.tournament_name !== '';
       });
     })
@@ -132,3 +132,7 @@ exports.filterToUniquePlayers = (playersList) => {
 
   return uniqueList;
 };
+
+exports.formatName = (name) => (
+  name.split('').map((letter, index) => index === 0 ? letter.toUpperCase() : letter.toLowerCase() ).join('')
+);

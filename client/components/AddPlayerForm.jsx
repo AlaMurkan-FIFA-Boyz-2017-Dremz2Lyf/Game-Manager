@@ -1,13 +1,15 @@
-var React = require('react');
-var axios = require('axios');
+import React from 'react'
+import axios from 'axios';
+import utils from '../utils';
 
 class Form extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
-      noError: true
+      noError: true,
+      playerName: ''
     };
   }
 
@@ -17,69 +19,47 @@ class Form extends React.Component {
     });
   }
 
-  //When Add User Form is filled out this function will be called onSubmit. Prevents the page from
-  //refreshing, posts the new user to the database, then displays this new user in the player list.
-  //If the username already exists in the database it will display an error on the page.
+  // When Add User Form is filled out this function will be called onSubmit. Prevents the page from
+    // refreshing, posts the new user to the database, then displays this new user in the player list.
+  // If the username already exists in the database it will display an error on the page.
   addNewPlayer(event) {
-    var context = this;
-    console.log(this.state);
+
     event.preventDefault();
 
-    var playerName = this.state.playerName.toUpperCase();
+    var playerName = utils.formatName(this.state.playerName);
 
     axios.post('/api/player', {
       username: playerName
     }).then(res => {
-      context.setState({
-        noError: true,
+      this.setState({
+        error: '',
         playerName: ''
       });
-      context.props.updatePlayers();
+      this.props.updatePlayers();
     }).catch(error => {
-      console.log('Error in posting username', error);
-      context.setState({
-        noError: false,
+      this.setState({
+        error: 'Oops, that name is taken! Try again!',
         playerName: ''
       });
     });
   }
 
   render() {
-    if (this.state.noError) {
-      return (
 
+    return (
         <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} autoComplete="off">
           <div className="form-group">
             <input type="text"
               className="form-control user-form"
               id="username"
-              value={this.state.value}
+              value={this.state.playerName}
               placeholder="Add User"
               onChange={this.handleInputChange.bind(this)} />
           </div>
           <button type="submit" className="btn btn-default">ADD</button>
+          <p className="user-oops">{this.state.error}</p>
         </form>
-
       );
-
-    } else {
-      return (
-
-        <form className="form-inline" onSubmit={this.addNewPlayer.bind(this)} autoComplete="off">
-          <div className="form-group">
-            <input type="text"
-              className="form-control user-form"
-              id="username"
-              value={this.state.value}
-              placeholder="Please try again"
-              onChange={this.handleInputChange.bind(this)} />
-          </div>
-          <button type="submit" className="btn btn-danger player-exists-btn">USER EXISTS</button>
-          <p className="user-oops">Oops, that name is taken! Try again!</p>
-        </form>
-
-      );
-    }
   }
 }
 

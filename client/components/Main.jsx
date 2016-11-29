@@ -67,7 +67,6 @@ class Main extends React.Component {
 
   updatePlayers() {
     // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
-    console.log(this.state);
     utils.getAllPlayers(this.state).then(res => {
       // It returns a promise object that resolves with the list of players filtered
         // against players already in the tournament list. We set this to state.
