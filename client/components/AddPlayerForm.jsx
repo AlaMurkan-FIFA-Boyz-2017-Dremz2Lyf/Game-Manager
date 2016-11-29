@@ -1,11 +1,11 @@
-var React = require('react');
-var axios = require('axios');
-var utils = require('../utils.js');
+import React from 'react'
+import axios from 'axios';
+import utils from '../utils';
 
 class Form extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       noError: true,
@@ -19,9 +19,9 @@ class Form extends React.Component {
     });
   }
 
-  //When Add User Form is filled out this function will be called onSubmit. Prevents the page from
-  //refreshing, posts the new user to the database, then displays this new user in the player list.
-  //If the username already exists in the database it will display an error on the page.
+  // When Add User Form is filled out this function will be called onSubmit. Prevents the page from
+    // refreshing, posts the new user to the database, then displays this new user in the player list.
+  // If the username already exists in the database it will display an error on the page.
   addNewPlayer(event) {
 
     event.preventDefault();
