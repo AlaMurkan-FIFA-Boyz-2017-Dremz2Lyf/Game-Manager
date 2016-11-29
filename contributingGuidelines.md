@@ -1,50 +1,92 @@
-# gitGeneral Workflow
+Guidelines
+=========
+
+1. Uphold the current code standard:
+  - Keep your code [DRY][].
+  - Apply the [boy scout rule][].
+  - Follow [STYLE-GUIDE.md](STYLE-GUIDE.md)
+1. Run the [tests][] before submitting a pull request.
+1. Tests are very, very important. Submit tests if your pull request contains
+new, testable behavior.
+1. Your pull request is comprised of a single ([squashed][]) commit.
+
+
+gitGeneral Workflow
+------
 
 1. Clone down the master directly (do not fork):
 
-  -> git clone masterURL yourdirectory
+  ```
+  $ git clone masterURL yourdirectory
+  ```
 
 2. Create a new feature branch from master, If it's a new feature, name the branch "featureDescription". If it's a bug fix, name the branch "bugFixDescription".
 
-  -> git checkout -b featureDescription  OR  -> git checkout -b bugFixDescription
+  ```
+  $ git checkout -b featureDescription  
+  ```
 
-3. Make changes and stage them for a commit to your feature branch.
+  OR  
 
-  -> git add -p
+  ```
+  $ git checkout -b bugFixDescription
+  ```
 
-4. Commit changes (see commit message guidelines below)  
+3. Repeat This cycle for every commit
 
-  -> git commit -m 'message'
+  1. Make changes and stage them for a commit to your feature branch.
 
-5. Ensure your remote master is up to date:
+    ```
+    $ git add -p
+    ```
 
-  -> git checkout master
-  -> git pull
+  2. Commit changes (see commit message guidelines below)  
 
-6. Go back to your feature branch:
+    ```
+    $ git commit -m 'message'
+    ```
 
-  -> git checkout branchname
+  3. Ensure your remote master is up to date:
 
-7. Sync up with latest master before pushing to remote feature branch:
+    ```
+    $ git checkout master
+    ```
 
-  -> git pull --rebase origin master
+    ```
+    $ git pull
+    ```
 
-8. Fix any merge conflicts if necessary.
+  4. Go back to your feature branch:
 
-9. Push changes to remote feature branch:
+    ```
+    $ git checkout branchname
+    ```
 
-  -> git push origin branchname
+  5. Sync up with latest master before pushing to remote feature branch:
 
-10. Generate pull request on GitHub:
+    ```
+    $ git pull --rebase origin master
+    ```
+
+  6. Fix any merge conflicts if necessary.
+    * If you have more work to do, go back to 3.1. If you are finished move to 4.
+
+4. Push changes to remote feature branch:
+
+  ```
+  $ git push origin branchname
+  ```
+
+5. Generate pull request on GitHub:
 
   ensure base: master
   ensure compare: branchname
 
-11. Fix any issues highlighted by reviewer if necessary.
+6. Fix any issues highlighted by reviewer if necessary.
 
-12. When everything checks out, reviewer merges pull request to master.
+7. When everything checks out, reviewer merges pull request to master.
 
-13. When a pull request is merged and closed, delete branchname branch.
+8. When a pull request is merged and closed, delete branchname branch.
 
 
 
@@ -53,10 +95,10 @@
 ### Cut a namespaced feature branch from master
 
 Your branch should follow this naming convention:
-  - bugFixDescription
-  - featureDescription
-  - docDescription
-  - refactorDescription
+  - [issue#]-bug/Description
+  - [issue#]-feat/Description
+  - [issue#]-doc/Description
+  - [issue#]-cleanUp/Description
 
 These commands will help you do this:
 
@@ -128,16 +170,6 @@ else, just repeat again.
 
 Thanks for contributing!
 
-### Guidelines
-
-1. Uphold the current code standard:
-    - Keep your code [DRY][].
-    - Apply the [boy scout rule][].
-    - Follow [STYLE-GUIDE.md](STYLE-GUIDE.md)
-1. Run the [tests][] before submitting a pull request.
-1. Tests are very, very important. Submit tests if your pull request contains
-   new, testable behavior.
-1. Your pull request is comprised of a single ([squashed][]) commit.
 
 ## Checklist:
 
