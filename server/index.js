@@ -4,19 +4,18 @@ var express = require('express');
 var Path = require('path');
 var helpers = require('./serverHelpers.js');
 var bodyParser = require('body-parser');
-var db = require('./db')
-
+var db = require('./db');
 
 var routes = express.Router();
 
 routes.use( require('body-parser').json() );
 
 var knex = require('knex')({
-    client: 'postgresql',
-    connection: {
-      database: 'database'
-    }
-  })
+  client: 'postgresql',
+  connection: {
+    database: 'database'
+  }
+});
 
 routes.use(bodyParser.json());
 
@@ -33,8 +32,8 @@ routes.get('/', function(req, res) {
   // NOTE: Routes for players
 
 routes.get('/api/player', function(req, res) {
-  if (req.query.tournament_players){
-    var playerArr = req.query.tournament_players.split('-')
+  if (req.query.tournament_players) {
+    var playerArr = req.query.tournament_players.split('-');
   }
   helpers.getAllPlayers(playerArr)
     .then(players => {
@@ -168,10 +167,9 @@ routes.put('/api/games', function(req, res) {
 routes.get('/api/table/', function(req, res) {
   helpers.getTable(Number(req.query.id))
   .then(function(response) {
-    console.log('response from getting table', response)
     res.status(200).send(response);
   }).catch(function(err) {
-    console.log('ERROR',err)
+    console.log('ERROR', err);
     res.status(500).send(err);
   });
 });

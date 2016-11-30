@@ -33,7 +33,6 @@ class GameStatsForm extends React.Component {
     var p2Score = this.state.player2_score;
 
     if (p1Score === '' || p2Score === '') {
-      console.log(p1Score);
       this.setState({
         error: 'Did you forget Something?'
       });

@@ -4,11 +4,11 @@
 
 
 var knex = require('knex')({
-    client: 'postgresql',
-    connection: {
-      database: 'database'
-    }
-  })
+  client: 'postgresql',
+  connection: {
+    database: 'database'
+  }
+});
 
 exports.createGamesForTourney = function(req) {
   // games array will be returned by this function
@@ -87,17 +87,16 @@ exports.getTable = function(tourneyId) {
         ) : (
           standings[p2].win++, standings[p1].loss++, standings[p2].points += 3, standings[p1].gd -= goalDiff, standings[p2].gd += goalDiff
         );
-        console.log('STANDINGS', standings)
+
         return standings;
       }, {});
 
-      var playerIDs = Object.keys(standingsObj)
+      var playerIDs = Object.keys(standingsObj);
 
       // for (key in standingsObj) {
       //   idString += ('-' + key);
       // }
 
-      console.log('Player IDs', playerIDs)
       // getAllPlayers function was made to accept a query string from a put request.
         // So we need to convert our array of player ids into a string with each
         // id separated by a '-' (dash).
@@ -112,7 +111,6 @@ exports.getTable = function(tourneyId) {
           return standingsArray;
         })
         .catch(err => {
-          console.log('Error in serverHelpers')
           throw err;
         });
 

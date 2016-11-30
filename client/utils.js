@@ -99,7 +99,6 @@ exports.getGamesByTourneyId = function(tourneyId) {
 };
 
 exports.getTableForTourney = function(tourneyId) {
-  console.log('get table for tourney', tourneyId)
   return axios.get('/api/table', {
     params: {
       id: tourneyId
@@ -110,7 +109,7 @@ exports.getTableForTourney = function(tourneyId) {
     });
     return table;
   }).catch(function(err) {
-    console.log('error in getting table', err)
+    console.log('error in getting table', err);
     throw err;
   });
 };

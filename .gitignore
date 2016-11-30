@@ -10,3 +10,5 @@ bundle.js
 #Some Postgres stuff ben might know more about
 PGDATA/
 .DS_Store
+database.sqlite3
+server/public
