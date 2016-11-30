@@ -12,3 +12,4 @@ PGDATA/
 .DS_Store
 database.sqlite3
 server/public
+*.orig
