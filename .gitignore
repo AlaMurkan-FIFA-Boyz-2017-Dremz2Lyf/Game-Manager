@@ -7,9 +7,13 @@ database.sqlite3
 #bundle
 bundle.js
 
-#Some Postgres stuff ben might know more about
+#Some Postgres stuff Ben probably knows more about
 PGDATA/
 .DS_Store
 database.sqlite3
-server/public
+players
+tournaments
+logfile
+
+#Merge Conflict files
 *.orig

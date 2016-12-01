@@ -3,7 +3,6 @@ var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
 var helpers = require('./serverHelpers.js');
-var bodyParser = require('body-parser');
 var db = require('./db');
 
 var routes = express.Router();
@@ -16,8 +15,6 @@ var knex = require('knex')({
     database: 'database'
   }
 });
-
-routes.use(bodyParser.json());
 
 routes.use(express.static(Path.join(__dirname, 'public')));
 
@@ -177,7 +174,7 @@ routes.get('/api/table/', function(req, res) {
 //
 // Static assets (html, etc.)
 //
-var assetFolder = Path.resolve(__dirname, '../client/public');
+var assetFolder = Path.resolve(__dirname, '../server/public');
 routes.use(express.static(assetFolder));
 
 

@@ -28,9 +28,8 @@ class StartTournament extends React.Component {
       });
     })
     .catch(function(err) {
-      console.log('error in startTourney', err);
       self.setState({
-        error: true
+        error: err.response.data.message
       });
     });
 
