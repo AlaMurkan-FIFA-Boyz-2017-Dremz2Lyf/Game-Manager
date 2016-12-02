@@ -4,13 +4,11 @@
   "description": "FIFA tournament manager",
   "main": "server/index.js",
   "scripts": {
-    "prestart": "knex migrate:rollback | knex migrate:latest",
     "build:watch": "webpack --watch --devtool inline-source-map",
-    "start": "nodemon server/ --ignore client/",
+    "start:dev": "nodemon server/ --ignore client/",
     "test": "./test/run.sh",
-    "up": "knex migrate:latest",
-    "down": "knex migrate:rollback",
-    "dev": "webpack-dev-server --inline --history-api-fallback --content-base client/public"
+    "start": "node server/ --ignore client/",
+    "build": "webpack"
   },
   "author": "Scott Charles Harris Horn <scotthorn0@gmail.com>",
   "contributors": [
