@@ -2,22 +2,47 @@
 
 Game Manager is an app for managing a local (offline) competition. Currently designed around FIFA (the video game, not the corrupt worldwide body responsible for managing the beautiful game known as, and rightfully called, football) with the intent of keeping records of players and handling the planning and organizing of round robin style tournaments between friends.
 
+## Getting Started
+
+First you will need to make sure you have PostgreSQL installed on your computer.
+  * Note: Postgres.app is an awesome easy tool to run your postgres server. It is recommended for ease of use.
+
+  [PostGres for Mac]: https://www.postgresql.org/download/macosx/
+
+Then install the dependencies:
+
+`npm install`
+
+Then create your PSQL database
+
+`createdb -h localhost -p 5432 -U {your mac username here} database`
+
+Next bundle everything up with webpack (development)
+
+`npm run build:watch`
+
+Finally start the server
+
+`npm start`
+
+and visit localhost:4000!
+
 ## Stack
-  - Database
-    - We used knex with sqlite3 to build our database
+  - PostgreSQL
+    - Knex
     - The database has three tables currently
       - Games
         - Holds every game ever played!
-        - Every game has a Foreign Key to each player, and the the tournament it is in
+        - Every game has Foreign Keys to both players, and the the tournament it is associated with.
       - Players
-        - Basic username and ID table
+        - Basic username and ID table, will eventually grow as login and other account features are implimented.
       - Tournaments
-        - Holds the Tournament name, ID, and the winner of that tournament
+        - Holds the Tournament name, ID, and the winner of that tournament.
   - Express on Node
     - Our server is running express for easy route handling because.. what else would you do?
   - React
     - The front end is handled with React and a list of components and what they do in the app is below
-  - Deploy with Heroku
+
 
 
 ## React Components
@@ -70,11 +95,12 @@ Game Manager is an app for managing a local (offline) competition. Currently des
     - [ ] Possession
     - [ ] Shots on Goal
     - [ ] Moar?
-  - [ ] Refactor to use PostgreSQL.... 
+  - [ ] Refactor to use PostgreSQL....
   - [ ] For the list of existing players on the landing page, add a customized (soccer ball?) badge with the count of how many tournament that player has Won
     Something like this if you could replace the badge with an image?
       `<li class="list-group-item">New <span class="badge">12</span></li>`
   - [ ] Some sort of (better) Congratulations to the winner when you end a tournament.
+    - [ ] Customized SweetAlerts would seem to be the money ticket here.
   - [x] Possible to create multiple tournaments without logins?
     - [x] home page shows every tournament and expand on selection?
   - [ ] Doubles tournaments
