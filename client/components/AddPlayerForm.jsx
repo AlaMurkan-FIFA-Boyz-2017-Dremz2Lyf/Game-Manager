@@ -41,6 +41,7 @@ class Form extends React.Component {
         error: 'Oops, that name is taken! Try again!',
         playerName: ''
       });
+      console.log('Error in posting username', error);
     });
   }
 

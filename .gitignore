@@ -6,3 +6,14 @@ database.sqlite3
 
 #bundle
 bundle.js
+
+#Some Postgres stuff Ben probably knows more about
+PGDATA/
+.DS_Store
+database.sqlite3
+players
+tournaments
+logfile
+
+#Merge Conflict files
+*.orig

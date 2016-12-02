@@ -4,11 +4,10 @@
 
 
 var knex = require('knex')({
-  client: 'sqlite3',
+  client: 'postgresql',
   connection: {
-    filename: './database.sqlite3'
-  },
-  useNullAsDefault: true
+    database: 'database'
+  }
 });
 
 exports.createGamesForTourney = function(req) {
@@ -56,7 +55,7 @@ exports.createGamesForTourney = function(req) {
 
 exports.getTable = function(tourneyId) {
 
-  return knex('games').where('tournament_id', tourneyId)
+  return knex('games').where('tournament_id', tourneyId) //Currently throwing an error, need to fix
     .then(function(games) {
       var standingsObj = games.filter(game =>
         game.player1_score !== null
@@ -88,19 +87,20 @@ exports.getTable = function(tourneyId) {
         ) : (
           standings[p2].win++, standings[p1].loss++, standings[p2].points += 3, standings[p1].gd -= goalDiff, standings[p2].gd += goalDiff
         );
+
         return standings;
       }, {});
 
-      var idString = '';
+      var playerIDs = Object.keys(standingsObj);
 
-      for (key in standingsObj) {
-        idString += ('-' + key);
-      }
+      // for (key in standingsObj) {
+      //   idString += ('-' + key);
+      // }
 
       // getAllPlayers function was made to accept a query string from a put request.
         // So we need to convert our array of player ids into a string with each
         // id separated by a '-' (dash).
-      return exports.getAllPlayers(idString)
+      return exports.getAllPlayers(playerIDs)
         .then(playersArray => {
           var standingsArray = [];
           playersArray.forEach(player => {
@@ -137,9 +137,8 @@ exports.setGameStatus = function(req, res) {
   });
 };
 
-exports.getAllPlayers = function(stringOfIds) {
-  if (stringOfIds) {
-    var arrayOfIds = stringOfIds.split('-');
+exports.getAllPlayers = function(arrayOfIds) {
+  if (arrayOfIds) {
     return knex('players').whereIn('id', arrayOfIds);
   } else {
     return knex('players').select();
@@ -178,7 +177,9 @@ exports.makePlayer = function(req) {
 };
 
 exports.makeTourney = function(tourneyName) {
-  return knex('tournaments').insert({
+  return knex('tournaments')
+  .returning('id') //Needed for Postgres, when using sqlite3 not necessary
+  .insert({
     tournament_name: tourneyName
   });
 };

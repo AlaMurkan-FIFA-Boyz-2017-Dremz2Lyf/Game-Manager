@@ -54,7 +54,6 @@ class StartTournament extends React.Component {
           <p className="tourney-oops">{this.state.error}</p>
         </form>
       );
-    // }
 
   }
 }

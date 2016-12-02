@@ -90,35 +90,34 @@ class Main extends React.Component {
       tournament_name: tourneyName,
       enough: enough
     }).then(function(response) {
-        // response.data holds an array with one number in it
-          // this number is the tournamentId
+      // response.data holds an array with one number in it
+        // this number is the tournamentId
       var tourneyId = response.data[0];
+      var tourneyName = (JSON.parse(response.config.data).tournament_name);
 
       context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+        .then(res => {
+          context.setState({
+            // currentTournamentTable: res,
+            currentTournament: { id: tourneyId, tournament_name: tourneyName }
+          });
+          // NOTE: This function call is failing because when we create a new tournament,
+            // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
+            // On the result of that filter, we call a reduce function to create the objects for the table.
+            // This is not a problem right now, but in the future.
+          utils.getTableForTourney(tourneyId)
           .then(res => {
+            // set the currentTournament key on state to an object with the id and name
             context.setState({
-              // currentTournamentTable: res,
-              currentTournament: { id: tourneyId, tournament_name: tourneyName }
+              currentTournamentTable: res
             });
-            // NOTE: This function call is failing because when we create a new tournament,
-              // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
-              // On the result of that filter, we call a reduce function to create the objects for the table.
-              // This is not a problem right now, but in the future.
-            utils.getTableForTourney(tourneyId)
-            .then(res => {
-              // set the currentTournament key on state to an object with the id and name
-              context.setState({
-                currentTournamentTable: res
-              });
-            })
-            .catch(err => {
-              throw err;
-            });
-          }).catch(err => {
+          })
+          .catch(err => {
             throw err;
           });
-
-
+        }).catch(err => {
+          throw err;
+        });
 
         // then call createGames with the new tourney ID
     }).catch(function(err) {
@@ -144,7 +143,6 @@ class Main extends React.Component {
         })
         .catch(function(err) {
           // This error handles failures in the getting of games back.
-          console.log('Error in get games by tourneyID:', err);
         });
       }).catch(function(err) {
         // This error handles failures posting games to the server/database.
