@@ -5,9 +5,9 @@ Game Manager is an app for managing a local (offline) competition. Currently des
 ## Getting Started
 
 First you will need to make sure you have PostgreSQL installed on your computer.
-  * Note: Postgres.app is an awesome easy tool to run your postgres server. It is recommended for ease of use.
+  * Note: [Postgres.app] is an awesome easy tool to run your postgres server. It is recommended for ease of use.
 
-  [PostGres for Mac]: https://www.postgresql.org/download/macosx/
+[PostGres.app]: https://www.postgresql.org/download/macosx/
 
 Then install the dependencies:
 
@@ -17,13 +17,25 @@ Then create your PSQL database
 
 `createdb -h localhost -p 5432 -U {your mac username here} database`
 
-Next bundle everything up with webpack (development)
+Next bundle everything up with webpack:
 
-`npm run build:watch`
+  * Development
 
-Finally start the server
+  `npm run build:watch`
 
-`npm start`
+  * Production
+
+  `npm run build`
+
+Finally start the server:
+
+  * Development
+
+  `npm run start:dev`
+
+  * Production
+
+  `npm start`
 
 and visit localhost:4000!
 
