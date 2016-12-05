@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'database'
+      database: 'game-manager'
     },
     seeds: {
       directory: './seeds'
@@ -31,7 +31,7 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      database: 'database'
+      database: 'game-manager'
     },
   }
 
