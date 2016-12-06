@@ -7,7 +7,6 @@ var tourneyNames = Mock_Data.tournaments.map(function(tourney) {
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return Promise.join(
-    knex('tournaments').del(),
     knex('tournaments').insert(tourneyNames)
   );
 };

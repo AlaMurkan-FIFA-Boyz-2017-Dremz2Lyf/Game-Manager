@@ -35,3 +35,7 @@ describe('axios driver', function() {
   })
 
 })
+
+describe('player model', function() {
+
+})

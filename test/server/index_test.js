@@ -9,9 +9,9 @@ var routes = require(__server + '/index.js');
 describe('The Server', function() {
 
   var knex = require('knex')({
-    client: 'sqlite3',
+    client: 'postgresql',
     connection: {
-      filename: './database.sqlite3'
+      filename: 'game-manager'
     }
   });
 
@@ -34,11 +34,14 @@ describe('The Server', function() {
         expect(helpers.createGamesForTourney).to.be.a('function');
       });
 
-      it_('When called with a tournament id and array of player objects it should return an array of game objects', function * () {
-        var tournamentId = 1;
-        var playersList = Mock_Data.playerObjs;
+      it_('Should accept an request object with tournamentId and playersList should return an array of game objects', function * () {
+        let req = {
+          body: {}
+        };
+        req.body.tourneyId = 1;
+        req.body.players = Mock_Data.playerObjs;
 
-        var result = helpers.createGamesForTourney(tournamentId, playersList);
+        let result = helpers.createGamesForTourney(req);
 
         expect(result).to.be.an('array');
         expect(result[0]).to.be.an('object');
@@ -75,16 +78,13 @@ describe('The Server', function() {
   describe('Routes', function() {
 
     beforeEach(function(done) {
-      knex.migrate.rollback()
-        .then(function() {
-          knex.migrate.latest()
-          .then(function() {
-            return knex.seed.run()
-            .then(function() {
+      knex.migrate.rollback().then(res => {
+        knex.migrate.latest().then(res => {
+          return knex.seed.run().then(function() {
               done();
-            });
-          });
-        });
+          })
+        })
+      });
     });
 
     describe('/api/games', function() {
