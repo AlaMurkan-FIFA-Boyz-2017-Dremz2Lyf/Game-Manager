@@ -31,8 +31,8 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTable('players'),
-    knex.schema.dropTable('tournaments'),
-    knex.schema.dropTable('games')
+    knex.raw('DROP TABLE players CASCADE'),
+    knex.raw('DROP TABLE tournaments CASCADE'),
+    knex.raw('DROP TABLE games CASCADE')
   ]);
 };

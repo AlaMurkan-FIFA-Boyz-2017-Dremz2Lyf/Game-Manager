@@ -12,7 +12,7 @@ routes.use( require('body-parser').json() );
 var knex = require('knex')({
   client: 'postgresql',
   connection: {
-    database: 'database'
+    database: 'game-manager'
   }
 });
 
