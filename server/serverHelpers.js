@@ -16,7 +16,7 @@ exports.createGamesForTourney = function(req) {
   var tourneyId = req.body.tourneyId;
 
   // get the players list from the request body
-  var list = req.body.players;
+  var list = req.body.players.slice();
 
   // This inner function is used to makeGames.
   function makeGames(tourneyId, list) {

@@ -6,8 +6,21 @@ exports.create = function(modelName) {
   let route = `api/${modelName}`;
 
   methods = {
+
     all: function() {
       return axios.get(route)
+    },
+
+    create: function(attrs) {
+      return axios.post(route, attrs)
+    },
+
+    findBy: function(attrs) {
+      return axios.get(route, attrs)
+    },
+
+    updateOne: function(attrs) {
+      return axios.put(route, attrs)
     }
 
   }

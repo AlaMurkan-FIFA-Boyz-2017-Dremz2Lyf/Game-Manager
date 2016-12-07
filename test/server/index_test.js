@@ -3,17 +3,13 @@ require(TEST_HELPER); // <--- This must be at the top of every test file.
 var helpers = require(__server + '/serverHelpers.js');
 var request = require('supertest-as-promised');
 var routes = require(__server + '/index.js');
-
+var config = require('../../knexfile.js');
+var env = 'test'
 
 
 describe('The Server', function() {
 
-  var knex = require('knex')({
-    client: 'postgresql',
-    connection: {
-      filename: 'game-manager'
-    }
-  });
+  var knex = require('knex')(config[env]);
 
   var app = TestHelper.createApp();
   app.use('/', routes);
@@ -80,7 +76,7 @@ describe('The Server', function() {
     beforeEach(function(done) {
       knex.migrate.rollback().then(res => {
         knex.migrate.latest().then(res => {
-          return knex.seed.run().then(function() {
+          return knex.seed.run().then(res => {
               done();
           })
         })
