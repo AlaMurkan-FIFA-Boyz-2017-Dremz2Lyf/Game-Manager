@@ -6,6 +6,7 @@ database.sqlite3
 
 #bundle
 bundle.js
+bundle.js.map
 
 #Some Postgres stuff Ben probably knows more about
 PGDATA/

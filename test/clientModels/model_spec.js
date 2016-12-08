@@ -10,7 +10,7 @@ describe('axios driver', function() {
 
   describe('new models', function() {
 
-    let testModel = driver.create('test')
+    let testModel = driver.create('test', 'http://localhost:4000/')
 
     it('should create a new front end model', function() {
       expect(testModel).to.have.property('methods');
@@ -36,6 +36,20 @@ describe('axios driver', function() {
 
 })
 
-describe('player model', function() {
+describe('game model', function() {
+
+  describe('all method', function() {
+
+    let games = driver.create('games', 'http://localhost:4000/')
+
+    it('should return all games in the database', function() {
+      games.all().then(res => {
+        res
+      }).catch(err => {
+        throw err
+      })
+    })
+
+  })
 
 })

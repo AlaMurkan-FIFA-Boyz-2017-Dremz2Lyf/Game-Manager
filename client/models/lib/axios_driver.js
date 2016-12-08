@@ -1,11 +1,11 @@
 const axios = require('axios');
 const Promise = require('bluebird');
 
-exports.create = function(modelName) {
+exports.create = function(modelName, baseurl) {
   let Model;
-  let route = `api/${modelName}`;
+  let route = `${baseurl}api/${modelName}`;
 
-  methods = {
+  const methods = {
 
     all: function() {
       return axios.get(route)

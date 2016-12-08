@@ -12,6 +12,7 @@ var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 var StatsTable = require('./StatsTable.jsx');
 var utils = require('../utils.js');
+var games = require('../models/games.js');
 
 class Main extends React.Component {
 
@@ -45,6 +46,12 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+
+    games.all()
+      .then(res => {
+        console.log(res);
+      })
+
     var self = this;
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
