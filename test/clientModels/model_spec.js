@@ -1,6 +1,11 @@
 require(TEST_HELPER); // <--- This must be at the top of every test file.
 
-const driver = require(__client + '/models/lib/axios_driver.js');
+const driver = require(__client + '/models/lib/axios_model.js');
+const axios = require('axios');
+const MockAdapter = require('axios-mock-adapter');
+
+let mock = new MockAdapter(axios)
+
 
 describe('axios driver', function() {
 
@@ -8,20 +13,60 @@ describe('axios driver', function() {
     expect(typeof driver.create).to.equal('function');
   })
 
-  describe('new models', function() {
+  describe('Test model', function() {
 
-    let testModel = driver.create('test', 'http://localhost:4000/')
+    let testModel = driver.create('/test')
 
     it('should create a new front end model', function() {
+
       expect(testModel).to.have.property('methods');
     })
 
-    it('should have an "all" method', function () {
-      expect(typeof testModel.all).to.equal('function');
+    it('should only accept a route as a string', function() {
+      let failedModel = driver.create(4)
+
+      expect(failedModel).to.have.all.keys(['name', 'message'])
+      expect(failedModel.name).to.equal('Invalid Argument')
+      expect(failedModel.message).to.equal('Route must be a string')
     })
 
-    it('should have a "create" method', function() {
-      expect(typeof testModel.create).to.equal('function')
+    describe('all method', function() {
+      it('should have an "all" method', function () {
+        expect(typeof testModel.all).to.equal('function');
+      })
+
+      it('should respond with all the data for the defined model', function(done) {
+        mock.onGet('/test').reply(200, 'ALL THE TEST DATA!')
+
+        testModel.all().then(res => {
+          expect(res.data).to.equal('ALL THE TEST DATA!')
+          done()
+        }).catch(err => {
+          throw err
+          done()
+        })
+      })
+
+    })
+
+    describe('create method', function() {
+      it('should have an "create" method', function () {
+        expect(typeof testModel.all).to.equal('function');
+      })
+
+      it('should respond with 200 and "Created" when called', function(done) {
+        mock.onPut('/test').reply(201, 'Created');
+
+        testModel.all().then(res => {
+          expect(res.status).to.equal(201);
+          expect(res.data).to.equal('Created');
+          done();
+        }).catch(err => {
+          throw err
+          done();
+        })
+      })
+
     })
 
     it('should have a "findBy" method', function() {
@@ -40,15 +85,8 @@ describe('game model', function() {
 
   describe('all method', function() {
 
-    let games = driver.create('games', 'http://localhost:4000/')
+    // let games = driver.create('games', 'http://localhost:4000/')
 
-    it('should return all games in the database', function() {
-      games.all().then(res => {
-        res
-      }).catch(err => {
-        throw err
-      })
-    })
 
   })
 
