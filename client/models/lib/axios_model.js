@@ -1,35 +1,43 @@
 const axios = require('axios');
 const Promise = require('bluebird');
 
-exports.create = function(url) {
-  let Model;
+exports.create = function(route) {
+  let Model = {};
 
-  if (typeof url !== 'string') {
-    return {name: 'Invalid Argument', message: 'Route must be a string'}
+  if (typeof route !== 'string') {
+    throw new TypeError('Route must be a string', 'axios_model.js', 8)
   }
 
   const methods = {
 
     all: function() {
-      return axios.get(url)
+      return axios.get(route)
     },
 
     create: function(attrs) {
-      return axios.post(url, attrs)
+      return axios.post(route, attrs)
     },
 
-    findBy: function(attrs) {
-      return axios.get(url, attrs)
+    findById: function(attrs) {
+      if (!!attrs.id && typeof attrs.id === 'number' ) {
+        return axios.get(route, attrs)
+      } else {
+        throw new TypeError('id must be a number', 'axios_model.js', 22)
+      }
     },
 
     updateOne: function(attrs) {
-      return axios.put(url, attrs)
+      return axios.put(route, attrs)
     }
 
   }
 
-  Model = Object.create(methods)
-  Model.methods = methods
+  Model = Object.create(methods);
 
-  return Model
+  Model.route = route;
+
+  Model.methods = methods;
+
+
+  return Model;
 }

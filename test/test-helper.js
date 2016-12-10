@@ -23,6 +23,29 @@ global.expect = chai.expect;
   // Those keys should point to arrays holding objects or 'rows' back from the DB
 global.Mock_Data = {};
 
+Mock_Data.test = {
+  existing: [
+    {
+      id: 1,
+      laborum: 'officia proident duis in commodo',
+      veniam: 'irure irure amet aliquip consectetur.'
+    },
+    {
+      id: 2,
+      laborum: 'Ea est eiusmod laborum elit ut amet id',
+      veniam: 'Esse minim irure eu occaecat veniam duis.'
+    }
+  ],
+  updated: [
+    {
+      id: 1,
+      laborum: 'Updated info',
+      veniam: 'Ya know it'
+    }
+  ]
+}
+
+
 // set a players key on the mock database
 Mock_Data.playerObjs = [
   {id: 1, username: 'Alice'},

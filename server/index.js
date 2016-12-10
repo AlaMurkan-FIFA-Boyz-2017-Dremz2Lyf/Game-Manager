@@ -18,11 +18,6 @@ var knex = require('knex')({
 
 routes.use(express.static(Path.join(__dirname, 'public')));
 
-// Home page
-routes.get('/', function(req, res) {
-  // res.sendFile(Path.join(__dirname, './public/index.html'));
-});
-
 
 // **************************************************
 
