@@ -18,17 +18,17 @@ class StartTournament extends React.Component {
     });
   }
 
-  startTourney(event) {
-    var self = this;
-    event.preventDefault();
+  startTourney(e) {
+
+    e.preventDefault();
     this.props.createTournament(this.state.tourneyName)
-    .then(function(res) {
-      self.setState({
+    .then((res) => {
+      this.setState({
         error: null
       });
     })
-    .catch(function(err) {
-      self.setState({
+    .catch((err) => {
+      this.setState({
         error: err.response.data.message
       });
     });
@@ -36,7 +36,6 @@ class StartTournament extends React.Component {
   }
 
   render() {
-
 
     var buttonClass = this.state.error ? 'btn btn-danger tourney-exists-btn' : 'btn btn-default';
     var buttonContent = this.state.error ? 'Whoops' : 'Create';

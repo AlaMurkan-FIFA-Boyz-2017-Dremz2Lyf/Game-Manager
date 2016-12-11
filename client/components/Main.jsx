@@ -12,7 +12,10 @@ var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 var StatsTable = require('./StatsTable.jsx');
 var utils = require('../utils.js');
-var games = require('../models/game.js');
+var games = require('../models/games.js');
+var tournaments = require('../models/tournaments.js');
+var players = require('../models/players.js');
+
 
 class Main extends React.Component {
 
@@ -52,20 +55,19 @@ class Main extends React.Component {
         console.log(res);
       })
 
-    var self = this;
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
       // It also returns a promise.
-    utils.getAllPlayers(this.state).then(function(response) {
+    utils.getAllPlayers(this.state).then((response) => {
       // So within a .then we can set the state to the players array
-      self.setState({
+      this.setState({
         // Adds the players from the db not already in a tourney to allPlayersList
         allPlayersList: response
       });
     });
     // getOngoingTournaments populates the in progress tournament list
-    utils.getOngoingTournaments().then(function(tourneys) {
-      self.setState({
+    utils.getOngoingTournaments().then((tourneys) => {
+      this.setState({
         // Add the ongoing tournaments to the state
         ongoingTournamentsList: tourneys
       });
@@ -86,25 +88,24 @@ class Main extends React.Component {
   //createTournament will make a post request to the server, which will insert the
     // new tournament into the DB, and after that call the createGames function
   createTournament(tourneyName) {
-    var context = this;
     var enough = true;
     // post request to the /api/tournaments endpoint with the tourneyName included
     if (this.state.tourneyPlayersList.length < 2) {
       enough = false;
     }
 
-    return axios.post('/api/tournaments', {
+    return tournaments.create({
       tournament_name: tourneyName,
       enough: enough
-    }).then(function(response) {
+    }).then((response) => {
       // response.data holds an array with one number in it
         // this number is the tournamentId
       var tourneyId = response.data[0];
-      var tourneyName = (JSON.parse(response.config.data).tournament_name);
+      // var tourneyName = (JSON.parse(response.config.data).tournament_name);
 
-      context.createGames(context, tourneyId, context.state.tourneyPlayersList)
+      this.createGames(this, tourneyId, this.state.tourneyPlayersList)
         .then(res => {
-          context.setState({
+          this.setState({
             // currentTournamentTable: res,
             currentTournament: { id: tourneyId, tournament_name: tourneyName }
           });
@@ -115,7 +116,7 @@ class Main extends React.Component {
           utils.getTableForTourney(tourneyId)
           .then(res => {
             // set the currentTournament key on state to an object with the id and name
-            context.setState({
+            this.setState({
               currentTournamentTable: res
             });
           })
@@ -139,10 +140,10 @@ class Main extends React.Component {
 
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     return utils.postGames(tourneyId, list)
-      .then(function(response) {
+      .then((response) => {
         // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
-        utils.getGamesByTourneyId(tourneyId).then(function(res) {
-          self.setState({
+        utils.getGamesByTourneyId(tourneyId).then((res) => {
+          this.setState({
             // We take those and set them to their appropriate state keys.
             currentTournamentGames: res.games,
             currentGame: res.nextGame
