@@ -12,7 +12,7 @@ var FinishTournament = require('./FinishTournament.jsx');
 var OngoingTournamentsList = require('./OngoingTournamentsList.jsx');
 var StatsTable = require('./StatsTable.jsx');
 var utils = require('../utils.js');
-var games = require('../models/games.js');
+var games = require('../models/game.js');
 
 class Main extends React.Component {
 
