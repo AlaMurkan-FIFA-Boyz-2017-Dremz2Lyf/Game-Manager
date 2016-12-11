@@ -21,23 +21,20 @@ exports.getFirstUnplayed = function(games) {
 
 exports.getAllPlayers = function(state) {
     // axios rocks and makes nice promise based calls to the server for us.
-  return axios.get('/api/player')
-    .then(function(playerData) {
-      var tourneyPlayerIds = state.tourneyPlayersList.map(function(tourneyPlayer) {
-        return tourneyPlayer.id; //Returns a list of players already in the tourney
-      });
-      var notAdded = playerData.data.filter(function(player) {
-        return tourneyPlayerIds.indexOf(player.id) === -1; //Returns a list of players not in the tourney from the db
-      });
+  return axios.get('/api/player').then(function(playerData) {
 
-      return notAdded.filter(function(player) {
-        return player.username !== '';
-      });
-    })
-    .catch(function(err) {
-      // Handle any errors here.
-      console.log('Error in getting players from the DB:', err);
-    });
+    //Returns a list of players already in the tourney
+    var tourneyPlayerIds = state.tourneyPlayersList.map((tourneyPlayer) => tourneyPlayer.id);
+
+    //Returns a list of players not in the tourney from the db
+    var notAdded = playerData.data.filter((player) => tourneyPlayerIds.indexOf(player.id) === -1);
+
+    return notAdded.filter((player) => player.username !== '');
+
+  }).catch(function(err) {
+    // Handle any errors here.
+    console.log('Error in getting players from the DB:', err);
+  });
 };
 
 // This function makes a call for all tournaments from the server and adds them to the state.
@@ -111,14 +108,6 @@ exports.getTableForTourney = function(tourneyId) {
   }).catch(function(err) {
     console.log('error in getting table', err);
     throw err;
-  });
-};
-
-exports.postGames = (tourneyId, list) => {
-
-  return axios.post('/api/games', {
-    tourneyId: tourneyId,
-    players: list
   });
 };
 

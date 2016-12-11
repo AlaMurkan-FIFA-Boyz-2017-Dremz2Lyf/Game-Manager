@@ -50,11 +50,6 @@ class Main extends React.Component {
 
   componentDidMount() {
 
-    games.all()
-      .then(res => {
-        console.log(res);
-      })
-
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
       // It also returns a promise.
@@ -139,23 +134,25 @@ class Main extends React.Component {
     var self = this;
 
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
-    return utils.postGames(tourneyId, list)
-      .then((response) => {
-        // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
-        utils.getGamesByTourneyId(tourneyId).then((res) => {
-          this.setState({
-            // We take those and set them to their appropriate state keys.
-            currentTournamentGames: res.games,
-            currentGame: res.nextGame
-          });
-        })
-        .catch(function(err) {
-          // This error handles failures in the getting of games back.
+    return games.create({
+      tourneyId: tourneyId,
+      players: list
+    }).then((response) => {
+      // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
+      utils.getGamesByTourneyId(tourneyId).then((res) => {
+        this.setState({
+          // We take those and set them to their appropriate state keys.
+          currentTournamentGames: res.games,
+          currentGame: res.nextGame
         });
-      }).catch(function(err) {
-        // This error handles failures posting games to the server/database.
-        console.log(err, 'failed to post to games');
+      })
+      .catch(function(err) {
+        // This error handles failures in the getting of games back.
       });
+    }).catch(function(err) {
+      // This error handles failures posting games to the server/database.
+      console.log(err, 'failed to post to games');
+    });
   }
 
   // this function moves a Player component to the list they are not in
