@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var axios = require('axios'); //Used for AJAX calls
 var AllPlayersList = require('./AllPlayersList.jsx');
 var Player = require('./Player.jsx');
@@ -14,7 +13,7 @@ var StatsTable = require('./StatsTable.jsx');
 var utils = require('../utils.js');
 var games = require('../models/games.js');
 var tournaments = require('../models/tournaments.js');
-var players = require('../models/players.js');
+var player = require('../models/player.js');
 
 
 class Main extends React.Component {
@@ -49,7 +48,6 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-
     // utils.getAllPlayers makes a call to the server for all players from the database.
       // State is passed in so we can check against the tournament players list.
       // It also returns a promise.
@@ -71,11 +69,9 @@ class Main extends React.Component {
 
   updatePlayers() {
     // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
-    utils.getAllPlayers(this.state).then(res => {
-      // It returns a promise object that resolves with the list of players filtered
-        // against players already in the tournament list. We set this to state.
+    player.all().then(res => {
       this.setState({
-        allPlayersList: res
+        allPlayersList: res.data
       });
     });
   }
@@ -89,42 +85,37 @@ class Main extends React.Component {
       enough = false;
     }
 
-    return tournaments.create({
+    let attrs = {
       tournament_name: tourneyName,
       enough: enough
-    }).then((response) => {
+    };
+
+    return tournaments.create(attrs).then((response) => {
       // response.data holds an array with one number in it
         // this number is the tournamentId
       var tourneyId = response.data[0];
-      // var tourneyName = (JSON.parse(response.config.data).tournament_name);
 
-      this.createGames(this, tourneyId, this.state.tourneyPlayersList)
-        .then(res => {
+      this.createGames(this, tourneyId, this.state.tourneyPlayersList).then(res => {
+        this.setState({
+          // currentTournamentTable: res,
+          currentTournament: { id: tourneyId, tournament_name: tourneyName }
+        });
+
+        utils.getTableForTourney(tourneyId).then(res => {
+          // set the currentTournament key on state to an object with the id and name
           this.setState({
-            // currentTournamentTable: res,
-            currentTournament: { id: tourneyId, tournament_name: tourneyName }
-          });
-          // NOTE: This function call is failing because when we create a new tournament,
-            // getTableForTourney gets all the game for that tournament, then filters down to only the games played.
-            // On the result of that filter, we call a reduce function to create the objects for the table.
-            // This is not a problem right now, but in the future.
-          utils.getTableForTourney(tourneyId)
-          .then(res => {
-            // set the currentTournament key on state to an object with the id and name
-            this.setState({
-              currentTournamentTable: res
-            });
-          })
-          .catch(err => {
-            throw err;
+            currentTournamentTable: res
           });
         }).catch(err => {
           throw err;
         });
+      }).catch(err => {
+        throw err;
+      });
 
-        // then call createGames with the new tourney ID
+    // then call createGames with the new tourney ID
     }).catch(function(err) {
-        // handles some errors
+      // handles some errors
       throw err;
     });
   }
@@ -243,9 +234,6 @@ class Main extends React.Component {
 
 
   finishTournament() {
-    // set our context here.
-    var self = this;
-
     // the sorting for the tournament table should happen on game submits,
       // so that means the first item in the currentTournamentTable array
       // should be the winner of our tournament when we end it!
@@ -257,38 +245,33 @@ class Main extends React.Component {
     tournament.winner_id = winner.playerId;
 
     // That results object will be passed into the put request to the server.
-    axios.put('/api/tournaments', tournament)
-      .then(function(response) {
-        // This (untested) alert definitely doesnt work right now, but is a place holder for some sort of
-          // Congradulations to the winner.
-        alert('Congratulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
+    tournaments.updateOne(tournament).then((response) => {
+      // This (untested) alert definitely doesnt work right now, but is a place holder for some sort of
+        // Congradulations to the winner.
+      alert('Congratulations to ' + winner.name + ' for winning the ' + tournament.tournament_name + ' tournament!');
 
+      var allPlayas = this.state.allPlayersList.concat(this.state.tourneyPlayersList);
 
-        var allPlayas = self.state.allPlayersList.concat(self.state.tourneyPlayersList);
-
-
-        var uniquePlayas = utils.filterToUniquePlayers(allPlayas);
-        // Then we set our currentTournament back to null to go back to the create tournament page.
-        self.setState({
-          currentTournament: null,
-          allPlayersList: uniquePlayas,
-          tourneyPlayersList: []
-        });
-
-      })
-      .then(res => {
-        utils.getOngoingTournaments()
-          .then(function(tourneys) {
-            self.setState({
-              ongoingTournamentsList: tourneys,
-              currentTournamentTable: []
-            });
-          });
-      })
-      .catch(function(err) {
-        // A catch in the event the put request fails.
-        console.log('FinishTournament Error:', err);
+      var uniquePlayas = utils.filterToUniquePlayers(allPlayas);
+      // Then we set our currentTournament back to null to go back to the create tournament page.
+      this.setState({
+        currentTournament: null,
+        allPlayersList: uniquePlayas,
+        tourneyPlayersList: []
       });
+
+    }).then(res => {
+      utils.getOngoingTournaments()
+        .then(function(tourneys) {
+          this.setState({
+            ongoingTournamentsList: tourneys,
+            currentTournamentTable: []
+          });
+        });
+    }).catch(function(err) {
+      // A catch in the event the put request fails.
+      console.log('FinishTournament Error:', err);
+    });
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.

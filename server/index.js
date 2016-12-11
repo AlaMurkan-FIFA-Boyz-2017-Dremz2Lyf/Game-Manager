@@ -27,6 +27,7 @@ routes.get('/api/player', function(req, res) {
   if (req.query.tournament_players) {
     var playerArr = req.query.tournament_players.split('-');
   }
+
   helpers.getAllPlayers(playerArr)
     .then(players => {
       res.status(200).send(players);
@@ -42,12 +43,11 @@ routes.post('/api/player', function(req, res) {
   if (req.body.username === '') {
     res.status(404).send('Cannot Insert Empty String Into Database');
   } else {
-    helpers.makePlayer(req)
-      .then(function(result) {
-        res.status(201).send('Posted new user to the database');
-      }).catch(function(err) {
-        res.status(400).send('User already exists');
-      });
+    helpers.makePlayer(req).then(function(result) {
+      res.status(201).send('Posted new user to the database');
+    }).catch(function(err) {
+      res.status(400).send('User already exists');
+    });
   }
 });
 
