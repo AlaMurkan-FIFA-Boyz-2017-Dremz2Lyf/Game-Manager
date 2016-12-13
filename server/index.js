@@ -120,16 +120,16 @@ routes.get('/api/games', function(req, res) {
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
     // query the db here with the tourneyId
-    knex('games').where('tournament_id', tourneyId).then(function(response) {
+    knex('games').where('tournament_id', tourneyId).then(response => {
       res.status(200).send(response);
-    }).catch(function(err) {
+    }).catch(err => {
       res.status(500).send(err);
     });
   } else {
     // query the db here for all games
-    knex.select().from('games').then(function(response) {
+    knex.select().from('games').then(response => {
       res.status(200).send(response);
-    }).catch(function(err) {
+    }).catch(err => {
       res.status(500).send(err);
     });
   }
