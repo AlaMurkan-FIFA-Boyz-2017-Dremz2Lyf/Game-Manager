@@ -177,9 +177,6 @@ class Main extends React.Component {
 
   // setCurrentGame takes in the game 'to be active', and the currently active game.
   setCurrentGame(toBeActive, currentActive) {
-    // Some more this binding
-    var self = this;
-
     // This handles the edge case of clicking on the game that is currently active.
     if (toBeActive.id === currentActive.id) {
       // Do nothing if the game you clicked on is already active.
@@ -194,13 +191,12 @@ class Main extends React.Component {
       // that we do nothing with :P, but we need to wait for that to finish before updating the games.
     utils.updateGameStatus(toBeActive, currentActive).then(res => {
       // Then we update the games with the current tournament id
-      self.updateGames(self.state.currentTournament.id);
+      this.updateGames(this.state.currentTournament.id);
     });
   }
 
   setCurrentTournament(index, tourneyId) {
 
-    var self = this;
     // Set the state of currentTournament to the tournament that was clicked on.
       // We do this by passing the index of the clicked on item up to this function,
       // then using that index to find the correct tournament in the ongoingTournamentsList.
@@ -208,24 +204,24 @@ class Main extends React.Component {
       currentTournament: this.state.ongoingTournamentsList[index]
     });
     // When we have a currentTournament, update the games and players.
-    this.updateGames(tourneyId, this.updatePlayerNames);
+    this.updateGames(tourneyId);
   }
 
   toggleStatsView() {
-    var self = this;
+
     this.setState({
       statsView: !this.state.statsView,
       tourneyPlayersList: []
     });
     // call our getAllPlayers
     utils.getAllPlayers(this.state).then(res => {
-      self.setState({
+      this.setState({
         allPlayersList: res
       });
     });
     // and call our getOngoingTournaments
-    utils.getOngoingTournaments().then(function(tourneys) {
-      self.setState({
+    utils.getOngoingTournaments().then(tourneys => {
+      this.setState({
         ongoingTournamentsList: tourneys
       });
     });
@@ -274,7 +270,7 @@ class Main extends React.Component {
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
-  updateGames(tourneyId, callback) {
+  updateGames(tourneyId) {
     utils.getGamesByTourneyId(tourneyId).then(res => {
       this.setState({
         currentTournamentGames: res.games,
@@ -288,46 +284,8 @@ class Main extends React.Component {
       }).catch(err => {
         throw err;
       });
-    }).then(res => {
-      typeof callback === 'function' ? callback(tourneyId, this) : '';
     });
   }
-
-  updatePlayerNames(tourneyId, context) {
-    // After setting the games, we will also want to reset the players so that they are displayed correctly when we set a new currentTournament
-    // Slight change here, by adding a dictionary we can make this process O(n) instead of O(2^n).
-    var dictionary = {};
-    // The dictionary gives us a constant/instant time to check if the id is in the unique id list.
-    // This lets us filter down to unique ids without nesting .includes or .indexOf.
-    var uniquePlayerIds = [];
-
-    // Here we iterate over the array of game objects to filter them down to unique IDs
-    context.state.currentTournamentGames.forEach((game) => {
-      if (dictionary[game.player1_id] === undefined) {
-        uniquePlayerIds.push(game.player1_id);
-      }
-      dictionary[game.player1_id] = 'found';
-
-      if (dictionary[game.player2_id] === undefined) {
-        uniquePlayerIds.push(game.player2_id);
-      }
-      dictionary[game.player2_id] = 'found';
-
-    });
-
-    var idsString = uniquePlayerIds.join('-');
-
-    axios.get('./api/player', {
-      params: {
-        tournament_players: idsString
-      }
-    }).then((playersInCurrentTourney) => {
-      context.setState({
-        tourneyPlayersList: playersInCurrentTourney.data,
-      });
-    });
-  }
-
 
   render() {
 

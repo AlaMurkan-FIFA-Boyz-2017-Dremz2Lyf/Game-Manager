@@ -22,11 +22,9 @@ routes.use(express.static(Path.join(__dirname, 'public')));
   // NOTE: Routes for players
 
 routes.get('/api/player', function(req, res) {
-  if (req.query.tournament_players) {
-    var playerArr = req.query.tournament_players.split('-');
-  }
+  let playerIds = req.query.id;
 
-  helpers.getAllPlayers(playerArr).then(players => {
+  helpers.getAllPlayers(playerIds).then(players => {
     res.status(200).send(players);
   }).catch(err => {
     res.status(500).send(err);
