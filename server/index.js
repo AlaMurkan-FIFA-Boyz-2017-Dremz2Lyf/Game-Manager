@@ -1,5 +1,3 @@
-var browserify = require('browserify-middleware');
-var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
 var helpers = require('./serverHelpers.js');
@@ -28,13 +26,11 @@ routes.get('/api/player', function(req, res) {
     var playerArr = req.query.tournament_players.split('-');
   }
 
-  helpers.getAllPlayers(playerArr)
-    .then(players => {
-      res.status(200).send(players);
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
+  helpers.getAllPlayers(playerArr).then(players => {
+    res.status(200).send(players);
+  }).catch(err => {
+    res.status(500).send(err);
+  });
 });
 
 
@@ -199,8 +195,7 @@ if (process.env.NODE_ENV !== 'test') {
   var port = process.env.PORT || 4000;
   app.listen(port);
   console.log('Listening on port', port);
-}
-else {
+} else {
   // We're in test mode; make this file importable instead.
   module.exports = routes;
 }

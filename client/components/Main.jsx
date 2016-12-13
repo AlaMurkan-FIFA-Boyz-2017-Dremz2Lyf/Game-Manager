@@ -68,7 +68,7 @@ class Main extends React.Component {
   }
 
   updatePlayers() {
-    // getAllPlayers needs access to the state for the list of tournament players, so it accepts that as an argument.
+    // players.all makes a request to the server for all the players in the database
     player.all().then(res => {
       this.setState({
         allPlayersList: res.data
@@ -80,7 +80,7 @@ class Main extends React.Component {
     // new tournament into the DB, and after that call the createGames function
   createTournament(tourneyName) {
     var enough = true;
-    // post request to the /api/tournaments endpoint with the tourneyName included
+
     if (this.state.tourneyPlayersList.length < 2) {
       enough = false;
     }
@@ -90,6 +90,8 @@ class Main extends React.Component {
       enough: enough
     };
 
+    // post request to the /api/tournaments endpoint with the tourneyName and
+      // a flag to let us know if there are enough players in the tournament.
     return tournaments.create(attrs).then((response) => {
       // response.data holds an array with one number in it
         // this number is the tournamentId
@@ -97,7 +99,6 @@ class Main extends React.Component {
 
       this.createGames(this, tourneyId, this.state.tourneyPlayersList).then(res => {
         this.setState({
-          // currentTournamentTable: res,
           currentTournament: { id: tourneyId, tournament_name: tourneyName }
         });
 
@@ -136,13 +137,13 @@ class Main extends React.Component {
           currentTournamentGames: res.games,
           currentGame: res.nextGame
         });
-      })
-      .catch(function(err) {
+      }).catch((err) => {
         // This error handles failures in the getting of games back.
+        throw err
       });
     }).catch(function(err) {
       // This error handles failures posting games to the server/database.
-      console.log(err, 'failed to post to games');
+      throw err
     });
   }
 
@@ -191,11 +192,10 @@ class Main extends React.Component {
 
     // updateGameStatus takes the two games to be updated and returns a promise object
       // that we do nothing with :P, but we need to wait for that to finish before updating the games.
-    utils.updateGameStatus(toBeActive, currentActive)
-      .then(res => {
-        // Then we update the games with the current tournament id
-        self.updateGames(self.state.currentTournament.id);
-      });
+    utils.updateGameStatus(toBeActive, currentActive).then(res => {
+      // Then we update the games with the current tournament id
+      self.updateGames(self.state.currentTournament.id);
+    });
   }
 
   setCurrentTournament(index, tourneyId) {
@@ -209,7 +209,6 @@ class Main extends React.Component {
     });
     // When we have a currentTournament, update the games and players.
     this.updateGames(tourneyId, this.updatePlayerNames);
-
   }
 
   toggleStatsView() {
@@ -261,40 +260,37 @@ class Main extends React.Component {
       });
 
     }).then(res => {
-      utils.getOngoingTournaments()
-        .then(function(tourneys) {
-          this.setState({
-            ongoingTournamentsList: tourneys,
-            currentTournamentTable: []
-          });
+      utils.getOngoingTournaments().then((tourneys) => {
+        this.setState({
+          ongoingTournamentsList: tourneys,
+          currentTournamentTable: []
         });
-    }).catch(function(err) {
+      });
+    }).catch((err) => {
       // A catch in the event the put request fails.
+      throw err
       console.log('FinishTournament Error:', err);
     });
   }
 
 //GameStatsForm calls this function after it has PUT the entered stats in the database.
   updateGames(tourneyId, callback) {
-    utils.getGamesByTourneyId(tourneyId)
-      .then(res => {
-        this.setState({
-          currentTournamentGames: res.games,
-          currentGame: res.nextGame
-        });
-      }).then(res =>{
-        utils.getTableForTourney(tourneyId)
-          .then(res => {
-            this.setState({
-              currentTournamentTable: res
-            });
-          })
-          .catch(err => {
-            throw err;
-          });
-      }).then(res => {
-        typeof callback === 'function' ? callback(tourneyId, this) : '';
+    utils.getGamesByTourneyId(tourneyId).then(res => {
+      this.setState({
+        currentTournamentGames: res.games,
+        currentGame: res.nextGame
       });
+    }).then(res =>{
+      utils.getTableForTourney(tourneyId).then(res => {
+        this.setState({
+          currentTournamentTable: res
+        });
+      }).catch(err => {
+        throw err;
+      });
+    }).then(res => {
+      typeof callback === 'function' ? callback(tourneyId, this) : '';
+    });
   }
 
   updatePlayerNames(tourneyId, context) {
@@ -306,7 +302,7 @@ class Main extends React.Component {
     var uniquePlayerIds = [];
 
     // Here we iterate over the array of game objects to filter them down to unique IDs
-    context.state.currentTournamentGames.forEach(function(game) {
+    context.state.currentTournamentGames.forEach((game) => {
       if (dictionary[game.player1_id] === undefined) {
         uniquePlayerIds.push(game.player1_id);
       }
@@ -325,8 +321,7 @@ class Main extends React.Component {
       params: {
         tournament_players: idsString
       }
-    })
-    .then(function(playersInCurrentTourney) {
+    }).then((playersInCurrentTourney) => {
       context.setState({
         tourneyPlayersList: playersInCurrentTourney.data,
       });

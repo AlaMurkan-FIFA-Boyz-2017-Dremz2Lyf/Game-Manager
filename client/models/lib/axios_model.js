@@ -1,5 +1,4 @@
 const axios = require('axios');
-const Promise = require('bluebird');
 
 exports.create = function(route) {
   let Model = {};
@@ -22,7 +21,7 @@ exports.create = function(route) {
       if (!!attrs.id && typeof attrs.id === 'number' ) {
         return axios.get(route, attrs)
       } else {
-        throw new TypeError('id must be a number', 'axios_model.js', 22)
+        throw new TypeError('Must pass an id and it must be a number', 'axios_model.js', 22)
       }
     },
 
