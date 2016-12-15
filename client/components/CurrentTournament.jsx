@@ -4,9 +4,11 @@ var GameStatsForm = require('./GameStatsForm.jsx');
 
 var CurrentTournament = (props) => {
 
-  var playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
+  let playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
 
-  props.state.allPlayersList.forEach(function(player) {
+  let allPlayers = props.state.allPlayersList.concat(props.state.tourneyPlayersList)
+
+  allPlayers.forEach(function(player) {
 
     playersInTourney[player.id] = player.username;
   });
