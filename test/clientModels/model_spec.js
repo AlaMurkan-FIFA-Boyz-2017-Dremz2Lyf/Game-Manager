@@ -24,7 +24,7 @@ mock.onGet('/test').reply((config) => {
     });
 
 
-describe('axios driver', function() {
+describe('axios model', function() {
 
   it('should have a create method', function() {
     expect(typeof driver.create).to.equal('function');
@@ -116,7 +116,7 @@ describe('axios driver', function() {
 
     it('should respond with 202 and the item id', function() {
       return testModel.updateOne(Mock_Data.test.updated).then(res => {
-        
+
         let body = res.data
 
         expect(res.status).to.equal(202)
