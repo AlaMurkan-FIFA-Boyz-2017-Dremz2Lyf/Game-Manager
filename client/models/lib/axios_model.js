@@ -19,9 +19,13 @@ exports.create = function(route) {
       return axios.post(route, attrs)
     },
 
+    find: function(attrs) {
+      return axios.get(route, {params: attrs})
+    },
+
     findById: function(attrs) {
       if (!!attrs.id && (typeof attrs.id === 'number' || Array.isArray(attrs.id))) {
-        return axios.get(route, attrs)
+        return Model.find(attrs)
       } else {
         throw new TypeError('findById requires an argument of an object with an id key. It\'s value may be a string or an array of IDs ', 'axios_model.js', 26)
       }

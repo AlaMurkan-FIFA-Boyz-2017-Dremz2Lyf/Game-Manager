@@ -91,7 +91,7 @@ routes.get('/api/tournaments', function(req, res) {
   .then(function(knexResponse) {
     // use our helper function here and organize all the tourneys
     let tourneys = helpers.organizedTourneys(knexResponse)
-    
+
     res.send(tourneys);
   });
 });
@@ -119,7 +119,6 @@ routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
-
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
     // query the db here with the tourneyId
@@ -158,7 +157,6 @@ routes.get('/api/table/', function(req, res) {
   .then(function(response) {
     res.status(200).send(response);
   }).catch(function(err) {
-    console.log('ERROR', err);
     res.status(500).send(err);
   });
 });

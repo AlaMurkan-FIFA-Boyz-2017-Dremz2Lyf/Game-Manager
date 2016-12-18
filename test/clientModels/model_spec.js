@@ -10,18 +10,18 @@ const MockAdapter = require('axios-mock-adapter');
 let mock = new MockAdapter(axios)
 
 mock.onGet('/test').reply((config) => {
-      if (config.id === 1) {
-        return [200, Mock_Data.test.existing[0]]
-      } else if (config.id === 3) {
-        return [200, Mock_Data.test.existing[2]]
-      } else {
-        return [200, Mock_Data.test.existing]
-      }
-    })
-    .onPost('/test').reply(201, 'Created')
-    .onPut('/test').reply((config) => {
-      return [202, {id: 1}]
-    });
+  if (!config.params) {
+    return [200, Mock_Data.test.existing]
+  } else if (config.params.id === 1) {
+    return [200, Mock_Data.test.existing[0]]
+  } else if (config.params.id === 3) {
+    return [200, Mock_Data.test.existing[2]]
+  }
+})
+.onPost('/test').reply(201, 'Created')
+.onPut('/test').reply((config) => {
+  return [202, {id: 1}]
+});
 
 
 describe('axios model', function() {
@@ -80,7 +80,7 @@ describe('axios model', function() {
         expect(res.data).to.equal('Created');
         done();
       }).catch(err => {
-        console.log(err)
+        throw err
         done();
       })
     })
@@ -89,13 +89,12 @@ describe('axios model', function() {
 
   describe('findById method', function() {
     it('should have an "findById" method', function () {
-      expect(typeof testModel.create).to.equal('function');
+      expect(typeof testModel.findById).to.equal('function');
     })
 
     it('should respond with 200 when called with an attributes object', function(done) {
 
       return testModel.findById({id: 1}).then(res => {
-
         expect(res.status).to.equal(200);
         expect(res.data).to.have.property('id');
         expect(res.data).to.have.property('laborum');

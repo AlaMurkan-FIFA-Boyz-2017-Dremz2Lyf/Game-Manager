@@ -4,9 +4,9 @@ var axios = require('axios');
 exports.getFirstUnplayed = function(games) {
   // reduce the games array down to one object, that object will have up to three keys.
     // Created, active, or disabled. Each key points to an array of games.
-  var organizedGames = games.reduce(function(prevGame, currGame) {
-    prevGame[currGame.status] ? prevGame[currGame.status].push(currGame) : prevGame[currGame.status] = [currGame];
-    return prevGame;
+  let organizedGames = games.reduce(function(organizedGames, currGame) {
+    organizedGames[currGame.status] ? organizedGames[currGame.status].push(currGame) : organizedGames[currGame.status] = [currGame];
+    return organizedGames;
   }, {});
 
   if (!organizedGames.created) {
@@ -14,7 +14,7 @@ exports.getFirstUnplayed = function(games) {
   }
 
   // Then we take the first game from the active list (if we have one), otherwise we take the first game from the Created list
-  var firstUnplayed = organizedGames.active ? organizedGames.active[0] : organizedGames.created[0] || null;
+  let firstUnplayed = organizedGames.active ? organizedGames.active[0] : organizedGames.created[0] || null;
 
   return firstUnplayed;
 };
@@ -33,7 +33,7 @@ exports.getAllPlayers = function(state) {
 
   }).catch(function(err) {
     // Handle any errors here.
-    console.log('Error in getting players from the DB:', err);
+    throw err
   });
 };
 
@@ -50,7 +50,7 @@ exports.getOngoingTournaments = function() {
     })
     .catch(function(err) {
       // Handle any errors here
-      console.log('Error in getting tourneys from the DB', err);
+      throw err
     });
 };
 
@@ -106,7 +106,6 @@ exports.getTableForTourney = function(tourneyId) {
     });
     return table;
   }).catch(function(err) {
-    console.log('error in getting table', err);
     throw err;
   });
 };

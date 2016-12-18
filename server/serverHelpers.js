@@ -40,6 +40,9 @@ exports.createGamesForTourney = function(req) {
         game.player2_id = player.id;
         game.tournament_id = tourneyId;
 
+        if (!games.length) {
+          game.status = 'active';
+        }
         // push into the games array
         games.push(game);
       });

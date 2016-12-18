@@ -91,12 +91,12 @@ class Main extends React.Component {
 
     // post request to the /api/tournaments endpoint with the tourneyName and
       // a flag to let us know if there are enough players in the tournament.
-    return tournaments.create(attrs).then((response) => {
+    return tournaments.create(attrs).then(response => {
       // response.data holds an array with one number in it
         // this number is the tournamentId
       var tourneyId = response.data[0];
 
-      this.createGames(this, tourneyId, this.state.tourneyPlayersList).then(res => {
+      this.createGames(tourneyId, this.state.tourneyPlayersList).then(res => {
         this.setState({
           currentTournament: { id: tourneyId, tournament_name: tourneyName }
         });
@@ -121,20 +121,22 @@ class Main extends React.Component {
   }
 
   // createGames will be called when the button linked to createTournament is clicked.
-  createGames(context, tourneyId, list) {
+  createGames(tourneyId, list) {
 
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     return games.create({
       tourneyId: tourneyId,
       players: list
-    }).then((response) => {
+    }).then(response => {
       // getGamesByTourneyId returns a promise object that resolves with two keys; games, and nextGame
-      utils.getGamesByTourneyId(tourneyId).then((res) => {
+      games.find({
+        tournament_id: tourneyId
+      }).then(res => {
+        let nextGame = utils.getFirstUnplayed(res.data)
         this.setState({
-          // We take those and set them to their appropriate state keys.
-          currentTournamentGames: res.games,
-          currentGame: res.nextGame
-        });
+          currentTournamentGames:res.data,
+          currentGame: nextGame
+        })
       }).catch((err) => {
         // This error handles failures in the getting of games back.
         throw err
@@ -254,7 +256,6 @@ class Main extends React.Component {
     }).catch((err) => {
       // A catch in the event the put request fails.
       throw err
-      console.log('FinishTournament Error:', err);
     });
   }
 
