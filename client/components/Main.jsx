@@ -40,7 +40,10 @@ class Main extends React.Component {
       // Bet you can guess what currentTournament is :D.
       currentTournament: null,
       // This one here isn't to hard to guess either!
-      ongoingTournamentsList: [],
+      ongoingTournamentsList: {
+        finished: [],
+        onGoing: []
+      },
 
       statsView: false,
       statLines: []
@@ -48,30 +51,26 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    // utils.getAllPlayers makes a call to the server for all players from the database.
-      // State is passed in so we can check against the tournament players list.
-      // It also returns a promise.
-    utils.getAllPlayers(this.state).then((response) => {
-      // So within a .then we can set the state to the players array
+    // Use the player and tournament model to get all the initial state.
+    player.all().then(players => {
       this.setState({
-        // Adds the players from the db not already in a tourney to allPlayersList
-        allPlayersList: response
-      });
-    });
-    // getOngoingTournaments populates the in progress tournament list
-    utils.getOngoingTournaments().then((tourneys) => {
+        allPlayersList: players
+      })
+    })
+
+    tournaments.all().then(tourneys => {
       this.setState({
-        // Add the ongoing tournaments to the state
         ongoingTournamentsList: tourneys
-      });
-    });
+      })
+    })
+
   }
 
   updatePlayers() {
     // players.all makes a request to the server for all the players in the database
-    player.all().then(res => {
+    player.all().then(players => {
       this.setState({
-        allPlayersList: res.data
+        allPlayersList: players
       });
     });
   }
@@ -123,7 +122,6 @@ class Main extends React.Component {
 
   // createGames will be called when the button linked to createTournament is clicked.
   createGames(context, tourneyId, list) {
-    var self = this;
 
     // Post request to the /api/games endpoint with the the tourneyPlayerList.
     return games.create({
@@ -149,10 +147,10 @@ class Main extends React.Component {
 
   // this function moves a Player component to the list they are not in
     // tourneyPlayersList into allPlayersList, and visa versa.
-  movePlayer(playerComponent, index) {
+  movePlayer(player, index) {
 
     // check if the tourneyPlayersList has this Player
-    if (this.state.tourneyPlayersList.includes(playerComponent)) {
+    if (this.state.tourneyPlayersList.includes(player)) {
 
       // if so, we move from that list with a splice.
       var out = this.state.tourneyPlayersList.splice(index, 1)[0];

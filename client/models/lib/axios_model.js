@@ -10,7 +10,9 @@ exports.create = function(route) {
   const methods = {
 
     all: function() {
-      return axios.get(route)
+      return axios.get(route).then(res => {
+        return res.data
+      })
     },
 
     create: function(attrs) {

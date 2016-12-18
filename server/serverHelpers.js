@@ -16,38 +16,38 @@ exports.createGamesForTourney = function(req) {
   var tourneyId = req.body.tourneyId;
 
   // get the players list from the request body
-  var list = req.body.players.slice();
+  var players = req.body.players.slice();
 
   // This inner function is used to makeGames.
-  function makeGames(tourneyId, list) {
+  function makeGames(tourneyId, players) {
     var games = [];
 
     // while there is more than one player in the tourneyPlayersList,
-    while (list.length > 1) {
+    while (players.length > 1) {
 
       // shift the first item off and hold it with our nextPlayer variable,
-      var nextPlayer = list.shift();
+      var nextPlayer = players.shift();
 
       // then forEach player left in there, create a game with the nextPlayer
       // and push that game into the games array.
-      list.forEach(function(playerObj) {
+      players.forEach(function(player) {
 
         // This will be the object pushed into the games array.
-        var gameObj = {};
+        var game = {};
 
         // set the needed values for the game object
-        gameObj.player1_id = nextPlayer.id;
-        gameObj.player2_id = playerObj.id;
-        gameObj.tournament_id = tourneyId;
+        game.player1_id = nextPlayer.id;
+        game.player2_id = player.id;
+        game.tournament_id = tourneyId;
 
         // push into the games array
-        games.push(gameObj);
+        games.push(game);
       });
     }
     return games;
   }
   // Call it!!
-  var games = makeGames(tourneyId, list);
+  var games = makeGames(tourneyId, players);
   // return the promise from the query
   return knex('games').insert(games);
 
@@ -183,3 +183,22 @@ exports.makeTourney = function(tourneyName) {
     tournament_name: tourneyName
   });
 };
+
+exports.organizedTourneys = (tournaments) => {
+  // First we set up the structure for the returned object.
+  let organized = {};
+  // with two keys pointing to empty arrays.
+  organized.finished = [];
+  organized.onGoing = [];
+
+  // then run over all the tournaments and place them in the proper array.
+  tournaments.forEach(tournament => {
+    tournament.winner_id === null ? organized.onGoing.push(tournament) : organized.finished.push(tournament);
+  })
+
+  // Then sort them for the most recent tournements to be first.
+  organized.finished.sort((a, b) => b.id - a.id);
+  organized.onGoing.sort((a, b) => b.id - a.id);
+
+  return organized;
+}

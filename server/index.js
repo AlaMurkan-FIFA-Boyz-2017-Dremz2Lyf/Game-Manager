@@ -86,10 +86,13 @@ routes.put('/api/tournaments', function(req, res) {
 
 //NOTE: REFACTOR, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
-  knex('tournaments').where('winner_id', null)
+  knex('tournaments')
   .orderBy('id', 'desc')
-  .then(function(data) {
-    res.send(data);
+  .then(function(knexResponse) {
+    // use our helper function here and organize all the tourneys
+    let tourneys = helpers.organizedTourneys(knexResponse)
+    
+    res.send(tourneys);
   });
 });
 

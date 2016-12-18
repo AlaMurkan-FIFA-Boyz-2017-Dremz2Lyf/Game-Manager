@@ -52,7 +52,7 @@ describe('axios model', function() {
     it('should respond with all the data for the defined model', function(done) {
 
       testModel.all().then(res => {
-        expect(res.data).to.deep.equal(Mock_Data.test.existing)
+        expect(res).to.deep.equal(Mock_Data.test.existing)
         done()
       }).catch(err => {
         throw err
