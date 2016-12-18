@@ -195,13 +195,13 @@ class Main extends React.Component {
     });
   }
 
-  setCurrentTournament(tournament, tourneyId) {
+  setCurrentTournament(tournament) {
     // Set the state of currentTournament to the tournament that was clicked on.
     this.setState({
       currentTournament: tournament
     });
     // When we have a currentTournament, update the games and players.
-    this.updateGames(tourneyId);
+    this.updateGames(tournament.id);
   }
 
   toggleStatsView() {
