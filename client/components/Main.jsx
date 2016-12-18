@@ -193,13 +193,10 @@ class Main extends React.Component {
     });
   }
 
-  setCurrentTournament(index, tourneyId) {
-
+  setCurrentTournament(tournament, tourneyId) {
     // Set the state of currentTournament to the tournament that was clicked on.
-      // We do this by passing the index of the clicked on item up to this function,
-      // then using that index to find the correct tournament in the ongoingTournamentsList.
     this.setState({
-      currentTournament: this.state.ongoingTournamentsList[index]
+      currentTournament: tournament
     });
     // When we have a currentTournament, update the games and players.
     this.updateGames(tourneyId);
@@ -212,15 +209,9 @@ class Main extends React.Component {
       tourneyPlayersList: []
     });
     // call our getAllPlayers
-    utils.getAllPlayers(this.state).then(res => {
+    player.all().then(players => {
       this.setState({
-        allPlayersList: res
-      });
-    });
-    // and call our getOngoingTournaments
-    utils.getOngoingTournaments().then(tourneys => {
-      this.setState({
-        ongoingTournamentsList: tourneys
+        allPlayersList: players
       });
     });
   }
@@ -254,7 +245,7 @@ class Main extends React.Component {
       });
 
     }).then(res => {
-      utils.getOngoingTournaments().then((tourneys) => {
+      tournaments.all().then(tourneys => {
         this.setState({
           ongoingTournamentsList: tourneys,
           currentTournamentTable: []
