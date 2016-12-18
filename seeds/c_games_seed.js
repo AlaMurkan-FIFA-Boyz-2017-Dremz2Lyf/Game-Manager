@@ -7,7 +7,6 @@ var games = Mock_Data.games.map(function(game) {
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return Promise.join(
-    knex('games').del(),
     knex('games').insert(games)
   );
 };

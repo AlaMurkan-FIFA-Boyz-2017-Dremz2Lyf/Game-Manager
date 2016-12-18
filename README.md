@@ -13,9 +13,15 @@ Then install the dependencies:
 
 `npm install`
 
-Then create your PSQL database
+Set your user to config:
 
-`createdb -h localhost -p 5432 -U {your mac username here} database`
+NOTE: This may or may not be needed, still clarifying the use of environment variables in package.json
+
+`npm config set Game-Manager:user {your local username here}`
+
+Then create your PSQL database:
+
+`npm run db`
 
 Next bundle everything up with webpack:
 

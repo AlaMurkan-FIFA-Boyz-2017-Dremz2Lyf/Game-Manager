@@ -1,8 +1,8 @@
-import React from 'react'
-import axios from 'axios';
+import React from 'react';
 import utils from '../utils';
+import player from '../models/player.js';
 
-class Form extends React.Component {
+class CreatePlayerForm extends React.Component {
 
   constructor() {
     super();
@@ -22,15 +22,14 @@ class Form extends React.Component {
   // When Add User Form is filled out this function will be called onSubmit. Prevents the page from
     // refreshing, posts the new user to the database, then displays this new user in the player list.
   // If the username already exists in the database it will display an error on the page.
-  addNewPlayer(event) {
+  addNewPlayer(e) {
 
-    event.preventDefault();
+    e.preventDefault();
+    let newPlayer = {}
 
-    var playerName = utils.formatName(this.state.playerName);
+    newPlayer.username = utils.formatName(this.state.playerName);
 
-    axios.post('/api/player', {
-      username: playerName
-    }).then(res => {
+    player.create(newPlayer).then(res => {
       this.setState({
         error: '',
         playerName: ''
@@ -41,7 +40,7 @@ class Form extends React.Component {
         error: 'Oops, that name is taken! Try again!',
         playerName: ''
       });
-      console.log('Error in posting username', error);
+      throw error
     });
   }
 
@@ -64,4 +63,4 @@ class Form extends React.Component {
   }
 }
 
-module.exports = Form;
+module.exports = CreatePlayerForm;

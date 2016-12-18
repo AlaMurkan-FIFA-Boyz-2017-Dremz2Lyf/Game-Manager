@@ -4,9 +4,11 @@ var GameStatsForm = require('./GameStatsForm.jsx');
 
 var CurrentTournament = (props) => {
 
-  var playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
+  let playersInTourney = {}; //Create an object that will assign IDs to names, in order to then pass that down to game components
 
-  props.state.tourneyPlayersList.forEach(function(player) {
+  let allPlayers = props.state.allPlayersList.concat(props.state.tourneyPlayersList)
+
+  allPlayers.forEach(function(player) {
 
     playersInTourney[player.id] = player.username;
   });
@@ -14,7 +16,16 @@ var CurrentTournament = (props) => {
   // Use that object and props to map over the list of games and return a built out Game Component
   var gamesList = props.state.currentTournamentGames.map(function(game, index) {
     // Props to Ben here for his clever use of the object as a library.
-    return <Game thisGame={game} activeGame={props.state.currentGame} key={index} setCurrentGame={props.setCurrentGame} player1_name={playersInTourney[game.player1_id]} player2_name={playersInTourney[game.player2_id]} />; //Passing along player names to display in matchups
+    return  (
+      <Game
+        key={index}
+        thisGame={game}
+        activeGame={props.state.currentGame}
+        setCurrentGame={props.setCurrentGame}
+        player1_name={playersInTourney[game.player1_id]}
+        player2_name={playersInTourney[game.player2_id]}
+      />
+    );
   });
 
   return (

@@ -1,5 +1,3 @@
-var browserify = require('browserify-middleware');
-var babelify = require('babelify');
 var express = require('express');
 var Path = require('path');
 var helpers = require('./serverHelpers.js');
@@ -12,16 +10,11 @@ routes.use( require('body-parser').json() );
 var knex = require('knex')({
   client: 'postgresql',
   connection: {
-    database: 'database'
+    database: 'game-manager'
   }
 });
 
 routes.use(express.static(Path.join(__dirname, 'public')));
-
-// Home page
-routes.get('/', function(req, res) {
-  // res.sendFile(Path.join(__dirname, './public/index.html'));
-});
 
 
 // **************************************************
@@ -29,16 +22,13 @@ routes.get('/', function(req, res) {
   // NOTE: Routes for players
 
 routes.get('/api/player', function(req, res) {
-  if (req.query.tournament_players) {
-    var playerArr = req.query.tournament_players.split('-');
-  }
-  helpers.getAllPlayers(playerArr)
-    .then(players => {
-      res.status(200).send(players);
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
+  let playerIds = req.query.id;
+
+  helpers.getAllPlayers(playerIds).then(players => {
+    res.status(200).send(players);
+  }).catch(err => {
+    res.status(500).send(err);
+  });
 });
 
 
@@ -47,12 +37,11 @@ routes.post('/api/player', function(req, res) {
   if (req.body.username === '') {
     res.status(404).send('Cannot Insert Empty String Into Database');
   } else {
-    helpers.makePlayer(req)
-      .then(function(result) {
-        res.status(201).send('Posted new user to the database');
-      }).catch(function(err) {
-        res.status(400).send('User already exists');
-      });
+    helpers.makePlayer(req).then(function(result) {
+      res.status(201).send('Posted new user to the database');
+    }).catch(function(err) {
+      res.status(400).send('User already exists');
+    });
   }
 });
 
@@ -97,10 +86,13 @@ routes.put('/api/tournaments', function(req, res) {
 
 //NOTE: REFACTOR, the below will only fetch ONGOING tournaments
 routes.get('/api/tournaments', function(req, res) {
-  knex('tournaments').where('winner_id', null)
+  knex('tournaments')
   .orderBy('id', 'desc')
-  .then(function(data) {
-    res.send(data);
+  .then(function(knexResponse) {
+    // use our helper function here and organize all the tourneys
+    let tourneys = helpers.organizedTourneys(knexResponse)
+
+    res.send(tourneys);
   });
 });
 
@@ -127,20 +119,19 @@ routes.get('/api/games', function(req, res) {
   // this will use the id from the query as the tournament id.
     // then fetch all games from the Database that have that tourneyId
   var tourneyId = req.query.tournament_id;
-
   // if the route was queried with a tournament_id, return the games of that tournament_id
   if (tourneyId) {
     // query the db here with the tourneyId
-    knex('games').where('tournament_id', tourneyId).then(function(response) {
+    knex('games').where('tournament_id', tourneyId).then(response => {
       res.status(200).send(response);
-    }).catch(function(err) {
+    }).catch(err => {
       res.status(500).send(err);
     });
   } else {
     // query the db here for all games
-    knex.select().from('games').then(function(response) {
+    knex.select().from('games').then(response => {
       res.status(200).send(response);
-    }).catch(function(err) {
+    }).catch(err => {
       res.status(500).send(err);
     });
   }
@@ -166,7 +157,6 @@ routes.get('/api/table/', function(req, res) {
   .then(function(response) {
     res.status(200).send(response);
   }).catch(function(err) {
-    console.log('ERROR', err);
     res.status(500).send(err);
   });
 });
@@ -204,8 +194,7 @@ if (process.env.NODE_ENV !== 'test') {
   var port = process.env.PORT || 4000;
   app.listen(port);
   console.log('Listening on port', port);
-}
-else {
+} else {
   // We're in test mode; make this file importable instead.
   module.exports = routes;
 }
